@@ -1,0 +1,182 @@
+[
+ {
+  "file": "SpriteKiln_01_text_to_pixel_art.json",
+  "title": "Text → Pixel Art (Z-Image Turbo)",
+  "description": "RD Fast equivalent: style presets, exact art size, palette size, transparent background.",
+  "nodes": 21
+ },
+ {
+  "file": "SpriteKiln_02_image_to_pixel_art.json",
+  "title": "Image → Pixel Art (convert + AI redraw)",
+  "description": "Any picture to pixel art: a direct algorithmic conversion and a Z-Image img2img redraw (strength).",
+  "nodes": 23
+ },
+ {
+  "file": "SpriteKiln_03_reference_to_pixel_art.json",
+  "title": "Reference Images → Pixel Art (FLUX.2 klein)",
+  "description": "RD Plus / PixelLab style-reference equivalent: subject + style reference images and a text prompt.",
+  "nodes": 33
+ },
+ {
+  "file": "SpriteKiln_04_edit_pixel_art.json",
+  "title": "Edit Pixel Art (text + image references, FLUX.2 klein)",
+  "description": "Instruction edits on an existing sprite; optional second image as an extra reference.",
+  "nodes": 32
+ },
+ {
+  "file": "SpriteKiln_05_inpaint_pixel_art.json",
+  "title": "Inpaint Pixel Art (region edit, FLUX.2 klein)",
+  "description": "Change only a rectangle (or painted area) of a sprite; everything else stays pixel-identical.",
+  "nodes": 27
+ },
+ {
+  "file": "SpriteKiln_06_rotate_8_directions.json",
+  "title": "Rotate Sprite → 4/8 Directions (FLUX.2 klein)",
+  "description": "PixelLab-style rotations: one edit per facing; west-facing views are mirrored for perfect symmetry.",
+  "nodes": 27
+ },
+ {
+  "file": "SpriteKiln_07_rotate_hq_qwen_multiangle.json",
+  "title": "Rotate Sprite HQ (Qwen-Image-Edit-2511 + Multiple-Angles LoRA)",
+  "description": "96-camera-pose LoRA for the most consistent turnarounds. Slower (20B, GGUF Q4).",
+  "nodes": 25
+ },
+ {
+  "file": "SpriteKiln_08_object_multiview_2x2.json",
+  "title": "Object → 4 Views 2×2 Sheet (klein base + sprite-sheet LoRA)",
+  "description": "fal's 2x2 sprite-sheet LoRA: isometric left/right, side and top-down views of an object in one pass.",
+  "nodes": 29
+ },
+ {
+  "file": "SpriteKiln_09_walk_spritesheet_from_text.json",
+  "title": "4-Direction Walk Spritesheet from Text (klein base + LoRA)",
+  "description": "32×32 character sheet: walk down/left/right/up, arms raised, jumps, lying down — plus a GIF per direction.",
+  "nodes": 37
+ },
+ {
+  "file": "SpriteKiln_09b_walk_spritesheet_from_reference.json",
+  "title": "4-Direction Walk Spritesheet from a Reference (klein base + LoRA)",
+  "description": "Same as 09 but from an image of your character (concept art, a sprite, a photo).",
+  "nodes": 41
+ },
+ {
+  "file": "SpriteKiln_10_animate_sprite.json",
+  "title": "Animate Sprite – any action or free text (Wan 2.2 14B I2V)",
+  "description": "RD Animation / PixelLab text animation: 36 presets (combat, movement, creatures, props, FX) or free text.",
+  "nodes": 32
+ },
+ {
+  "file": "SpriteKiln_11_animate_sprite_hq_loop.json",
+  "title": "Animate Sprite – seamless loop (Wan 2.2 14B first = last frame)",
+  "description": "First and last video frame are your sprite: perfect loops and 'returns to the starting pose' motions.",
+  "nodes": 32
+ },
+ {
+  "file": "SpriteKiln_12_seamless_tile_texture.json",
+  "title": "Seamless Tile / Texture (Z-Image + circular tiling)",
+  "description": "RD Tile 'single tile' equivalent: perfectly wrapping pixel textures at any tile size.",
+  "nodes": 19
+ },
+ {
+  "file": "SpriteKiln_13_autotile_tileset.json",
+  "title": "Autotile Tileset – wang16 + blob47 (Z-Image + seamless + SpriteKiln)",
+  "description": "RD Tile 'tileset' equivalent: two seamless terrains combined into dual-grid and 47-blob autotile sets.",
+  "nodes": 29
+ },
+ {
+  "file": "SpriteKiln_14_pixelize_and_recolor.json",
+  "title": "Pixelize / Unfake + Palette Swap (no AI)",
+  "description": "Fix 'fake' AI pixel art (auto grid detection), reduce colours, recolour to retro palettes, add outlines.",
+  "nodes": 11
+ },
+ {
+  "file": "SpriteKiln_15_spritesheet_to_animation.json",
+  "title": "Spritesheet → GIF / APNG / Aseprite JSON (no AI)",
+  "description": "Slice any sheet, stabilise, export animation files for engines.",
+  "nodes": 7
+ },
+ {
+  "file": "SpriteKiln_16_8dir_animated_spritesheet.json",
+  "title": "8-Direction Animated Spritesheet (klein rotations + Wan 2.2 14B)",
+  "description": "PixelLab-style: one sprite -> 8 facings -> the same action animated in every facing -> one row per direction.",
+  "nodes": 52
+ },
+ {
+  "file": "SpriteKiln_17_keyframe_inbetween.json",
+  "title": "Keyframe In-betweening (Wan 2.2 14B first → last frame)",
+  "description": "Animate between two poses you control (e.g. stand → crouch, wind-up → slash end). Chain clips for combos.",
+  "nodes": 33
+ },
+ {
+  "file": "SpriteKiln_18_equipment_layer.json",
+  "title": "Equipment Layer for an Animation (paper-doll / swappable gear)",
+  "description": "Re-dress every frame of a base animation with a weapon/armour reference and extract it as a transparent layer that lines up with the base sheet frame-for-frame.",
+  "nodes": 39
+ },
+ {
+  "file": "SpriteKiln_19_text_to_animation.json",
+  "title": "Text → Animation / VFX (no sprite needed)",
+  "description": "Describe a character, creature, prop or effect and its motion: Z-Image draws frame 1, Wan 2.2 animates it.",
+  "nodes": 41
+ },
+ {
+  "file": "SpriteKiln_20_animated_tile.json",
+  "title": "Animated Seamless Tile (water, lava, grass…)",
+  "description": "RD animated tiles: a seamless pixel tile animated with Wan 2.2 while staying tileable in every frame.",
+  "nodes": 45
+ },
+ {
+  "file": "SpriteKiln_21_color_and_upscale_tools.json",
+  "title": "Colour Ramps, Palette Swap, Hue Shift, Scale2x (no AI)",
+  "description": "Hue-shifted ramps, enemy/team colour variants, recolours and pixel-art upscaling.",
+  "nodes": 17
+ },
+ {
+  "file": "SpriteKiln_22_hd_text_to_art.json",
+  "title": "HD 2D Art from Text (painted / cartoon, no pixels)",
+  "description": "Rayman-style painted cartoon characters, creatures, props, icons and VFX as clean transparent PNGs.",
+  "nodes": 16
+ },
+ {
+  "file": "SpriteKiln_23_hd_edit.json",
+  "title": "HD 2D Edit with Text + Image References (FLUX.2 klein)",
+  "description": "Change outfits, props, colours or poses of HD 2D art; optional second reference image.",
+  "nodes": 30
+ },
+ {
+  "file": "SpriteKiln_24_hd_rotate_8_directions.json",
+  "title": "HD 2D Rotate → 4/8 Directions (FLUX.2 klein)",
+  "description": "Turnarounds of painted / cartoon characters with mirrored west views and a shared-size sheet.",
+  "nodes": 26
+ },
+ {
+  "file": "SpriteKiln_25_hd_animate.json",
+  "title": "HD 2D Animate – presets or free text (Wan 2.2 14B)",
+  "description": "Painted / cartoon character animation from one image: 35 actions or your own sentence, HD sheet + GIF/APNG.",
+  "nodes": 29
+ },
+ {
+  "file": "SpriteKiln_26_hd_textures_and_parallax.json",
+  "title": "HD Seamless Texture + Parallax Background Layer",
+  "description": "Painted tileable textures (both axes) and horizontally looping parallax backgrounds.",
+  "nodes": 26
+ },
+ {
+  "file": "SpriteKiln_27_character_to_rig_parts.json",
+  "title": "Character → Rig Parts for Cutout Animation (SAM3 + klein inpainting)",
+  "description": "Split a character into named parts (head, torso, arms, legs, weapon…), inpaint the hidden sections, export aligned layers + JSON for Spine / DragonBones / Godot Skeleton2D.",
+  "nodes": 30
+ },
+ {
+  "file": "SpriteKiln_28_sprite_normal_maps.json",
+  "title": "Sprite Normal Maps for 2D Lighting (pixel or HD, no AI)",
+  "description": "Normal + height maps so engine lights shade sprites like HD-2D games; works on single sprites and whole sheets.",
+  "nodes": 8
+ },
+ {
+  "file": "SpriteKiln_28b_hd_normal_maps_ai.json",
+  "title": "HD Normal Maps with AI Shape (MoGe + sprite inflation)",
+  "description": "For painted / HD art: MoGe reads real 3D shape (faces, folds, armour) and is blended with silhouette rounding.",
+  "nodes": 13
+ }
+]

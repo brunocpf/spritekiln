@@ -1,0 +1,526 @@
+{
+ "2": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "spritekiln_example_sprite.png"
+  },
+  "_meta": {
+   "title": "Sprite"
+  }
+ },
+ "3": {
+  "class_type": "JoinImageWithAlpha",
+  "inputs": {
+   "image": [
+    "2",
+    0
+   ],
+   "alpha": [
+    "2",
+    1
+   ]
+  },
+  "_meta": {
+   "title": "Sprite (RGBA)"
+  }
+ },
+ "4": {
+  "class_type": "SK_ToCanvas",
+  "inputs": {
+   "image": [
+    "3",
+    0
+   ],
+   "long_side": 640,
+   "multiple": 16,
+   "background": "gray",
+   "custom_color": "#808080",
+   "padding": 8,
+   "target_width": 640,
+   "target_height": 640
+  },
+  "_meta": {
+   "title": "SK_ToCanvas"
+  }
+ },
+ "5": {
+  "class_type": "SK_AnimationPreset",
+  "inputs": {
+   "subject": "the pixel art knight",
+   "action": "walk",
+   "view": "side view",
+   "custom_motion": "",
+   "background": "gray",
+   "art": "pixel art"
+  },
+  "_meta": {
+   "title": "SK_AnimationPreset"
+  }
+ },
+ "6": {
+  "class_type": "PrimitiveInt",
+  "inputs": {
+   "value": 33
+  },
+  "_meta": {
+   "title": "Video frames (4n+1)"
+  }
+ },
+ "7": {
+  "class_type": "CLIPLoader",
+  "inputs": {
+   "clip_name": "umt5_xxl_fp16.safetensors",
+   "type": "wan",
+   "device": "default"
+  },
+  "_meta": {
+   "title": "CLIPLoader"
+  }
+ },
+ "8": {
+  "class_type": "VAELoader",
+  "inputs": {
+   "vae_name": "wan_2.1_vae.safetensors"
+  },
+  "_meta": {
+   "title": "VAELoader"
+  }
+ },
+ "9": {
+  "class_type": "UnetLoaderGGUF",
+  "inputs": {
+   "unet_name": "wan2.2_i2v_high_noise_14B_Q4_K_M.gguf"
+  },
+  "_meta": {
+   "title": "Wan 2.2 I2V 14B high noise"
+  }
+ },
+ "10": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "9",
+    0
+   ],
+   "lora_name": "wan2.2_i2v_lightning_4step_high.safetensors",
+   "strength_model": 1.0
+  },
+  "_meta": {
+   "title": "Lightning 4-step (high)"
+  }
+ },
+ "11": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "10",
+    0
+   ],
+   "lora_name": "spritekiln_wan22_pixel_animate.safetensors",
+   "strength_model": 1.0
+  },
+  "_meta": {
+   "title": "Pixel-animate LoRA (high)"
+  }
+ },
+ "12": {
+  "class_type": "ModelSamplingSD3",
+  "inputs": {
+   "model": [
+    "11",
+    0
+   ],
+   "shift": 5.0
+  },
+  "_meta": {
+   "title": "ModelSamplingSD3"
+  }
+ },
+ "13": {
+  "class_type": "UnetLoaderGGUF",
+  "inputs": {
+   "unet_name": "wan2.2_i2v_low_noise_14B_Q4_K_M.gguf"
+  },
+  "_meta": {
+   "title": "Wan 2.2 I2V 14B low noise"
+  }
+ },
+ "14": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "13",
+    0
+   ],
+   "lora_name": "wan2.2_i2v_lightning_4step_low.safetensors",
+   "strength_model": 1.0
+  },
+  "_meta": {
+   "title": "Lightning 4-step (low)"
+  }
+ },
+ "15": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "14",
+    0
+   ],
+   "lora_name": "spritekiln_wan22_pixel_animate.safetensors",
+   "strength_model": 1.0
+  },
+  "_meta": {
+   "title": "Pixel-animate LoRA (low)"
+  }
+ },
+ "16": {
+  "class_type": "ModelSamplingSD3",
+  "inputs": {
+   "model": [
+    "15",
+    0
+   ],
+   "shift": 5.0
+  },
+  "_meta": {
+   "title": "ModelSamplingSD3"
+  }
+ },
+ "17": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": [
+    "5",
+    0
+   ],
+   "clip": [
+    "7",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Motion prompt"
+  }
+ },
+ "18": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": [
+    "5",
+    1
+   ],
+   "clip": [
+    "7",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Negative"
+  }
+ },
+ "19": {
+  "class_type": "WanFirstLastFrameToVideo",
+  "inputs": {
+   "positive": [
+    "17",
+    0
+   ],
+   "negative": [
+    "18",
+    0
+   ],
+   "vae": [
+    "8",
+    0
+   ],
+   "width": [
+    "4",
+    2
+   ],
+   "height": [
+    "4",
+    3
+   ],
+   "length": [
+    "6",
+    0
+   ],
+   "batch_size": 1,
+   "start_image": [
+    "4",
+    0
+   ],
+   "end_image": [
+    "4",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "WanFirstLastFrameToVideo"
+  }
+ },
+ "20": {
+  "class_type": "KSamplerAdvanced",
+  "inputs": {
+   "model": [
+    "12",
+    0
+   ],
+   "add_noise": "enable",
+   "noise_seed": 1234,
+   "steps": 4,
+   "cfg": 1.0,
+   "sampler_name": "euler",
+   "scheduler": "simple",
+   "positive": [
+    "19",
+    0
+   ],
+   "negative": [
+    "19",
+    1
+   ],
+   "latent_image": [
+    "19",
+    2
+   ],
+   "start_at_step": 0,
+   "end_at_step": 2,
+   "return_with_leftover_noise": "enable"
+  },
+  "_meta": {
+   "title": "High noise (steps 0-2)"
+  }
+ },
+ "21": {
+  "class_type": "KSamplerAdvanced",
+  "inputs": {
+   "model": [
+    "16",
+    0
+   ],
+   "add_noise": "disable",
+   "noise_seed": 1234,
+   "steps": 4,
+   "cfg": 1.0,
+   "sampler_name": "euler",
+   "scheduler": "simple",
+   "positive": [
+    "19",
+    0
+   ],
+   "negative": [
+    "19",
+    1
+   ],
+   "latent_image": [
+    "20",
+    0
+   ],
+   "start_at_step": 2,
+   "end_at_step": 10000,
+   "return_with_leftover_noise": "disable"
+  },
+  "_meta": {
+   "title": "Low noise (steps 2-4)"
+  }
+ },
+ "22": {
+  "class_type": "VAEDecode",
+  "inputs": {
+   "samples": [
+    "21",
+    0
+   ],
+   "vae": [
+    "8",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "VAEDecode"
+  }
+ },
+ "23": {
+  "class_type": "SaveAnimatedWEBP",
+  "inputs": {
+   "images": [
+    "22",
+    0
+   ],
+   "filename_prefix": "spritekiln/raw_anim_hq",
+   "fps": 16.0,
+   "lossless": false,
+   "quality": 85,
+   "method": "default"
+  },
+  "_meta": {
+   "title": "Raw video preview"
+  }
+ },
+ "24": {
+  "class_type": "SK_FrameSelect",
+  "inputs": {
+   "frames": [
+    "22",
+    0
+   ],
+   "count": [
+    "5",
+    2
+   ],
+   "mode": "auto",
+   "skip_start": 1,
+   "min_loop_fraction": 0.4,
+   "loop": [
+    "5",
+    4
+   ]
+  },
+  "_meta": {
+   "title": "SK_FrameSelect"
+  }
+ },
+ "25": {
+  "class_type": "PreviewAny",
+  "inputs": {
+   "source": [
+    "24",
+    1
+   ]
+  },
+  "_meta": {
+   "title": "Loop info"
+  }
+ },
+ "26": {
+  "class_type": "SK_PixelPerfect",
+  "inputs": {
+   "image": [
+    "24",
+    0
+   ],
+   "mode": "match_reference",
+   "width": 64,
+   "height": 64,
+   "scale": [
+    "4",
+    1
+   ],
+   "method": "dominant",
+   "pre_colors": 48,
+   "reference": [
+    "4",
+    4
+   ]
+  },
+  "_meta": {
+   "title": "SK_PixelPerfect"
+  }
+ },
+ "27": {
+  "class_type": "SK_BackgroundRemove",
+  "inputs": {
+   "image": [
+    "26",
+    0
+   ],
+   "mode": "border_flood",
+   "remove_shadow": true,
+   "tolerance": 0.08,
+   "mask_threshold": 0.5,
+   "enabled": true
+  },
+  "_meta": {
+   "title": "SK_BackgroundRemove"
+  }
+ },
+ "28": {
+  "class_type": "SK_Palette",
+  "inputs": {
+   "image": [
+    "27",
+    0
+   ],
+   "source": "palette_image",
+   "colors": 256,
+   "preset": "PICO-8",
+   "dither": "none",
+   "dither_strength": 0.5,
+   "shared_palette": true,
+   "palette_image": [
+    "3",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Lock to the sprite's palette"
+  }
+ },
+ "29": {
+  "class_type": "SK_Stabilize",
+  "inputs": {
+   "frames": [
+    "28",
+    0
+   ],
+   "anchor": "bottom_center"
+  },
+  "_meta": {
+   "title": "SK_Stabilize"
+  }
+ },
+ "30": {
+  "class_type": "SK_Cleanup",
+  "inputs": {
+   "image": [
+    "29",
+    0
+   ],
+   "speck_size": 2,
+   "max_contrast": 0.12,
+   "outline": "none",
+   "outline_color": "#140c1c",
+   "outline_diagonal": false,
+   "darken": 0.45
+  },
+  "_meta": {
+   "title": "SK_Cleanup"
+  }
+ },
+ "31": {
+  "class_type": "SK_CropToContent",
+  "inputs": {
+   "frames": [
+    "30",
+    0
+   ],
+   "margin": 2,
+   "multiple": 2,
+   "square": false
+  },
+  "_meta": {
+   "title": "SK_CropToContent"
+  }
+ },
+ "32": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "31",
+    0
+   ],
+   "filename_prefix": "spritekiln/anim_loop",
+   "upscale": 8,
+   "as_animation": true,
+   "fps": [
+    "5",
+    3
+   ],
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ }
+}

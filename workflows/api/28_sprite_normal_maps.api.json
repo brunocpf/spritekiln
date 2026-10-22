@@ -1,0 +1,112 @@
+{
+ "2": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "spritekiln_example_sprite.png"
+  },
+  "_meta": {
+   "title": "Sprite or sheet (transparent PNG)"
+  }
+ },
+ "3": {
+  "class_type": "JoinImageWithAlpha",
+  "inputs": {
+   "image": [
+    "2",
+    0
+   ],
+   "alpha": [
+    "2",
+    1
+   ]
+  },
+  "_meta": {
+   "title": "Sprite or sheet (transparent PNG) (RGBA)"
+  }
+ },
+ "4": {
+  "class_type": "SK_SpriteNormalMap",
+  "inputs": {
+   "image": [
+    "3",
+    0
+   ],
+   "inflate": 1.0,
+   "radius": 0,
+   "detail": 0.35,
+   "detail_blur": 0.0,
+   "strength": 1.0,
+   "convention": "opengl",
+   "invert_detail": false
+  },
+  "_meta": {
+   "title": "SK_SpriteNormalMap"
+  }
+ },
+ "5": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "4",
+    0
+   ],
+   "filename_prefix": "spritekiln/sprite_normal",
+   "upscale": 8,
+   "as_animation": false,
+   "fps": 8.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "Normal map"
+  }
+ },
+ "6": {
+  "class_type": "PreviewImage",
+  "inputs": {
+   "images": [
+    "4",
+    1
+   ]
+  },
+  "_meta": {
+   "title": "Height"
+  }
+ },
+ "7": {
+  "class_type": "SK_NormalLightPreview",
+  "inputs": {
+   "image": [
+    "3",
+    0
+   ],
+   "normal_map": [
+    "4",
+    0
+   ],
+   "frames": 12,
+   "elevation_deg": 35.0,
+   "ambient": 0.3,
+   "convention": "opengl"
+  },
+  "_meta": {
+   "title": "SK_NormalLightPreview"
+  }
+ },
+ "8": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "7",
+    0
+   ],
+   "filename_prefix": "spritekiln/sprite_lit",
+   "upscale": 8,
+   "as_animation": true,
+   "fps": 10.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "Lit preview (light circling)"
+  }
+ }
+}

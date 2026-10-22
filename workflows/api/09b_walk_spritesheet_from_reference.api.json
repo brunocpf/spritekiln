@@ -1,0 +1,600 @@
+{
+ "2": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "spritekiln_example_sprite.png"
+  },
+  "_meta": {
+   "title": "Character reference"
+  }
+ },
+ "3": {
+  "class_type": "JoinImageWithAlpha",
+  "inputs": {
+   "image": [
+    "2",
+    0
+   ],
+   "alpha": [
+    "2",
+    1
+   ]
+  },
+  "_meta": {
+   "title": "Character reference (RGBA)"
+  }
+ },
+ "4": {
+  "class_type": "SK_ToCanvas",
+  "inputs": {
+   "image": [
+    "3",
+    0
+   ],
+   "long_side": 512,
+   "multiple": 16,
+   "background": "white",
+   "custom_color": "#ffffff",
+   "padding": 4
+  },
+  "_meta": {
+   "title": "SK_ToCanvas"
+  }
+ },
+ "5": {
+  "class_type": "UNETLoader",
+  "inputs": {
+   "unet_name": "flux-2-klein-base-4b.safetensors",
+   "weight_dtype": "default"
+  },
+  "_meta": {
+   "title": "FLUX.2 klein 4B base"
+  }
+ },
+ "6": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "5",
+    0
+   ],
+   "lora_name": "spritekiln_klein_base_4walk_sheet.safetensors",
+   "strength_model": 1.0
+  },
+  "_meta": {
+   "title": "4-walk spritesheet LoRA"
+  }
+ },
+ "7": {
+  "class_type": "CLIPLoader",
+  "inputs": {
+   "clip_name": "qwen_3_4b.safetensors",
+   "type": "flux2",
+   "device": "default"
+  },
+  "_meta": {
+   "title": "CLIPLoader"
+  }
+ },
+ "8": {
+  "class_type": "VAELoader",
+  "inputs": {
+   "vae_name": "flux2-vae.safetensors"
+  },
+  "_meta": {
+   "title": "VAELoader"
+  }
+ },
+ "9": {
+  "class_type": "VAEEncode",
+  "inputs": {
+   "pixels": [
+    "4",
+    0
+   ],
+   "vae": [
+    "8",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "VAEEncode"
+  }
+ },
+ "10": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": "Create a pixel art spritesheet of the character in the image. The spritesheet is a 4 by 4 grid of four rows of frames - first row is 3 walking frames facing down and 1 frame both arms raised, second row is 3 walking frames facing left and 1 frame jumping left, third row is 3 walking frames facing right and 1 frame jumping right, fourth row is 3 walking frames back view facing up and 1 frame lying on floor.",
+   "clip": [
+    "7",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Prompt"
+  }
+ },
+ "11": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": "blurry, smooth, photo, text, watermark",
+   "clip": [
+    "7",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Negative"
+  }
+ },
+ "12": {
+  "class_type": "ReferenceLatent",
+  "inputs": {
+   "conditioning": [
+    "10",
+    0
+   ],
+   "latent": [
+    "9",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ReferenceLatent"
+  }
+ },
+ "13": {
+  "class_type": "ReferenceLatent",
+  "inputs": {
+   "conditioning": [
+    "11",
+    0
+   ],
+   "latent": [
+    "9",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ReferenceLatent"
+  }
+ },
+ "14": {
+  "class_type": "RandomNoise",
+  "inputs": {
+   "noise_seed": 1234
+  },
+  "_meta": {
+   "title": "RandomNoise"
+  }
+ },
+ "15": {
+  "class_type": "CFGGuider",
+  "inputs": {
+   "model": [
+    "6",
+    0
+   ],
+   "positive": [
+    "12",
+    0
+   ],
+   "negative": [
+    "13",
+    0
+   ],
+   "cfg": 5.0
+  },
+  "_meta": {
+   "title": "CFGGuider"
+  }
+ },
+ "16": {
+  "class_type": "KSamplerSelect",
+  "inputs": {
+   "sampler_name": "euler"
+  },
+  "_meta": {
+   "title": "KSamplerSelect"
+  }
+ },
+ "17": {
+  "class_type": "Flux2Scheduler",
+  "inputs": {
+   "steps": 24,
+   "width": 512,
+   "height": 512
+  },
+  "_meta": {
+   "title": "Flux2Scheduler"
+  }
+ },
+ "18": {
+  "class_type": "EmptyFlux2LatentImage",
+  "inputs": {
+   "width": 512,
+   "height": 512,
+   "batch_size": 1
+  },
+  "_meta": {
+   "title": "EmptyFlux2LatentImage"
+  }
+ },
+ "19": {
+  "class_type": "SamplerCustomAdvanced",
+  "inputs": {
+   "noise": [
+    "14",
+    0
+   ],
+   "guider": [
+    "15",
+    0
+   ],
+   "sampler": [
+    "16",
+    0
+   ],
+   "sigmas": [
+    "17",
+    0
+   ],
+   "latent_image": [
+    "18",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "SamplerCustomAdvanced"
+  }
+ },
+ "20": {
+  "class_type": "VAEDecode",
+  "inputs": {
+   "samples": [
+    "19",
+    0
+   ],
+   "vae": [
+    "8",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "VAEDecode"
+  }
+ },
+ "21": {
+  "class_type": "PreviewImage",
+  "inputs": {
+   "images": [
+    "20",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Raw sheet"
+  }
+ },
+ "22": {
+  "class_type": "LoadBackgroundRemovalModel",
+  "inputs": {
+   "bg_removal_name": "birefnet.safetensors"
+  },
+  "_meta": {
+   "title": "LoadBackgroundRemovalModel"
+  }
+ },
+ "23": {
+  "class_type": "RemoveBackground",
+  "inputs": {
+   "bg_removal_model": [
+    "22",
+    0
+   ],
+   "image": [
+    "20",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "RemoveBackground"
+  }
+ },
+ "24": {
+  "class_type": "SK_BackgroundRemove",
+  "inputs": {
+   "image": [
+    "20",
+    0
+   ],
+   "mode": "mask_and_key",
+   "remove_shadow": true,
+   "tolerance": 0.08,
+   "mask_threshold": 0.5,
+   "enabled": true,
+   "foreground_mask": [
+    "23",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "SK_BackgroundRemove"
+  }
+ },
+ "25": {
+  "class_type": "SK_PixelPerfect",
+  "inputs": {
+   "image": [
+    "24",
+    0
+   ],
+   "mode": "fixed_size",
+   "width": 128,
+   "height": 128,
+   "scale": 4,
+   "method": "dominant",
+   "pre_colors": 48
+  },
+  "_meta": {
+   "title": "512 → 128 (x4, as trained)"
+  }
+ },
+ "26": {
+  "class_type": "SK_Palette",
+  "inputs": {
+   "image": [
+    "25",
+    0
+   ],
+   "source": "auto",
+   "colors": 24,
+   "preset": "PICO-8",
+   "dither": "none",
+   "dither_strength": 0.5,
+   "shared_palette": true
+  },
+  "_meta": {
+   "title": "SK_Palette"
+  }
+ },
+ "27": {
+  "class_type": "SK_Cleanup",
+  "inputs": {
+   "image": [
+    "26",
+    0
+   ],
+   "speck_size": 2,
+   "max_contrast": 0.12,
+   "outline": "none",
+   "outline_color": "#140c1c",
+   "outline_diagonal": false,
+   "darken": 0.45
+  },
+  "_meta": {
+   "title": "SK_Cleanup"
+  }
+ },
+ "28": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "27",
+    0
+   ],
+   "filename_prefix": "spritekiln/walksheet",
+   "upscale": 8,
+   "as_animation": false,
+   "fps": 8.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ },
+ "29": {
+  "class_type": "SK_SliceSheet",
+  "inputs": {
+   "sheet": [
+    "27",
+    0
+   ],
+   "rows": 4,
+   "columns": 4,
+   "inset": 0,
+   "order": "row_major"
+  },
+  "_meta": {
+   "title": "SK_SliceSheet"
+  }
+ },
+ "30": {
+  "class_type": "ImageFromBatch",
+  "inputs": {
+   "image": [
+    "29",
+    0
+   ],
+   "batch_index": 0,
+   "length": 3
+  },
+  "_meta": {
+   "title": "Walk down"
+  }
+ },
+ "31": {
+  "class_type": "SK_FrameSelect",
+  "inputs": {
+   "frames": [
+    "30",
+    0
+   ],
+   "count": 4,
+   "mode": "ping_pong",
+   "skip_start": 0,
+   "min_loop_fraction": 0.4
+  },
+  "_meta": {
+   "title": "Ping-pong 0-1-2-1"
+  }
+ },
+ "32": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "31",
+    0
+   ],
+   "filename_prefix": "spritekiln/walk_down",
+   "upscale": 8,
+   "as_animation": true,
+   "fps": 6.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ },
+ "33": {
+  "class_type": "ImageFromBatch",
+  "inputs": {
+   "image": [
+    "29",
+    0
+   ],
+   "batch_index": 4,
+   "length": 3
+  },
+  "_meta": {
+   "title": "Walk left"
+  }
+ },
+ "34": {
+  "class_type": "SK_FrameSelect",
+  "inputs": {
+   "frames": [
+    "33",
+    0
+   ],
+   "count": 4,
+   "mode": "ping_pong",
+   "skip_start": 0,
+   "min_loop_fraction": 0.4
+  },
+  "_meta": {
+   "title": "Ping-pong 0-1-2-1"
+  }
+ },
+ "35": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "34",
+    0
+   ],
+   "filename_prefix": "spritekiln/walk_left",
+   "upscale": 8,
+   "as_animation": true,
+   "fps": 6.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ },
+ "36": {
+  "class_type": "ImageFromBatch",
+  "inputs": {
+   "image": [
+    "29",
+    0
+   ],
+   "batch_index": 8,
+   "length": 3
+  },
+  "_meta": {
+   "title": "Walk right"
+  }
+ },
+ "37": {
+  "class_type": "SK_FrameSelect",
+  "inputs": {
+   "frames": [
+    "36",
+    0
+   ],
+   "count": 4,
+   "mode": "ping_pong",
+   "skip_start": 0,
+   "min_loop_fraction": 0.4
+  },
+  "_meta": {
+   "title": "Ping-pong 0-1-2-1"
+  }
+ },
+ "38": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "37",
+    0
+   ],
+   "filename_prefix": "spritekiln/walk_right",
+   "upscale": 8,
+   "as_animation": true,
+   "fps": 6.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ },
+ "39": {
+  "class_type": "ImageFromBatch",
+  "inputs": {
+   "image": [
+    "29",
+    0
+   ],
+   "batch_index": 12,
+   "length": 3
+  },
+  "_meta": {
+   "title": "Walk up"
+  }
+ },
+ "40": {
+  "class_type": "SK_FrameSelect",
+  "inputs": {
+   "frames": [
+    "39",
+    0
+   ],
+   "count": 4,
+   "mode": "ping_pong",
+   "skip_start": 0,
+   "min_loop_fraction": 0.4
+  },
+  "_meta": {
+   "title": "Ping-pong 0-1-2-1"
+  }
+ },
+ "41": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "40",
+    0
+   ],
+   "filename_prefix": "spritekiln/walk_up",
+   "upscale": 8,
+   "as_animation": true,
+   "fps": 6.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ }
+}

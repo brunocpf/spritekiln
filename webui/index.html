@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<script>
+try { document.querySelector('meta[name="color-scheme"]').content = (localStorage.getItem("sk.color-scheme") ?? localStorage.getItem("pf.color-scheme")) ?? "light dark"; } catch (e) {}
+</script>
+<title>SpriteKiln</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' shape-rendering='crispEdges'%3E%3Cpath fill='%23e43b44' d='M1 1h3v3H1z'/%3E%3Cpath fill='%2338b764' d='M4 1h3v3H4z'/%3E%3Cpath fill='%233b5dc9' d='M1 4h3v3H1z'/%3E%3Cpath fill='%23ffcd75' d='M4 4h3v3H4z'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><span class="logo" aria-hidden="true"></span>SpriteKiln</div>
+  <div class="topbar-status">
+    <span id="comfy-status" class="status-pill" title="ComfyUI connection">connecting…</span>
+    <span id="queue-status" class="status-pill muted" title="Jobs in the ComfyUI queue (all clients)"></span>
+  </div>
+  <button id="theme-toggle" class="icon-btn" type="button" title="Toggle light / dark">
+    <span class="when-light" aria-label="Switch to dark theme">☾</span>
+    <span class="when-dark" aria-label="Switch to light theme">☀</span>
+  </button>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" aria-label="Workflows">
+    <input id="wf-search" type="search" placeholder="Filter tools…" autocomplete="off">
+    <div id="wf-nav"></div>
+  </nav>
+
+  <main class="editor">
+    <form id="wf-form" autocomplete="off">
+      <div id="wf-head" class="wf-head"></div>
+      <div id="wf-fields"></div>
+      <div class="runbar">
+        <div class="runbar-buttons">
+          <button id="run-btn" class="primary" type="submit">Generate <kbd>⌘↵</kbd></button>
+          <button id="reset-btn" type="button" class="ghost" title="Restore the workflow's default values">Reset</button>
+        </div>
+        <div id="run-status" class="run-status" aria-live="polite"></div>
+      </div>
+    </form>
+  </main>
+
+  <section class="results" aria-label="Results">
+    <div class="results-toolbar">
+      <label class="zoom">Zoom
+        <input id="zoom" type="range" min="0" max="16" step="1" value="0">
+        <output id="zoom-out">Fit</output>
+      </label>
+      <label class="check"><input id="checker" type="checkbox" checked> Checkerboard</label>
+      <span class="spacer"></span>
+      <button id="clear-history" type="button" class="ghost small" title="Forget finished runs in this browser (files stay on disk)">Clear history</button>
+    </div>
+    <div id="feed" class="feed"></div>
+  </section>
+</div>
+
+<template id="tpl-empty-feed">
+  <div class="empty">
+    <div class="empty-art" aria-hidden="true"></div>
+    <p>Results appear here. Pick a tool on the left, set it up and press <b>Generate</b> (<kbd>⌘↵</kbd>).</p>
+  </div>
+</template>
+
+<script src="app.js"></script>
+</body>
+</html>

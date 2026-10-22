@@ -1,0 +1,164 @@
+{
+ "2": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "spritekiln_example_fake_pixel.png"
+  },
+  "_meta": {
+   "title": "LoadImage"
+  }
+ },
+ "3": {
+  "class_type": "SK_PixelPerfect",
+  "inputs": {
+   "image": [
+    "2",
+    0
+   ],
+   "mode": "auto_detect",
+   "width": 64,
+   "height": 64,
+   "scale": 16,
+   "method": "dominant",
+   "pre_colors": 48
+  },
+  "_meta": {
+   "title": "SK_PixelPerfect"
+  }
+ },
+ "4": {
+  "class_type": "PreviewAny",
+  "inputs": {
+   "source": [
+    "3",
+    2
+   ]
+  },
+  "_meta": {
+   "title": "Detected grid"
+  }
+ },
+ "5": {
+  "class_type": "SK_Palette",
+  "inputs": {
+   "image": [
+    "3",
+    0
+   ],
+   "source": "auto",
+   "colors": 32,
+   "preset": "PICO-8",
+   "dither": "none",
+   "dither_strength": 0.5,
+   "shared_palette": true
+  },
+  "_meta": {
+   "title": "Clean colours"
+  }
+ },
+ "6": {
+  "class_type": "SK_Cleanup",
+  "inputs": {
+   "image": [
+    "5",
+    0
+   ],
+   "speck_size": 2,
+   "max_contrast": 0.12,
+   "outline": "none",
+   "outline_color": "#140c1c",
+   "outline_diagonal": false,
+   "darken": 0.45
+  },
+  "_meta": {
+   "title": "SK_Cleanup"
+  }
+ },
+ "7": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "6",
+    0
+   ],
+   "filename_prefix": "spritekiln/unfaked",
+   "upscale": 8,
+   "as_animation": false,
+   "fps": 8.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ },
+ "8": {
+  "class_type": "SK_Palette",
+  "inputs": {
+   "image": [
+    "6",
+    0
+   ],
+   "source": "preset",
+   "colors": 4,
+   "preset": "Game Boy (DMG)",
+   "dither": "bayer-4",
+   "dither_strength": 0.4,
+   "shared_palette": true
+  },
+  "_meta": {
+   "title": "Game Boy + Bayer dither"
+  }
+ },
+ "9": {
+  "class_type": "SK_Palette",
+  "inputs": {
+   "image": [
+    "6",
+    0
+   ],
+   "source": "preset",
+   "colors": 16,
+   "preset": "PICO-8",
+   "dither": "none",
+   "dither_strength": 0.5,
+   "shared_palette": true
+  },
+  "_meta": {
+   "title": "PICO-8"
+  }
+ },
+ "10": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "8",
+    0
+   ],
+   "filename_prefix": "spritekiln/recolor_gameboy",
+   "upscale": 8,
+   "as_animation": false,
+   "fps": 8.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ },
+ "11": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "9",
+    0
+   ],
+   "filename_prefix": "spritekiln/recolor_pico8",
+   "upscale": 8,
+   "as_animation": false,
+   "fps": 8.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ }
+}

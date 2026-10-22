@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+spritekiln_out/
+*.log
+.venv/
+ComfyUI-SpriteKiln/palettes/*
+!ComfyUI-SpriteKiln/palettes/.gitkeep

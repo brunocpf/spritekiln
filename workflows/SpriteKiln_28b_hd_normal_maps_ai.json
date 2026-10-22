@@ -1,0 +1,971 @@
+{
+ "id": "spritekiln-28b_hd_normal_maps_ai",
+ "revision": 0,
+ "last_node_id": 13,
+ "last_link_id": 14,
+ "nodes": [
+  {
+   "id": 1,
+   "type": "MarkdownNote",
+   "pos": [
+    20,
+    70
+   ],
+   "size": [
+    420,
+    180
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "MarkdownNote"
+   },
+   "title": "Note",
+   "inputs": [],
+   "outputs": [],
+   "widgets_values": [
+    "## HD normal maps (AI)\nMoGe-2 estimates surface normals from the art; they are blended (`ai_weight`) with the model-free silhouette normals so edges still round off cleanly. Use 28 for pixel art (MoGe needs more than a few dozen pixels to see shape)."
+   ],
+   "color": "#432",
+   "bgcolor": "#653"
+  },
+  {
+   "id": 2,
+   "type": "LoadImage",
+   "pos": [
+    20,
+    290
+   ],
+   "size": [
+    320,
+    410
+   ],
+   "flags": {},
+   "order": 1,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "LoadImage"
+   },
+   "title": "HD art (transparent PNG)",
+   "inputs": [
+    {
+     "name": "image",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "image"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      1
+     ],
+     "slot_index": 0
+    },
+    {
+     "name": "MASK",
+     "type": "MASK",
+     "links": [
+      2
+     ],
+     "slot_index": 1
+    }
+   ],
+   "widgets_values": [
+    "spritekiln_example_hd_character.png",
+    "image"
+   ]
+  },
+  {
+   "id": 3,
+   "type": "JoinImageWithAlpha",
+   "pos": [
+    490,
+    70
+   ],
+   "size": [
+    320,
+    84
+   ],
+   "flags": {},
+   "order": 2,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "JoinImageWithAlpha"
+   },
+   "title": "HD art (transparent PNG) (RGBA)",
+   "inputs": [
+    {
+     "name": "image",
+     "type": "IMAGE",
+     "link": 1
+    },
+    {
+     "name": "alpha",
+     "type": "MASK",
+     "link": 2
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      3,
+      8,
+      12
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": []
+  },
+  {
+   "id": 4,
+   "type": "SK_Flatten",
+   "pos": [
+    930,
+    70
+   ],
+   "size": [
+    320,
+    88
+   ],
+   "flags": {},
+   "order": 3,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_Flatten"
+   },
+   "inputs": [
+    {
+     "name": "image",
+     "type": "IMAGE",
+     "link": 3
+    },
+    {
+     "name": "background",
+     "type": "STRING",
+     "link": null,
+     "widget": {
+      "name": "background"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      5
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    "#808080"
+   ]
+  },
+  {
+   "id": 5,
+   "type": "LoadMoGeModel",
+   "pos": [
+    930,
+    198
+   ],
+   "size": [
+    320,
+    88
+   ],
+   "flags": {},
+   "order": 4,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "LoadMoGeModel"
+   },
+   "inputs": [
+    {
+     "name": "model_name",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "model_name"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "MOGE_MODEL",
+     "type": "MOGE_MODEL",
+     "links": [
+      4
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    "moge_2_vitl_normal_fp16.safetensors"
+   ]
+  },
+  {
+   "id": 6,
+   "type": "MoGeInference",
+   "pos": [
+    1300,
+    70
+   ],
+   "size": [
+    320,
+    240
+   ],
+   "flags": {},
+   "order": 5,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "MoGeInference"
+   },
+   "inputs": [
+    {
+     "name": "moge_model",
+     "type": "MOGE_MODEL",
+     "link": 4
+    },
+    {
+     "name": "image",
+     "type": "IMAGE",
+     "link": 5
+    },
+    {
+     "name": "resolution_level",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "resolution_level"
+     }
+    },
+    {
+     "name": "fov_x_degrees",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "fov_x_degrees"
+     }
+    },
+    {
+     "name": "batch_size",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "batch_size"
+     }
+    },
+    {
+     "name": "force_projection",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "force_projection"
+     }
+    },
+    {
+     "name": "apply_mask",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "apply_mask"
+     }
+    },
+    {
+     "name": "refine_steps",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "refine_steps"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "moge_geometry",
+     "type": "MOGE_GEOMETRY",
+     "links": [
+      6
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    9,
+    0.0,
+    1,
+    true,
+    false,
+    0
+   ]
+  },
+  {
+   "id": 7,
+   "type": "MoGeRender",
+   "pos": [
+    1670,
+    70
+   ],
+   "size": [
+    320,
+    88
+   ],
+   "flags": {},
+   "order": 6,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "MoGeRender"
+   },
+   "inputs": [
+    {
+     "name": "moge_geometry",
+     "type": "MOGE_GEOMETRY",
+     "link": 6
+    },
+    {
+     "name": "output",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "output"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      7,
+      9
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    "normal_opengl"
+   ]
+  },
+  {
+   "id": 8,
+   "type": "PreviewImage",
+   "pos": [
+    2040,
+    70
+   ],
+   "size": [
+    320,
+    362
+   ],
+   "flags": {},
+   "order": 7,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "PreviewImage"
+   },
+   "title": "MoGe normals",
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 7
+    }
+   ],
+   "outputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "links": [],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": []
+  },
+  {
+   "id": 9,
+   "type": "SK_SpriteNormalMap",
+   "pos": [
+    2480,
+    70
+   ],
+   "size": [
+    320,
+    292
+   ],
+   "flags": {},
+   "order": 8,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_SpriteNormalMap"
+   },
+   "inputs": [
+    {
+     "name": "image",
+     "type": "IMAGE",
+     "link": 8
+    },
+    {
+     "name": "inflate",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "inflate"
+     }
+    },
+    {
+     "name": "radius",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "radius"
+     }
+    },
+    {
+     "name": "detail",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "detail"
+     }
+    },
+    {
+     "name": "detail_blur",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "detail_blur"
+     }
+    },
+    {
+     "name": "strength",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "strength"
+     }
+    },
+    {
+     "name": "convention",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "convention"
+     }
+    },
+    {
+     "name": "invert_detail",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "invert_detail"
+     }
+    },
+    {
+     "name": "ai_normals",
+     "type": "IMAGE",
+     "link": 9
+    },
+    {
+     "name": "ai_weight",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "ai_weight"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "normal_map",
+     "type": "IMAGE",
+     "links": [
+      10,
+      13
+     ],
+     "slot_index": 0
+    },
+    {
+     "name": "height",
+     "type": "IMAGE",
+     "links": [
+      11
+     ],
+     "slot_index": 1
+    }
+   ],
+   "widgets_values": [
+    1.0,
+    0,
+    0.2,
+    1.5,
+    1.0,
+    "opengl",
+    false,
+    0.6
+   ]
+  },
+  {
+   "id": 10,
+   "type": "SK_SavePixelArt",
+   "pos": [
+    20,
+    920
+   ],
+   "size": [
+    320,
+    514
+   ],
+   "flags": {},
+   "order": 9,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_SavePixelArt"
+   },
+   "title": "Normal map",
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 10
+    },
+    {
+     "name": "filename_prefix",
+     "type": "STRING",
+     "link": null,
+     "widget": {
+      "name": "filename_prefix"
+     }
+    },
+    {
+     "name": "upscale",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "upscale"
+     }
+    },
+    {
+     "name": "as_animation",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "as_animation"
+     }
+    },
+    {
+     "name": "fps",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "fps"
+     }
+    },
+    {
+     "name": "sheet_columns",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "sheet_columns"
+     }
+    },
+    {
+     "name": "row_names",
+     "type": "STRING",
+     "link": null
+    }
+   ],
+   "outputs": [],
+   "widgets_values": [
+    "spritekiln/hd_normal",
+    1,
+    false,
+    8.0,
+    0
+   ]
+  },
+  {
+   "id": 11,
+   "type": "PreviewImage",
+   "pos": [
+    20,
+    1474
+   ],
+   "size": [
+    320,
+    362
+   ],
+   "flags": {},
+   "order": 10,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "PreviewImage"
+   },
+   "title": "Height",
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 11
+    }
+   ],
+   "outputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "links": [],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": []
+  },
+  {
+   "id": 12,
+   "type": "SK_NormalLightPreview",
+   "pos": [
+    20,
+    1876
+   ],
+   "size": [
+    320,
+    188
+   ],
+   "flags": {},
+   "order": 11,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_NormalLightPreview"
+   },
+   "inputs": [
+    {
+     "name": "image",
+     "type": "IMAGE",
+     "link": 12
+    },
+    {
+     "name": "normal_map",
+     "type": "IMAGE",
+     "link": 13
+    },
+    {
+     "name": "frames",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "frames"
+     }
+    },
+    {
+     "name": "elevation_deg",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "elevation_deg"
+     }
+    },
+    {
+     "name": "ambient",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "ambient"
+     }
+    },
+    {
+     "name": "convention",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "convention"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "lit_frames",
+     "type": "IMAGE",
+     "links": [
+      14
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    12,
+    35.0,
+    0.3,
+    "opengl"
+   ]
+  },
+  {
+   "id": 13,
+   "type": "SK_SavePixelArt",
+   "pos": [
+    390,
+    920
+   ],
+   "size": [
+    320,
+    514
+   ],
+   "flags": {},
+   "order": 12,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_SavePixelArt"
+   },
+   "title": "Lit preview (light circling)",
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 14
+    },
+    {
+     "name": "filename_prefix",
+     "type": "STRING",
+     "link": null,
+     "widget": {
+      "name": "filename_prefix"
+     }
+    },
+    {
+     "name": "upscale",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "upscale"
+     }
+    },
+    {
+     "name": "as_animation",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "as_animation"
+     }
+    },
+    {
+     "name": "fps",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "fps"
+     }
+    },
+    {
+     "name": "sheet_columns",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "sheet_columns"
+     }
+    },
+    {
+     "name": "row_names",
+     "type": "STRING",
+     "link": null
+    }
+   ],
+   "outputs": [],
+   "widgets_values": [
+    "spritekiln/hd_lit",
+    1,
+    true,
+    10.0,
+    0
+   ]
+  }
+ ],
+ "links": [
+  [
+   1,
+   2,
+   0,
+   3,
+   0,
+   "IMAGE"
+  ],
+  [
+   2,
+   2,
+   1,
+   3,
+   1,
+   "MASK"
+  ],
+  [
+   3,
+   3,
+   0,
+   4,
+   0,
+   "IMAGE"
+  ],
+  [
+   4,
+   5,
+   0,
+   6,
+   0,
+   "MOGE_MODEL"
+  ],
+  [
+   5,
+   4,
+   0,
+   6,
+   1,
+   "IMAGE"
+  ],
+  [
+   6,
+   6,
+   0,
+   7,
+   0,
+   "MOGE_GEOMETRY"
+  ],
+  [
+   7,
+   7,
+   0,
+   8,
+   0,
+   "IMAGE"
+  ],
+  [
+   8,
+   3,
+   0,
+   9,
+   0,
+   "IMAGE"
+  ],
+  [
+   9,
+   7,
+   0,
+   9,
+   8,
+   "IMAGE"
+  ],
+  [
+   10,
+   9,
+   0,
+   10,
+   0,
+   "IMAGE"
+  ],
+  [
+   11,
+   9,
+   1,
+   11,
+   0,
+   "IMAGE"
+  ],
+  [
+   12,
+   3,
+   0,
+   12,
+   0,
+   "IMAGE"
+  ],
+  [
+   13,
+   9,
+   0,
+   12,
+   1,
+   "IMAGE"
+  ],
+  [
+   14,
+   12,
+   0,
+   13,
+   0,
+   "IMAGE"
+  ]
+ ],
+ "groups": [
+  {
+   "id": 1,
+   "title": "1 · HD art",
+   "bounding": [
+    0,
+    0,
+    830,
+    730
+   ],
+   "color": "#3f789e",
+   "font_size": 24,
+   "flags": {}
+  },
+  {
+   "id": 2,
+   "title": "2 · AI normals (MoGe-2)",
+   "bounding": [
+    910,
+    0,
+    1470,
+    462
+   ],
+   "color": "#8A8",
+   "font_size": 24,
+   "flags": {}
+  },
+  {
+   "id": 3,
+   "title": "3 · Blend with sprite normals",
+   "bounding": [
+    2460,
+    0,
+    360,
+    392
+   ],
+   "color": "#b06634",
+   "font_size": 24,
+   "flags": {}
+  },
+  {
+   "id": 4,
+   "title": "4 · Save + lit preview",
+   "bounding": [
+    0,
+    850,
+    730,
+    1244
+   ],
+   "color": "#a1309b",
+   "font_size": 24,
+   "flags": {}
+  }
+ ],
+ "config": {},
+ "extra": {
+  "ds": {
+   "scale": 0.55,
+   "offset": [
+    40,
+    40
+   ]
+  },
+  "spritekiln": {
+   "title": "HD Normal Maps with AI Shape (MoGe + sprite inflation)",
+   "description": "For painted / HD art: MoGe reads real 3D shape (faces, folds, armour) and is blended with silhouette rounding."
+  }
+ },
+ "version": 0.4
+}

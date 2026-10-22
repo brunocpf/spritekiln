@@ -1,0 +1,284 @@
+{
+ "2": {
+  "class_type": "SK_StylePreset",
+  "inputs": {
+   "subject": "green grass with a few small flowers, large chunky pixels, simple 16-bit RPG game tile",
+   "style": "texture (tileable)",
+   "model": "z_image (pixel LoRA)",
+   "art_width": 32,
+   "art_height": 32,
+   "colors": 12,
+   "background": "scene",
+   "long_side": 512,
+   "extra": ""
+  },
+  "_meta": {
+   "title": "SK_StylePreset"
+  }
+ },
+ "3": {
+  "class_type": "UNETLoader",
+  "inputs": {
+   "unet_name": "z_image_turbo_bf16.safetensors",
+   "weight_dtype": "default"
+  },
+  "_meta": {
+   "title": "UNETLoader"
+  }
+ },
+ "4": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "3",
+    0
+   ],
+   "lora_name": "spritekiln_zimage_pixel_art.safetensors",
+   "strength_model": 0.8
+  },
+  "_meta": {
+   "title": "Pixel-art LoRA (Z-Image)"
+  }
+ },
+ "5": {
+  "class_type": "ModelSamplingAuraFlow",
+  "inputs": {
+   "model": [
+    "4",
+    0
+   ],
+   "shift": 3.0
+  },
+  "_meta": {
+   "title": "ModelSamplingAuraFlow"
+  }
+ },
+ "6": {
+  "class_type": "CLIPLoader",
+  "inputs": {
+   "clip_name": "qwen_3_4b.safetensors",
+   "type": "lumina2",
+   "device": "default"
+  },
+  "_meta": {
+   "title": "CLIPLoader"
+  }
+ },
+ "7": {
+  "class_type": "VAELoader",
+  "inputs": {
+   "vae_name": "ae.safetensors"
+  },
+  "_meta": {
+   "title": "VAELoader"
+  }
+ },
+ "8": {
+  "class_type": "SK_SeamlessTiling",
+  "inputs": {
+   "model": [
+    "5",
+    0
+   ],
+   "axes": "both",
+   "align": 2
+  },
+  "_meta": {
+   "title": "SK_SeamlessTiling"
+  }
+ },
+ "9": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": [
+    "2",
+    0
+   ],
+   "clip": [
+    "6",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Prompt"
+  }
+ },
+ "10": {
+  "class_type": "ConditioningZeroOut",
+  "inputs": {
+   "conditioning": [
+    "9",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ConditioningZeroOut"
+  }
+ },
+ "11": {
+  "class_type": "EmptySD3LatentImage",
+  "inputs": {
+   "width": [
+    "2",
+    4
+   ],
+   "height": [
+    "2",
+    5
+   ],
+   "batch_size": 1
+  },
+  "_meta": {
+   "title": "EmptySD3LatentImage"
+  }
+ },
+ "12": {
+  "class_type": "KSampler",
+  "inputs": {
+   "model": [
+    "8",
+    0
+   ],
+   "seed": 1234,
+   "steps": 8,
+   "cfg": 1.0,
+   "sampler_name": "res_multistep",
+   "scheduler": "simple",
+   "positive": [
+    "9",
+    0
+   ],
+   "negative": [
+    "10",
+    0
+   ],
+   "latent_image": [
+    "11",
+    0
+   ],
+   "denoise": 1.0
+  },
+  "_meta": {
+   "title": "KSampler"
+  }
+ },
+ "13": {
+  "class_type": "SK_SeamlessVAEDecode",
+  "inputs": {
+   "samples": [
+    "12",
+    0
+   ],
+   "vae": [
+    "7",
+    0
+   ],
+   "axes": "both",
+   "pad_latent": 8
+  },
+  "_meta": {
+   "title": "SK_SeamlessVAEDecode"
+  }
+ },
+ "14": {
+  "class_type": "SK_PixelPerfect",
+  "inputs": {
+   "image": [
+    "13",
+    0
+   ],
+   "mode": "fixed_size",
+   "width": [
+    "2",
+    2
+   ],
+   "height": [
+    "2",
+    3
+   ],
+   "scale": 16,
+   "method": "dominant",
+   "pre_colors": 48
+  },
+  "_meta": {
+   "title": "SK_PixelPerfect"
+  }
+ },
+ "15": {
+  "class_type": "SK_Palette",
+  "inputs": {
+   "image": [
+    "14",
+    0
+   ],
+   "source": "auto",
+   "colors": [
+    "2",
+    6
+   ],
+   "preset": "PICO-8",
+   "dither": "none",
+   "dither_strength": 0.5,
+   "shared_palette": true
+  },
+  "_meta": {
+   "title": "SK_Palette"
+  }
+ },
+ "16": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "15",
+    0
+   ],
+   "filename_prefix": "spritekiln/tile",
+   "upscale": 8,
+   "as_animation": false,
+   "fps": 8.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ },
+ "17": {
+  "class_type": "SK_TilePreview",
+  "inputs": {
+   "image": [
+    "15",
+    0
+   ],
+   "repeat_x": 3,
+   "repeat_y": 3
+  },
+  "_meta": {
+   "title": "SK_TilePreview"
+  }
+ },
+ "18": {
+  "class_type": "SK_ScaleNearest",
+  "inputs": {
+   "image": [
+    "17",
+    0
+   ],
+   "scale": 6
+  },
+  "_meta": {
+   "title": "SK_ScaleNearest"
+  }
+ },
+ "19": {
+  "class_type": "PreviewImage",
+  "inputs": {
+   "images": [
+    "18",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "3×3 tiling check"
+  }
+ }
+}

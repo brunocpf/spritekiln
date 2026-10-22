@@ -1,0 +1,427 @@
+{
+ "2": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "spritekiln_example_hd_character.png"
+  },
+  "_meta": {
+   "title": "Art to edit"
+  }
+ },
+ "3": {
+  "class_type": "JoinImageWithAlpha",
+  "inputs": {
+   "image": [
+    "2",
+    0
+   ],
+   "alpha": [
+    "2",
+    1
+   ]
+  },
+  "_meta": {
+   "title": "Art to edit (RGBA)"
+  }
+ },
+ "4": {
+  "class_type": "SK_HDCanvas",
+  "inputs": {
+   "image": [
+    "3",
+    0
+   ],
+   "width": 1024,
+   "height": 1024,
+   "padding_percent": 8.0,
+   "background": "white",
+   "trim_first": true
+  },
+  "_meta": {
+   "title": "SK_HDCanvas"
+  }
+ },
+ "5": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "spritekiln_example_reference.png"
+  },
+  "_meta": {
+   "title": "Extra reference (image 2)"
+  }
+ },
+ "6": {
+  "class_type": "UNETLoader",
+  "inputs": {
+   "unet_name": "flux-2-klein-4b.safetensors",
+   "weight_dtype": "default"
+  },
+  "_meta": {
+   "title": "FLUX.2 klein 4B distilled"
+  }
+ },
+ "7": {
+  "class_type": "CLIPLoader",
+  "inputs": {
+   "clip_name": "qwen_3_4b.safetensors",
+   "type": "flux2",
+   "device": "default"
+  },
+  "_meta": {
+   "title": "CLIPLoader"
+  }
+ },
+ "8": {
+  "class_type": "VAELoader",
+  "inputs": {
+   "vae_name": "flux2-vae.safetensors"
+  },
+  "_meta": {
+   "title": "VAELoader"
+  }
+ },
+ "9": {
+  "class_type": "VAEEncode",
+  "inputs": {
+   "pixels": [
+    "4",
+    0
+   ],
+   "vae": [
+    "8",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "VAEEncode"
+  }
+ },
+ "10": {
+  "class_type": "ImageScaleToTotalPixels",
+  "inputs": {
+   "image": [
+    "5",
+    0
+   ],
+   "upscale_method": "lanczos",
+   "megapixels": 1.0,
+   "resolution_steps": 16
+  },
+  "_meta": {
+   "title": "ImageScaleToTotalPixels"
+  }
+ },
+ "11": {
+  "class_type": "VAEEncode",
+  "inputs": {
+   "pixels": [
+    "10",
+    0
+   ],
+   "vae": [
+    "8",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "VAEEncode"
+  }
+ },
+ "12": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": "Edit the character in image 1: give them a golden crown and a purple cape. Keep everything else identical: same pose, size, proportions and hand-painted art style, plain white background.",
+   "clip": [
+    "7",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Prompt"
+  }
+ },
+ "13": {
+  "class_type": "ConditioningZeroOut",
+  "inputs": {
+   "conditioning": [
+    "12",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ConditioningZeroOut"
+  }
+ },
+ "14": {
+  "class_type": "ReferenceLatent",
+  "inputs": {
+   "conditioning": [
+    "12",
+    0
+   ],
+   "latent": [
+    "9",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ReferenceLatent"
+  }
+ },
+ "15": {
+  "class_type": "ReferenceLatent",
+  "inputs": {
+   "conditioning": [
+    "13",
+    0
+   ],
+   "latent": [
+    "9",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ReferenceLatent"
+  }
+ },
+ "16": {
+  "class_type": "ReferenceLatent",
+  "inputs": {
+   "conditioning": [
+    "14",
+    0
+   ],
+   "latent": [
+    "11",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ReferenceLatent"
+  }
+ },
+ "17": {
+  "class_type": "ReferenceLatent",
+  "inputs": {
+   "conditioning": [
+    "15",
+    0
+   ],
+   "latent": [
+    "11",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ReferenceLatent"
+  }
+ },
+ "18": {
+  "class_type": "RandomNoise",
+  "inputs": {
+   "noise_seed": 1234
+  },
+  "_meta": {
+   "title": "RandomNoise"
+  }
+ },
+ "19": {
+  "class_type": "CFGGuider",
+  "inputs": {
+   "model": [
+    "6",
+    0
+   ],
+   "positive": [
+    "16",
+    0
+   ],
+   "negative": [
+    "17",
+    0
+   ],
+   "cfg": 1.0
+  },
+  "_meta": {
+   "title": "CFGGuider"
+  }
+ },
+ "20": {
+  "class_type": "KSamplerSelect",
+  "inputs": {
+   "sampler_name": "euler"
+  },
+  "_meta": {
+   "title": "KSamplerSelect"
+  }
+ },
+ "21": {
+  "class_type": "Flux2Scheduler",
+  "inputs": {
+   "steps": 4,
+   "width": [
+    "4",
+    1
+   ],
+   "height": [
+    "4",
+    2
+   ]
+  },
+  "_meta": {
+   "title": "Flux2Scheduler"
+  }
+ },
+ "22": {
+  "class_type": "EmptyFlux2LatentImage",
+  "inputs": {
+   "width": [
+    "4",
+    1
+   ],
+   "height": [
+    "4",
+    2
+   ],
+   "batch_size": 1
+  },
+  "_meta": {
+   "title": "EmptyFlux2LatentImage"
+  }
+ },
+ "23": {
+  "class_type": "SamplerCustomAdvanced",
+  "inputs": {
+   "noise": [
+    "18",
+    0
+   ],
+   "guider": [
+    "19",
+    0
+   ],
+   "sampler": [
+    "20",
+    0
+   ],
+   "sigmas": [
+    "21",
+    0
+   ],
+   "latent_image": [
+    "22",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "SamplerCustomAdvanced"
+  }
+ },
+ "24": {
+  "class_type": "VAEDecode",
+  "inputs": {
+   "samples": [
+    "23",
+    0
+   ],
+   "vae": [
+    "8",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "VAEDecode"
+  }
+ },
+ "25": {
+  "class_type": "PreviewImage",
+  "inputs": {
+   "images": [
+    "24",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Raw edit"
+  }
+ },
+ "26": {
+  "class_type": "PrimitiveInt",
+  "inputs": {
+   "value": 768
+  },
+  "_meta": {
+   "title": "Output long side (px)"
+  }
+ },
+ "27": {
+  "class_type": "LoadBackgroundRemovalModel",
+  "inputs": {
+   "bg_removal_name": "birefnet.safetensors"
+  },
+  "_meta": {
+   "title": "LoadBackgroundRemovalModel"
+  }
+ },
+ "28": {
+  "class_type": "RemoveBackground",
+  "inputs": {
+   "bg_removal_model": [
+    "27",
+    0
+   ],
+   "image": [
+    "24",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "RemoveBackground"
+  }
+ },
+ "29": {
+  "class_type": "SK_HDCutout",
+  "inputs": {
+   "image": [
+    "24",
+    0
+   ],
+   "mode": "mask_and_key",
+   "tolerance": 0.08,
+   "remove_shadow": true,
+   "soft_edges": true,
+   "decontaminate": true,
+   "trim": true,
+   "margin": 8,
+   "out_long_side": [
+    "26",
+    0
+   ],
+   "enabled": true,
+   "foreground_mask": [
+    "28",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "SK_HDCutout"
+  }
+ },
+ "30": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "29",
+    0
+   ],
+   "filename_prefix": "spritekiln/hd_edit",
+   "upscale": 1,
+   "as_animation": false,
+   "fps": 8.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ }
+}

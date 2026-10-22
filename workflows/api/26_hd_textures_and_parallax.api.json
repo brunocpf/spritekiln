@@ -1,0 +1,387 @@
+{
+ "2": {
+  "class_type": "UNETLoader",
+  "inputs": {
+   "unet_name": "z_image_turbo_bf16.safetensors",
+   "weight_dtype": "default"
+  },
+  "_meta": {
+   "title": "UNETLoader"
+  }
+ },
+ "3": {
+  "class_type": "ModelSamplingAuraFlow",
+  "inputs": {
+   "model": [
+    "2",
+    0
+   ],
+   "shift": 3.0
+  },
+  "_meta": {
+   "title": "ModelSamplingAuraFlow"
+  }
+ },
+ "4": {
+  "class_type": "CLIPLoader",
+  "inputs": {
+   "clip_name": "qwen_3_4b.safetensors",
+   "type": "lumina2",
+   "device": "default"
+  },
+  "_meta": {
+   "title": "CLIPLoader"
+  }
+ },
+ "5": {
+  "class_type": "VAELoader",
+  "inputs": {
+   "vae_name": "ae.safetensors"
+  },
+  "_meta": {
+   "title": "VAELoader"
+  }
+ },
+ "6": {
+  "class_type": "SK_HDStylePreset",
+  "inputs": {
+   "subject": "mossy cobblestone path with small flowers",
+   "style": "texture (painted, tileable)",
+   "background": "scene",
+   "out_long_side": 0,
+   "extra": ""
+  },
+  "_meta": {
+   "title": "SK_HDStylePreset"
+  }
+ },
+ "7": {
+  "class_type": "SK_SeamlessTiling",
+  "inputs": {
+   "model": [
+    "3",
+    0
+   ],
+   "axes": "both",
+   "align": 2
+  },
+  "_meta": {
+   "title": "SK_SeamlessTiling"
+  }
+ },
+ "8": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": [
+    "6",
+    0
+   ],
+   "clip": [
+    "4",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Prompt"
+  }
+ },
+ "9": {
+  "class_type": "ConditioningZeroOut",
+  "inputs": {
+   "conditioning": [
+    "8",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ConditioningZeroOut"
+  }
+ },
+ "10": {
+  "class_type": "EmptySD3LatentImage",
+  "inputs": {
+   "width": [
+    "6",
+    2
+   ],
+   "height": [
+    "6",
+    3
+   ],
+   "batch_size": 1
+  },
+  "_meta": {
+   "title": "EmptySD3LatentImage"
+  }
+ },
+ "11": {
+  "class_type": "KSampler",
+  "inputs": {
+   "model": [
+    "7",
+    0
+   ],
+   "seed": 1234,
+   "steps": 8,
+   "cfg": 1.0,
+   "sampler_name": "res_multistep",
+   "scheduler": "simple",
+   "positive": [
+    "8",
+    0
+   ],
+   "negative": [
+    "9",
+    0
+   ],
+   "latent_image": [
+    "10",
+    0
+   ],
+   "denoise": 1.0
+  },
+  "_meta": {
+   "title": "KSampler"
+  }
+ },
+ "12": {
+  "class_type": "SK_SeamlessVAEDecode",
+  "inputs": {
+   "samples": [
+    "11",
+    0
+   ],
+   "vae": [
+    "5",
+    0
+   ],
+   "axes": "both",
+   "pad_latent": 8
+  },
+  "_meta": {
+   "title": "SK_SeamlessVAEDecode"
+  }
+ },
+ "13": {
+  "class_type": "ImageScale",
+  "inputs": {
+   "image": [
+    "12",
+    0
+   ],
+   "upscale_method": "lanczos",
+   "width": 512,
+   "height": 512,
+   "crop": "disabled"
+  },
+  "_meta": {
+   "title": "Texture size"
+  }
+ },
+ "14": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "13",
+    0
+   ],
+   "filename_prefix": "spritekiln/hd_texture",
+   "upscale": 1,
+   "as_animation": false,
+   "fps": 8.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ },
+ "15": {
+  "class_type": "SK_TilePreview",
+  "inputs": {
+   "image": [
+    "13",
+    0
+   ],
+   "repeat_x": 3,
+   "repeat_y": 2
+  },
+  "_meta": {
+   "title": "SK_TilePreview"
+  }
+ },
+ "16": {
+  "class_type": "PreviewImage",
+  "inputs": {
+   "images": [
+    "15",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Tiling check"
+  }
+ },
+ "17": {
+  "class_type": "SK_HDStylePreset",
+  "inputs": {
+   "subject": "enchanted forest with giant mushrooms and distant hills",
+   "style": "painted background / parallax layer",
+   "background": "scene",
+   "out_long_side": 0,
+   "extra": ""
+  },
+  "_meta": {
+   "title": "SK_HDStylePreset"
+  }
+ },
+ "18": {
+  "class_type": "SK_SeamlessTiling",
+  "inputs": {
+   "model": [
+    "3",
+    0
+   ],
+   "axes": "x",
+   "align": 2
+  },
+  "_meta": {
+   "title": "SK_SeamlessTiling"
+  }
+ },
+ "19": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": [
+    "17",
+    0
+   ],
+   "clip": [
+    "4",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Prompt"
+  }
+ },
+ "20": {
+  "class_type": "ConditioningZeroOut",
+  "inputs": {
+   "conditioning": [
+    "19",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ConditioningZeroOut"
+  }
+ },
+ "21": {
+  "class_type": "EmptySD3LatentImage",
+  "inputs": {
+   "width": [
+    "17",
+    2
+   ],
+   "height": [
+    "17",
+    3
+   ],
+   "batch_size": 1
+  },
+  "_meta": {
+   "title": "EmptySD3LatentImage"
+  }
+ },
+ "22": {
+  "class_type": "KSampler",
+  "inputs": {
+   "model": [
+    "18",
+    0
+   ],
+   "seed": 1234,
+   "steps": 8,
+   "cfg": 1.0,
+   "sampler_name": "res_multistep",
+   "scheduler": "simple",
+   "positive": [
+    "19",
+    0
+   ],
+   "negative": [
+    "20",
+    0
+   ],
+   "latent_image": [
+    "21",
+    0
+   ],
+   "denoise": 1.0
+  },
+  "_meta": {
+   "title": "KSampler"
+  }
+ },
+ "23": {
+  "class_type": "SK_SeamlessVAEDecode",
+  "inputs": {
+   "samples": [
+    "22",
+    0
+   ],
+   "vae": [
+    "5",
+    0
+   ],
+   "axes": "x",
+   "pad_latent": 8
+  },
+  "_meta": {
+   "title": "SK_SeamlessVAEDecode"
+  }
+ },
+ "24": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "23",
+    0
+   ],
+   "filename_prefix": "spritekiln/hd_parallax",
+   "upscale": 1,
+   "as_animation": false,
+   "fps": 8.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ },
+ "25": {
+  "class_type": "SK_TilePreview",
+  "inputs": {
+   "image": [
+    "23",
+    0
+   ],
+   "repeat_x": 2,
+   "repeat_y": 1
+  },
+  "_meta": {
+   "title": "SK_TilePreview"
+  }
+ },
+ "26": {
+  "class_type": "PreviewImage",
+  "inputs": {
+   "images": [
+    "25",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Horizontal loop check"
+  }
+ }
+}

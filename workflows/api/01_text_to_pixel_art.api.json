@@ -1,0 +1,323 @@
+{
+ "2": {
+  "class_type": "SK_StylePreset",
+  "inputs": {
+   "subject": "a brave knight with a red cape, silver armor and a sword",
+   "style": "character (side view)",
+   "model": "z_image (pixel LoRA)",
+   "art_width": 0,
+   "art_height": 0,
+   "colors": 0,
+   "background": "auto",
+   "long_side": 1024,
+   "extra": ""
+  },
+  "_meta": {
+   "title": "SK_StylePreset"
+  }
+ },
+ "3": {
+  "class_type": "UNETLoader",
+  "inputs": {
+   "unet_name": "z_image_turbo_bf16.safetensors",
+   "weight_dtype": "default"
+  },
+  "_meta": {
+   "title": "UNETLoader"
+  }
+ },
+ "4": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "3",
+    0
+   ],
+   "lora_name": "spritekiln_zimage_pixel_art.safetensors",
+   "strength_model": [
+    "2",
+    8
+   ]
+  },
+  "_meta": {
+   "title": "Pixel-art LoRA (Z-Image)"
+  }
+ },
+ "5": {
+  "class_type": "ModelSamplingAuraFlow",
+  "inputs": {
+   "model": [
+    "4",
+    0
+   ],
+   "shift": 3.0
+  },
+  "_meta": {
+   "title": "ModelSamplingAuraFlow"
+  }
+ },
+ "6": {
+  "class_type": "CLIPLoader",
+  "inputs": {
+   "clip_name": "qwen_3_4b.safetensors",
+   "type": "lumina2",
+   "device": "default"
+  },
+  "_meta": {
+   "title": "CLIPLoader"
+  }
+ },
+ "7": {
+  "class_type": "VAELoader",
+  "inputs": {
+   "vae_name": "ae.safetensors"
+  },
+  "_meta": {
+   "title": "VAELoader"
+  }
+ },
+ "8": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": [
+    "2",
+    0
+   ],
+   "clip": [
+    "6",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Prompt"
+  }
+ },
+ "9": {
+  "class_type": "ConditioningZeroOut",
+  "inputs": {
+   "conditioning": [
+    "8",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ConditioningZeroOut"
+  }
+ },
+ "10": {
+  "class_type": "EmptySD3LatentImage",
+  "inputs": {
+   "width": [
+    "2",
+    4
+   ],
+   "height": [
+    "2",
+    5
+   ],
+   "batch_size": 1
+  },
+  "_meta": {
+   "title": "EmptySD3LatentImage"
+  }
+ },
+ "11": {
+  "class_type": "KSampler",
+  "inputs": {
+   "model": [
+    "5",
+    0
+   ],
+   "seed": 1234,
+   "steps": 8,
+   "cfg": 1.0,
+   "sampler_name": "res_multistep",
+   "scheduler": "simple",
+   "positive": [
+    "8",
+    0
+   ],
+   "negative": [
+    "9",
+    0
+   ],
+   "latent_image": [
+    "10",
+    0
+   ],
+   "denoise": 1.0
+  },
+  "_meta": {
+   "title": "KSampler"
+  }
+ },
+ "12": {
+  "class_type": "VAEDecode",
+  "inputs": {
+   "samples": [
+    "11",
+    0
+   ],
+   "vae": [
+    "7",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "VAEDecode"
+  }
+ },
+ "13": {
+  "class_type": "PreviewImage",
+  "inputs": {
+   "images": [
+    "12",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Raw model output"
+  }
+ },
+ "14": {
+  "class_type": "LoadBackgroundRemovalModel",
+  "inputs": {
+   "bg_removal_name": "birefnet.safetensors"
+  },
+  "_meta": {
+   "title": "LoadBackgroundRemovalModel"
+  }
+ },
+ "15": {
+  "class_type": "RemoveBackground",
+  "inputs": {
+   "bg_removal_model": [
+    "14",
+    0
+   ],
+   "image": [
+    "12",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "RemoveBackground"
+  }
+ },
+ "16": {
+  "class_type": "SK_BackgroundRemove",
+  "inputs": {
+   "image": [
+    "12",
+    0
+   ],
+   "mode": "mask_and_key",
+   "remove_shadow": true,
+   "tolerance": 0.08,
+   "mask_threshold": 0.5,
+   "enabled": [
+    "2",
+    7
+   ],
+   "foreground_mask": [
+    "15",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "SK_BackgroundRemove"
+  }
+ },
+ "17": {
+  "class_type": "SK_PixelPerfect",
+  "inputs": {
+   "image": [
+    "16",
+    0
+   ],
+   "mode": "fixed_size",
+   "width": [
+    "2",
+    2
+   ],
+   "height": [
+    "2",
+    3
+   ],
+   "scale": 16,
+   "method": "dominant",
+   "pre_colors": 48
+  },
+  "_meta": {
+   "title": "SK_PixelPerfect"
+  }
+ },
+ "18": {
+  "class_type": "SK_Palette",
+  "inputs": {
+   "image": [
+    "17",
+    0
+   ],
+   "source": "auto",
+   "colors": [
+    "2",
+    6
+   ],
+   "preset": "PICO-8",
+   "dither": "none",
+   "dither_strength": 0.5,
+   "shared_palette": true
+  },
+  "_meta": {
+   "title": "SK_Palette"
+  }
+ },
+ "19": {
+  "class_type": "SK_Cleanup",
+  "inputs": {
+   "image": [
+    "18",
+    0
+   ],
+   "speck_size": 2,
+   "max_contrast": 0.12,
+   "outline": "none",
+   "outline_color": "#140c1c",
+   "outline_diagonal": false,
+   "darken": 0.45
+  },
+  "_meta": {
+   "title": "SK_Cleanup"
+  }
+ },
+ "20": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "19",
+    0
+   ],
+   "filename_prefix": "spritekiln/text2pixel",
+   "upscale": 8,
+   "as_animation": false,
+   "fps": 8.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ },
+ "21": {
+  "class_type": "PreviewImage",
+  "inputs": {
+   "images": [
+    "18",
+    1
+   ]
+  },
+  "_meta": {
+   "title": "Palette"
+  }
+ }
+}

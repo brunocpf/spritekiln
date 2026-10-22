@@ -1,0 +1,409 @@
+{
+ "2": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "spritekiln_example_sprite.png"
+  },
+  "_meta": {
+   "title": "Object image"
+  }
+ },
+ "3": {
+  "class_type": "JoinImageWithAlpha",
+  "inputs": {
+   "image": [
+    "2",
+    0
+   ],
+   "alpha": [
+    "2",
+    1
+   ]
+  },
+  "_meta": {
+   "title": "Object image (RGBA)"
+  }
+ },
+ "4": {
+  "class_type": "SK_ToCanvas",
+  "inputs": {
+   "image": [
+    "3",
+    0
+   ],
+   "long_side": 1024,
+   "multiple": 16,
+   "background": "white",
+   "custom_color": "#808080",
+   "padding": 0
+  },
+  "_meta": {
+   "title": "SK_ToCanvas"
+  }
+ },
+ "5": {
+  "class_type": "PrimitiveInt",
+  "inputs": {
+   "value": 64
+  },
+  "_meta": {
+   "title": "Art size per view"
+  }
+ },
+ "6": {
+  "class_type": "UNETLoader",
+  "inputs": {
+   "unet_name": "flux-2-klein-base-4b.safetensors",
+   "weight_dtype": "default"
+  },
+  "_meta": {
+   "title": "FLUX.2 klein 4B base"
+  }
+ },
+ "7": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "6",
+    0
+   ],
+   "lora_name": "spritekiln_klein_2x2_multiview.safetensors",
+   "strength_model": 1.1
+  },
+  "_meta": {
+   "title": "2x2 sprite-sheet LoRA (fal)"
+  }
+ },
+ "8": {
+  "class_type": "CLIPLoader",
+  "inputs": {
+   "clip_name": "qwen_3_4b.safetensors",
+   "type": "flux2",
+   "device": "default"
+  },
+  "_meta": {
+   "title": "CLIPLoader"
+  }
+ },
+ "9": {
+  "class_type": "VAELoader",
+  "inputs": {
+   "vae_name": "flux2-vae.safetensors"
+  },
+  "_meta": {
+   "title": "VAELoader"
+  }
+ },
+ "10": {
+  "class_type": "VAEEncode",
+  "inputs": {
+   "pixels": [
+    "4",
+    0
+   ],
+   "vae": [
+    "9",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "VAEEncode"
+  }
+ },
+ "11": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": "2x2 sprite sheet, pixel art",
+   "clip": [
+    "8",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Prompt"
+  }
+ },
+ "12": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": "blurry, photo, text",
+   "clip": [
+    "8",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Negative"
+  }
+ },
+ "13": {
+  "class_type": "ReferenceLatent",
+  "inputs": {
+   "conditioning": [
+    "11",
+    0
+   ],
+   "latent": [
+    "10",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ReferenceLatent"
+  }
+ },
+ "14": {
+  "class_type": "ReferenceLatent",
+  "inputs": {
+   "conditioning": [
+    "12",
+    0
+   ],
+   "latent": [
+    "10",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ReferenceLatent"
+  }
+ },
+ "15": {
+  "class_type": "RandomNoise",
+  "inputs": {
+   "noise_seed": 1234
+  },
+  "_meta": {
+   "title": "RandomNoise"
+  }
+ },
+ "16": {
+  "class_type": "CFGGuider",
+  "inputs": {
+   "model": [
+    "7",
+    0
+   ],
+   "positive": [
+    "13",
+    0
+   ],
+   "negative": [
+    "14",
+    0
+   ],
+   "cfg": 5.0
+  },
+  "_meta": {
+   "title": "CFGGuider"
+  }
+ },
+ "17": {
+  "class_type": "KSamplerSelect",
+  "inputs": {
+   "sampler_name": "euler"
+  },
+  "_meta": {
+   "title": "KSamplerSelect"
+  }
+ },
+ "18": {
+  "class_type": "Flux2Scheduler",
+  "inputs": {
+   "steps": 20,
+   "width": 1024,
+   "height": 1024
+  },
+  "_meta": {
+   "title": "Flux2Scheduler"
+  }
+ },
+ "19": {
+  "class_type": "EmptyFlux2LatentImage",
+  "inputs": {
+   "width": 1024,
+   "height": 1024,
+   "batch_size": 1
+  },
+  "_meta": {
+   "title": "EmptyFlux2LatentImage"
+  }
+ },
+ "20": {
+  "class_type": "SamplerCustomAdvanced",
+  "inputs": {
+   "noise": [
+    "15",
+    0
+   ],
+   "guider": [
+    "16",
+    0
+   ],
+   "sampler": [
+    "17",
+    0
+   ],
+   "sigmas": [
+    "18",
+    0
+   ],
+   "latent_image": [
+    "19",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "SamplerCustomAdvanced"
+  }
+ },
+ "21": {
+  "class_type": "VAEDecode",
+  "inputs": {
+   "samples": [
+    "20",
+    0
+   ],
+   "vae": [
+    "9",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "VAEDecode"
+  }
+ },
+ "22": {
+  "class_type": "PreviewImage",
+  "inputs": {
+   "images": [
+    "21",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Raw 2x2 sheet"
+  }
+ },
+ "23": {
+  "class_type": "SK_SliceSheet",
+  "inputs": {
+   "sheet": [
+    "21",
+    0
+   ],
+   "rows": 2,
+   "columns": 2,
+   "inset": 6,
+   "order": "row_major"
+  },
+  "_meta": {
+   "title": "SK_SliceSheet"
+  }
+ },
+ "24": {
+  "class_type": "LoadBackgroundRemovalModel",
+  "inputs": {
+   "bg_removal_name": "birefnet.safetensors"
+  },
+  "_meta": {
+   "title": "LoadBackgroundRemovalModel"
+  }
+ },
+ "25": {
+  "class_type": "RemoveBackground",
+  "inputs": {
+   "bg_removal_model": [
+    "24",
+    0
+   ],
+   "image": [
+    "23",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "RemoveBackground"
+  }
+ },
+ "26": {
+  "class_type": "SK_BackgroundRemove",
+  "inputs": {
+   "image": [
+    "23",
+    0
+   ],
+   "mode": "mask_and_key",
+   "remove_shadow": true,
+   "tolerance": 0.1,
+   "mask_threshold": 0.5,
+   "enabled": true,
+   "foreground_mask": [
+    "25",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Remove the LoRA's red background"
+  }
+ },
+ "27": {
+  "class_type": "SK_PixelPerfect",
+  "inputs": {
+   "image": [
+    "26",
+    0
+   ],
+   "mode": "fixed_size",
+   "width": [
+    "5",
+    0
+   ],
+   "height": [
+    "5",
+    0
+   ],
+   "scale": 8,
+   "method": "dominant",
+   "pre_colors": 48
+  },
+  "_meta": {
+   "title": "SK_PixelPerfect"
+  }
+ },
+ "28": {
+  "class_type": "SK_Palette",
+  "inputs": {
+   "image": [
+    "27",
+    0
+   ],
+   "source": "auto",
+   "colors": 24,
+   "preset": "PICO-8",
+   "dither": "none",
+   "dither_strength": 0.5,
+   "shared_palette": true
+  },
+  "_meta": {
+   "title": "SK_Palette"
+  }
+ },
+ "29": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "28",
+    0
+   ],
+   "filename_prefix": "spritekiln/multiview",
+   "upscale": 8,
+   "as_animation": true,
+   "fps": 2.0,
+   "sheet_columns": 2
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ }
+}

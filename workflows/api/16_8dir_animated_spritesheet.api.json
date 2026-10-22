@@ -1,0 +1,842 @@
+{
+ "2": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "spritekiln_example_sprite.png"
+  },
+  "_meta": {
+   "title": "Front-facing sprite"
+  }
+ },
+ "3": {
+  "class_type": "JoinImageWithAlpha",
+  "inputs": {
+   "image": [
+    "2",
+    0
+   ],
+   "alpha": [
+    "2",
+    1
+   ]
+  },
+  "_meta": {
+   "title": "Front-facing sprite (RGBA)"
+  }
+ },
+ "4": {
+  "class_type": "SK_ToCanvas",
+  "inputs": {
+   "image": [
+    "3",
+    0
+   ],
+   "long_side": 1024,
+   "multiple": 16,
+   "background": "gray",
+   "custom_color": "#808080",
+   "padding": 0
+  },
+  "_meta": {
+   "title": "SK_ToCanvas"
+  }
+ },
+ "5": {
+  "class_type": "SK_DirectionPrompts",
+  "inputs": {
+   "directions": "8",
+   "mirror_west": true,
+   "prompt_style": "flux2 klein",
+   "template": "Turn the character in the image to a {direction}. Keep exactly the same character design, outfit, colors, proportions, size and pixel art style. Full body, centered, {background}.",
+   "background": "gray"
+  },
+  "_meta": {
+   "title": "SK_DirectionPrompts"
+  }
+ },
+ "6": {
+  "class_type": "SK_AnimationPreset",
+  "inputs": {
+   "subject": "the pixel art knight",
+   "action": "walk",
+   "view": "keep facing direction",
+   "custom_motion": "",
+   "background": "gray",
+   "art": "pixel art"
+  },
+  "_meta": {
+   "title": "SK_AnimationPreset"
+  }
+ },
+ "7": {
+  "class_type": "PrimitiveInt",
+  "inputs": {
+   "value": 33
+  },
+  "_meta": {
+   "title": "Video frames (4n+1)"
+  }
+ },
+ "8": {
+  "class_type": "UNETLoader",
+  "inputs": {
+   "unet_name": "flux-2-klein-4b.safetensors",
+   "weight_dtype": "default"
+  },
+  "_meta": {
+   "title": "FLUX.2 klein 4B distilled"
+  }
+ },
+ "9": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "8",
+    0
+   ],
+   "lora_name": "spritekiln_klein_pixel_art.safetensors",
+   "strength_model": 0.6
+  },
+  "_meta": {
+   "title": "Pixel-art LoRA (klein)"
+  }
+ },
+ "10": {
+  "class_type": "CLIPLoader",
+  "inputs": {
+   "clip_name": "qwen_3_4b.safetensors",
+   "type": "flux2",
+   "device": "default"
+  },
+  "_meta": {
+   "title": "CLIPLoader"
+  }
+ },
+ "11": {
+  "class_type": "VAELoader",
+  "inputs": {
+   "vae_name": "flux2-vae.safetensors"
+  },
+  "_meta": {
+   "title": "VAELoader"
+  }
+ },
+ "12": {
+  "class_type": "VAEEncode",
+  "inputs": {
+   "pixels": [
+    "4",
+    0
+   ],
+   "vae": [
+    "11",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "VAEEncode"
+  }
+ },
+ "13": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": [
+    "5",
+    0
+   ],
+   "clip": [
+    "10",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Prompt"
+  }
+ },
+ "14": {
+  "class_type": "ConditioningZeroOut",
+  "inputs": {
+   "conditioning": [
+    "13",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ConditioningZeroOut"
+  }
+ },
+ "15": {
+  "class_type": "ReferenceLatent",
+  "inputs": {
+   "conditioning": [
+    "13",
+    0
+   ],
+   "latent": [
+    "12",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ReferenceLatent"
+  }
+ },
+ "16": {
+  "class_type": "ReferenceLatent",
+  "inputs": {
+   "conditioning": [
+    "14",
+    0
+   ],
+   "latent": [
+    "12",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ReferenceLatent"
+  }
+ },
+ "17": {
+  "class_type": "RandomNoise",
+  "inputs": {
+   "noise_seed": 1234
+  },
+  "_meta": {
+   "title": "RandomNoise"
+  }
+ },
+ "18": {
+  "class_type": "CFGGuider",
+  "inputs": {
+   "model": [
+    "9",
+    0
+   ],
+   "positive": [
+    "15",
+    0
+   ],
+   "negative": [
+    "16",
+    0
+   ],
+   "cfg": 1.0
+  },
+  "_meta": {
+   "title": "CFGGuider"
+  }
+ },
+ "19": {
+  "class_type": "KSamplerSelect",
+  "inputs": {
+   "sampler_name": "euler"
+  },
+  "_meta": {
+   "title": "KSamplerSelect"
+  }
+ },
+ "20": {
+  "class_type": "Flux2Scheduler",
+  "inputs": {
+   "steps": 4,
+   "width": [
+    "4",
+    2
+   ],
+   "height": [
+    "4",
+    3
+   ]
+  },
+  "_meta": {
+   "title": "Flux2Scheduler"
+  }
+ },
+ "21": {
+  "class_type": "EmptyFlux2LatentImage",
+  "inputs": {
+   "width": [
+    "4",
+    2
+   ],
+   "height": [
+    "4",
+    3
+   ],
+   "batch_size": 1
+  },
+  "_meta": {
+   "title": "EmptyFlux2LatentImage"
+  }
+ },
+ "22": {
+  "class_type": "SamplerCustomAdvanced",
+  "inputs": {
+   "noise": [
+    "17",
+    0
+   ],
+   "guider": [
+    "18",
+    0
+   ],
+   "sampler": [
+    "19",
+    0
+   ],
+   "sigmas": [
+    "20",
+    0
+   ],
+   "latent_image": [
+    "21",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "SamplerCustomAdvanced"
+  }
+ },
+ "23": {
+  "class_type": "VAEDecode",
+  "inputs": {
+   "samples": [
+    "22",
+    0
+   ],
+   "vae": [
+    "11",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "VAEDecode"
+  }
+ },
+ "24": {
+  "class_type": "SK_PixelPerfect",
+  "inputs": {
+   "image": [
+    "23",
+    0
+   ],
+   "mode": "match_reference",
+   "width": 64,
+   "height": 64,
+   "scale": [
+    "4",
+    1
+   ],
+   "method": "dominant",
+   "pre_colors": 48,
+   "reference": [
+    "4",
+    4
+   ]
+  },
+  "_meta": {
+   "title": "SK_PixelPerfect"
+  }
+ },
+ "25": {
+  "class_type": "SK_BackgroundRemove",
+  "inputs": {
+   "image": [
+    "24",
+    0
+   ],
+   "mode": "border_flood",
+   "remove_shadow": true,
+   "tolerance": 0.08,
+   "mask_threshold": 0.5,
+   "enabled": true
+  },
+  "_meta": {
+   "title": "SK_BackgroundRemove"
+  }
+ },
+ "26": {
+  "class_type": "SK_Palette",
+  "inputs": {
+   "image": [
+    "25",
+    0
+   ],
+   "source": "palette_image",
+   "colors": 256,
+   "preset": "PICO-8",
+   "dither": "none",
+   "dither_strength": 0.5,
+   "shared_palette": true,
+   "palette_image": [
+    "3",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Lock to the sprite's palette"
+  }
+ },
+ "27": {
+  "class_type": "SK_ToCanvas",
+  "inputs": {
+   "image": [
+    "26",
+    0
+   ],
+   "long_side": 640,
+   "multiple": 16,
+   "background": "gray",
+   "custom_color": "#808080",
+   "padding": 8,
+   "target_width": 640,
+   "target_height": 640
+  },
+  "_meta": {
+   "title": "Facing → video canvas"
+  }
+ },
+ "28": {
+  "class_type": "CLIPLoader",
+  "inputs": {
+   "clip_name": "umt5_xxl_fp16.safetensors",
+   "type": "wan",
+   "device": "default"
+  },
+  "_meta": {
+   "title": "CLIPLoader"
+  }
+ },
+ "29": {
+  "class_type": "VAELoader",
+  "inputs": {
+   "vae_name": "wan_2.1_vae.safetensors"
+  },
+  "_meta": {
+   "title": "VAELoader"
+  }
+ },
+ "30": {
+  "class_type": "UnetLoaderGGUF",
+  "inputs": {
+   "unet_name": "wan2.2_i2v_high_noise_14B_Q4_K_M.gguf"
+  },
+  "_meta": {
+   "title": "Wan 2.2 I2V 14B high noise"
+  }
+ },
+ "31": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "30",
+    0
+   ],
+   "lora_name": "wan2.2_i2v_lightning_4step_high.safetensors",
+   "strength_model": 1.0
+  },
+  "_meta": {
+   "title": "Lightning 4-step (high)"
+  }
+ },
+ "32": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "31",
+    0
+   ],
+   "lora_name": "spritekiln_wan22_pixel_animate.safetensors",
+   "strength_model": 1.0
+  },
+  "_meta": {
+   "title": "Pixel-animate LoRA (high)"
+  }
+ },
+ "33": {
+  "class_type": "ModelSamplingSD3",
+  "inputs": {
+   "model": [
+    "32",
+    0
+   ],
+   "shift": 5.0
+  },
+  "_meta": {
+   "title": "ModelSamplingSD3"
+  }
+ },
+ "34": {
+  "class_type": "UnetLoaderGGUF",
+  "inputs": {
+   "unet_name": "wan2.2_i2v_low_noise_14B_Q4_K_M.gguf"
+  },
+  "_meta": {
+   "title": "Wan 2.2 I2V 14B low noise"
+  }
+ },
+ "35": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "34",
+    0
+   ],
+   "lora_name": "wan2.2_i2v_lightning_4step_low.safetensors",
+   "strength_model": 1.0
+  },
+  "_meta": {
+   "title": "Lightning 4-step (low)"
+  }
+ },
+ "36": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "35",
+    0
+   ],
+   "lora_name": "spritekiln_wan22_pixel_animate.safetensors",
+   "strength_model": 1.0
+  },
+  "_meta": {
+   "title": "Pixel-animate LoRA (low)"
+  }
+ },
+ "37": {
+  "class_type": "ModelSamplingSD3",
+  "inputs": {
+   "model": [
+    "36",
+    0
+   ],
+   "shift": 5.0
+  },
+  "_meta": {
+   "title": "ModelSamplingSD3"
+  }
+ },
+ "38": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": [
+    "6",
+    0
+   ],
+   "clip": [
+    "28",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Motion prompt"
+  }
+ },
+ "39": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": [
+    "6",
+    1
+   ],
+   "clip": [
+    "28",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Negative"
+  }
+ },
+ "40": {
+  "class_type": "WanImageToVideo",
+  "inputs": {
+   "positive": [
+    "38",
+    0
+   ],
+   "negative": [
+    "39",
+    0
+   ],
+   "vae": [
+    "29",
+    0
+   ],
+   "width": [
+    "27",
+    2
+   ],
+   "height": [
+    "27",
+    3
+   ],
+   "length": [
+    "7",
+    0
+   ],
+   "batch_size": 1,
+   "start_image": [
+    "27",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "WanImageToVideo"
+  }
+ },
+ "41": {
+  "class_type": "KSamplerAdvanced",
+  "inputs": {
+   "model": [
+    "33",
+    0
+   ],
+   "add_noise": "enable",
+   "noise_seed": 1234,
+   "steps": 4,
+   "cfg": 1.0,
+   "sampler_name": "euler",
+   "scheduler": "simple",
+   "positive": [
+    "40",
+    0
+   ],
+   "negative": [
+    "40",
+    1
+   ],
+   "latent_image": [
+    "40",
+    2
+   ],
+   "start_at_step": 0,
+   "end_at_step": 2,
+   "return_with_leftover_noise": "enable"
+  },
+  "_meta": {
+   "title": "High noise (steps 0-2)"
+  }
+ },
+ "42": {
+  "class_type": "KSamplerAdvanced",
+  "inputs": {
+   "model": [
+    "37",
+    0
+   ],
+   "add_noise": "disable",
+   "noise_seed": 1234,
+   "steps": 4,
+   "cfg": 1.0,
+   "sampler_name": "euler",
+   "scheduler": "simple",
+   "positive": [
+    "40",
+    0
+   ],
+   "negative": [
+    "40",
+    1
+   ],
+   "latent_image": [
+    "41",
+    0
+   ],
+   "start_at_step": 2,
+   "end_at_step": 10000,
+   "return_with_leftover_noise": "disable"
+  },
+  "_meta": {
+   "title": "Low noise (steps 2-4)"
+  }
+ },
+ "43": {
+  "class_type": "VAEDecode",
+  "inputs": {
+   "samples": [
+    "42",
+    0
+   ],
+   "vae": [
+    "29",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "VAEDecode"
+  }
+ },
+ "44": {
+  "class_type": "SK_FrameSelect",
+  "inputs": {
+   "frames": [
+    "43",
+    0
+   ],
+   "count": [
+    "6",
+    2
+   ],
+   "mode": "auto",
+   "skip_start": 1,
+   "min_loop_fraction": 0.4,
+   "loop": [
+    "6",
+    4
+   ]
+  },
+  "_meta": {
+   "title": "SK_FrameSelect"
+  }
+ },
+ "45": {
+  "class_type": "SK_PixelPerfect",
+  "inputs": {
+   "image": [
+    "44",
+    0
+   ],
+   "mode": "match_reference",
+   "width": 64,
+   "height": 64,
+   "scale": [
+    "27",
+    1
+   ],
+   "method": "dominant",
+   "pre_colors": 48,
+   "reference": [
+    "27",
+    4
+   ]
+  },
+  "_meta": {
+   "title": "SK_PixelPerfect"
+  }
+ },
+ "46": {
+  "class_type": "SK_BackgroundRemove",
+  "inputs": {
+   "image": [
+    "45",
+    0
+   ],
+   "mode": "border_flood",
+   "remove_shadow": true,
+   "tolerance": 0.08,
+   "mask_threshold": 0.5,
+   "enabled": true
+  },
+  "_meta": {
+   "title": "SK_BackgroundRemove"
+  }
+ },
+ "47": {
+  "class_type": "SK_Palette",
+  "inputs": {
+   "image": [
+    "46",
+    0
+   ],
+   "source": "palette_image",
+   "colors": 256,
+   "preset": "PICO-8",
+   "dither": "none",
+   "dither_strength": 0.5,
+   "shared_palette": true,
+   "palette_image": [
+    "3",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Lock to the sprite's palette"
+  }
+ },
+ "48": {
+  "class_type": "SK_Stabilize",
+  "inputs": {
+   "frames": [
+    "47",
+    0
+   ],
+   "anchor": "bottom_center"
+  },
+  "_meta": {
+   "title": "SK_Stabilize"
+  }
+ },
+ "49": {
+  "class_type": "SK_DirectionAssemble",
+  "inputs": {
+   "images": [
+    "48",
+    0
+   ],
+   "labels": [
+    "5",
+    1
+   ],
+   "order": "clockwise from S"
+  },
+  "_meta": {
+   "title": "SK_DirectionAssemble"
+  }
+ },
+ "50": {
+  "class_type": "SK_CropToContent",
+  "inputs": {
+   "frames": [
+    "49",
+    0
+   ],
+   "margin": 2,
+   "multiple": 2,
+   "square": false
+  },
+  "_meta": {
+   "title": "SK_CropToContent"
+  }
+ },
+ "51": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "50",
+    0
+   ],
+   "filename_prefix": "spritekiln/anim8dir",
+   "upscale": 6,
+   "as_animation": true,
+   "fps": [
+    "6",
+    3
+   ],
+   "sheet_columns": [
+    "49",
+    2
+   ],
+   "row_names": [
+    "49",
+    1
+   ]
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ },
+ "52": {
+  "class_type": "PreviewAny",
+  "inputs": {
+   "source": [
+    "49",
+    1
+   ]
+  },
+  "_meta": {
+   "title": "Row order"
+  }
+ }
+}

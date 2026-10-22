@@ -1,0 +1,536 @@
+{
+ "2": {
+  "class_type": "PrimitiveStringMultiline",
+  "inputs": {
+   "value": "A pixel art spritesheet of a medieval knight wearing metal armor and a helmet with a red plume."
+  },
+  "_meta": {
+   "title": "Character"
+  }
+ },
+ "3": {
+  "class_type": "StringConcatenate",
+  "inputs": {
+   "string_a": [
+    "2",
+    0
+   ],
+   "string_b": "The spritesheet is a 4 by 4 grid of four rows of frames - first row is 3 walking frames facing down and 1 frame both arms raised, second row is 3 walking frames facing left and 1 frame jumping left, third row is 3 walking frames facing right and 1 frame jumping right, fourth row is 3 walking frames back view facing up and 1 frame lying on floor.",
+   "delimiter": " "
+  },
+  "_meta": {
+   "title": "StringConcatenate"
+  }
+ },
+ "4": {
+  "class_type": "UNETLoader",
+  "inputs": {
+   "unet_name": "flux-2-klein-base-4b.safetensors",
+   "weight_dtype": "default"
+  },
+  "_meta": {
+   "title": "FLUX.2 klein 4B base"
+  }
+ },
+ "5": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "4",
+    0
+   ],
+   "lora_name": "spritekiln_klein_base_4walk_sheet.safetensors",
+   "strength_model": 1.0
+  },
+  "_meta": {
+   "title": "4-walk spritesheet LoRA"
+  }
+ },
+ "6": {
+  "class_type": "CLIPLoader",
+  "inputs": {
+   "clip_name": "qwen_3_4b.safetensors",
+   "type": "flux2",
+   "device": "default"
+  },
+  "_meta": {
+   "title": "CLIPLoader"
+  }
+ },
+ "7": {
+  "class_type": "VAELoader",
+  "inputs": {
+   "vae_name": "flux2-vae.safetensors"
+  },
+  "_meta": {
+   "title": "VAELoader"
+  }
+ },
+ "8": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": [
+    "3",
+    0
+   ],
+   "clip": [
+    "6",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Prompt"
+  }
+ },
+ "9": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": "blurry, smooth, photo, text, watermark",
+   "clip": [
+    "6",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Negative"
+  }
+ },
+ "10": {
+  "class_type": "RandomNoise",
+  "inputs": {
+   "noise_seed": 1234
+  },
+  "_meta": {
+   "title": "RandomNoise"
+  }
+ },
+ "11": {
+  "class_type": "CFGGuider",
+  "inputs": {
+   "model": [
+    "5",
+    0
+   ],
+   "positive": [
+    "8",
+    0
+   ],
+   "negative": [
+    "9",
+    0
+   ],
+   "cfg": 5.0
+  },
+  "_meta": {
+   "title": "CFGGuider"
+  }
+ },
+ "12": {
+  "class_type": "KSamplerSelect",
+  "inputs": {
+   "sampler_name": "euler"
+  },
+  "_meta": {
+   "title": "KSamplerSelect"
+  }
+ },
+ "13": {
+  "class_type": "Flux2Scheduler",
+  "inputs": {
+   "steps": 24,
+   "width": 512,
+   "height": 512
+  },
+  "_meta": {
+   "title": "Flux2Scheduler"
+  }
+ },
+ "14": {
+  "class_type": "EmptyFlux2LatentImage",
+  "inputs": {
+   "width": 512,
+   "height": 512,
+   "batch_size": 1
+  },
+  "_meta": {
+   "title": "EmptyFlux2LatentImage"
+  }
+ },
+ "15": {
+  "class_type": "SamplerCustomAdvanced",
+  "inputs": {
+   "noise": [
+    "10",
+    0
+   ],
+   "guider": [
+    "11",
+    0
+   ],
+   "sampler": [
+    "12",
+    0
+   ],
+   "sigmas": [
+    "13",
+    0
+   ],
+   "latent_image": [
+    "14",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "SamplerCustomAdvanced"
+  }
+ },
+ "16": {
+  "class_type": "VAEDecode",
+  "inputs": {
+   "samples": [
+    "15",
+    0
+   ],
+   "vae": [
+    "7",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "VAEDecode"
+  }
+ },
+ "17": {
+  "class_type": "PreviewImage",
+  "inputs": {
+   "images": [
+    "16",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Raw sheet"
+  }
+ },
+ "18": {
+  "class_type": "LoadBackgroundRemovalModel",
+  "inputs": {
+   "bg_removal_name": "birefnet.safetensors"
+  },
+  "_meta": {
+   "title": "LoadBackgroundRemovalModel"
+  }
+ },
+ "19": {
+  "class_type": "RemoveBackground",
+  "inputs": {
+   "bg_removal_model": [
+    "18",
+    0
+   ],
+   "image": [
+    "16",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "RemoveBackground"
+  }
+ },
+ "20": {
+  "class_type": "SK_BackgroundRemove",
+  "inputs": {
+   "image": [
+    "16",
+    0
+   ],
+   "mode": "mask_and_key",
+   "remove_shadow": true,
+   "tolerance": 0.08,
+   "mask_threshold": 0.5,
+   "enabled": true,
+   "foreground_mask": [
+    "19",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "SK_BackgroundRemove"
+  }
+ },
+ "21": {
+  "class_type": "SK_PixelPerfect",
+  "inputs": {
+   "image": [
+    "20",
+    0
+   ],
+   "mode": "fixed_size",
+   "width": 128,
+   "height": 128,
+   "scale": 4,
+   "method": "dominant",
+   "pre_colors": 48
+  },
+  "_meta": {
+   "title": "512 → 128 (x4, as trained)"
+  }
+ },
+ "22": {
+  "class_type": "SK_Palette",
+  "inputs": {
+   "image": [
+    "21",
+    0
+   ],
+   "source": "auto",
+   "colors": 24,
+   "preset": "PICO-8",
+   "dither": "none",
+   "dither_strength": 0.5,
+   "shared_palette": true
+  },
+  "_meta": {
+   "title": "SK_Palette"
+  }
+ },
+ "23": {
+  "class_type": "SK_Cleanup",
+  "inputs": {
+   "image": [
+    "22",
+    0
+   ],
+   "speck_size": 2,
+   "max_contrast": 0.12,
+   "outline": "none",
+   "outline_color": "#140c1c",
+   "outline_diagonal": false,
+   "darken": 0.45
+  },
+  "_meta": {
+   "title": "SK_Cleanup"
+  }
+ },
+ "24": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "23",
+    0
+   ],
+   "filename_prefix": "spritekiln/walksheet",
+   "upscale": 8,
+   "as_animation": false,
+   "fps": 8.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ },
+ "25": {
+  "class_type": "SK_SliceSheet",
+  "inputs": {
+   "sheet": [
+    "23",
+    0
+   ],
+   "rows": 4,
+   "columns": 4,
+   "inset": 0,
+   "order": "row_major"
+  },
+  "_meta": {
+   "title": "SK_SliceSheet"
+  }
+ },
+ "26": {
+  "class_type": "ImageFromBatch",
+  "inputs": {
+   "image": [
+    "25",
+    0
+   ],
+   "batch_index": 0,
+   "length": 3
+  },
+  "_meta": {
+   "title": "Walk down"
+  }
+ },
+ "27": {
+  "class_type": "SK_FrameSelect",
+  "inputs": {
+   "frames": [
+    "26",
+    0
+   ],
+   "count": 4,
+   "mode": "ping_pong",
+   "skip_start": 0,
+   "min_loop_fraction": 0.4
+  },
+  "_meta": {
+   "title": "Ping-pong 0-1-2-1"
+  }
+ },
+ "28": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "27",
+    0
+   ],
+   "filename_prefix": "spritekiln/walk_down",
+   "upscale": 8,
+   "as_animation": true,
+   "fps": 6.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ },
+ "29": {
+  "class_type": "ImageFromBatch",
+  "inputs": {
+   "image": [
+    "25",
+    0
+   ],
+   "batch_index": 4,
+   "length": 3
+  },
+  "_meta": {
+   "title": "Walk left"
+  }
+ },
+ "30": {
+  "class_type": "SK_FrameSelect",
+  "inputs": {
+   "frames": [
+    "29",
+    0
+   ],
+   "count": 4,
+   "mode": "ping_pong",
+   "skip_start": 0,
+   "min_loop_fraction": 0.4
+  },
+  "_meta": {
+   "title": "Ping-pong 0-1-2-1"
+  }
+ },
+ "31": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "30",
+    0
+   ],
+   "filename_prefix": "spritekiln/walk_left",
+   "upscale": 8,
+   "as_animation": true,
+   "fps": 6.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ },
+ "32": {
+  "class_type": "ImageFromBatch",
+  "inputs": {
+   "image": [
+    "25",
+    0
+   ],
+   "batch_index": 8,
+   "length": 3
+  },
+  "_meta": {
+   "title": "Walk right"
+  }
+ },
+ "33": {
+  "class_type": "SK_FrameSelect",
+  "inputs": {
+   "frames": [
+    "32",
+    0
+   ],
+   "count": 4,
+   "mode": "ping_pong",
+   "skip_start": 0,
+   "min_loop_fraction": 0.4
+  },
+  "_meta": {
+   "title": "Ping-pong 0-1-2-1"
+  }
+ },
+ "34": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "33",
+    0
+   ],
+   "filename_prefix": "spritekiln/walk_right",
+   "upscale": 8,
+   "as_animation": true,
+   "fps": 6.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ },
+ "35": {
+  "class_type": "ImageFromBatch",
+  "inputs": {
+   "image": [
+    "25",
+    0
+   ],
+   "batch_index": 12,
+   "length": 3
+  },
+  "_meta": {
+   "title": "Walk up"
+  }
+ },
+ "36": {
+  "class_type": "SK_FrameSelect",
+  "inputs": {
+   "frames": [
+    "35",
+    0
+   ],
+   "count": 4,
+   "mode": "ping_pong",
+   "skip_start": 0,
+   "min_loop_fraction": 0.4
+  },
+  "_meta": {
+   "title": "Ping-pong 0-1-2-1"
+  }
+ },
+ "37": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "36",
+    0
+   ],
+   "filename_prefix": "spritekiln/walk_up",
+   "upscale": 8,
+   "as_animation": true,
+   "fps": 6.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ }
+}

@@ -1,0 +1,87 @@
+{
+ "2": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "spritekiln_example_sheet.png"
+  },
+  "_meta": {
+   "title": "Sheet"
+  }
+ },
+ "3": {
+  "class_type": "JoinImageWithAlpha",
+  "inputs": {
+   "image": [
+    "2",
+    0
+   ],
+   "alpha": [
+    "2",
+    1
+   ]
+  },
+  "_meta": {
+   "title": "Sheet (RGBA)"
+  }
+ },
+ "4": {
+  "class_type": "SK_SliceSheet",
+  "inputs": {
+   "sheet": [
+    "3",
+    0
+   ],
+   "rows": 4,
+   "columns": 4,
+   "inset": 0,
+   "order": "row_major"
+  },
+  "_meta": {
+   "title": "SK_SliceSheet"
+  }
+ },
+ "5": {
+  "class_type": "ImageFromBatch",
+  "inputs": {
+   "image": [
+    "4",
+    0
+   ],
+   "batch_index": 0,
+   "length": 4
+  },
+  "_meta": {
+   "title": "Pick frames (row 1)"
+  }
+ },
+ "6": {
+  "class_type": "SK_Stabilize",
+  "inputs": {
+   "frames": [
+    "5",
+    0
+   ],
+   "anchor": "bottom_center"
+  },
+  "_meta": {
+   "title": "SK_Stabilize"
+  }
+ },
+ "7": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "6",
+    0
+   ],
+   "filename_prefix": "spritekiln/sheet_export",
+   "upscale": 8,
+   "as_animation": true,
+   "fps": 8.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ }
+}

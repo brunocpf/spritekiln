@@ -1,0 +1,496 @@
+{
+ "2": {
+  "class_type": "SK_StylePreset",
+  "inputs": {
+   "subject": "the character from image 1, redrawn as a pixel art sprite in the exact pixel art style, palette and shading of image 2",
+   "style": "game asset",
+   "model": "flux2 klein (pixel LoRA)",
+   "art_width": 64,
+   "art_height": 64,
+   "colors": 0,
+   "background": "auto",
+   "long_side": 1024,
+   "extra": ""
+  },
+  "_meta": {
+   "title": "SK_StylePreset"
+  }
+ },
+ "3": {
+  "class_type": "UNETLoader",
+  "inputs": {
+   "unet_name": "flux-2-klein-4b.safetensors",
+   "weight_dtype": "default"
+  },
+  "_meta": {
+   "title": "FLUX.2 klein 4B distilled"
+  }
+ },
+ "4": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "3",
+    0
+   ],
+   "lora_name": "spritekiln_klein_pixel_art.safetensors",
+   "strength_model": [
+    "2",
+    8
+   ]
+  },
+  "_meta": {
+   "title": "Pixel-art LoRA (klein)"
+  }
+ },
+ "5": {
+  "class_type": "CLIPLoader",
+  "inputs": {
+   "clip_name": "qwen_3_4b.safetensors",
+   "type": "flux2",
+   "device": "default"
+  },
+  "_meta": {
+   "title": "CLIPLoader"
+  }
+ },
+ "6": {
+  "class_type": "VAELoader",
+  "inputs": {
+   "vae_name": "flux2-vae.safetensors"
+  },
+  "_meta": {
+   "title": "VAELoader"
+  }
+ },
+ "7": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "spritekiln_example_reference.png"
+  },
+  "_meta": {
+   "title": "Subject reference (image 1)"
+  }
+ },
+ "8": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "spritekiln_example_style.png"
+  },
+  "_meta": {
+   "title": "Style reference (image 2)"
+  }
+ },
+ "9": {
+  "class_type": "ImageScaleToTotalPixels",
+  "inputs": {
+   "image": [
+    "7",
+    0
+   ],
+   "upscale_method": "lanczos",
+   "megapixels": 1.0,
+   "resolution_steps": 16
+  },
+  "_meta": {
+   "title": "ImageScaleToTotalPixels"
+  }
+ },
+ "10": {
+  "class_type": "VAEEncode",
+  "inputs": {
+   "pixels": [
+    "9",
+    0
+   ],
+   "vae": [
+    "6",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "VAEEncode"
+  }
+ },
+ "11": {
+  "class_type": "ImageScaleToTotalPixels",
+  "inputs": {
+   "image": [
+    "8",
+    0
+   ],
+   "upscale_method": "nearest-exact",
+   "megapixels": 1.0,
+   "resolution_steps": 16
+  },
+  "_meta": {
+   "title": "Style reference scale"
+  }
+ },
+ "12": {
+  "class_type": "VAEEncode",
+  "inputs": {
+   "pixels": [
+    "11",
+    0
+   ],
+   "vae": [
+    "6",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Style reference encode"
+  }
+ },
+ "13": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": [
+    "2",
+    0
+   ],
+   "clip": [
+    "5",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Prompt"
+  }
+ },
+ "14": {
+  "class_type": "ConditioningZeroOut",
+  "inputs": {
+   "conditioning": [
+    "13",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ConditioningZeroOut"
+  }
+ },
+ "15": {
+  "class_type": "ReferenceLatent",
+  "inputs": {
+   "conditioning": [
+    "13",
+    0
+   ],
+   "latent": [
+    "10",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ReferenceLatent"
+  }
+ },
+ "16": {
+  "class_type": "ReferenceLatent",
+  "inputs": {
+   "conditioning": [
+    "14",
+    0
+   ],
+   "latent": [
+    "10",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ReferenceLatent"
+  }
+ },
+ "17": {
+  "class_type": "ReferenceLatent",
+  "inputs": {
+   "conditioning": [
+    "15",
+    0
+   ],
+   "latent": [
+    "12",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ReferenceLatent"
+  }
+ },
+ "18": {
+  "class_type": "ReferenceLatent",
+  "inputs": {
+   "conditioning": [
+    "16",
+    0
+   ],
+   "latent": [
+    "12",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ReferenceLatent"
+  }
+ },
+ "19": {
+  "class_type": "RandomNoise",
+  "inputs": {
+   "noise_seed": 1234
+  },
+  "_meta": {
+   "title": "RandomNoise"
+  }
+ },
+ "20": {
+  "class_type": "CFGGuider",
+  "inputs": {
+   "model": [
+    "4",
+    0
+   ],
+   "positive": [
+    "17",
+    0
+   ],
+   "negative": [
+    "18",
+    0
+   ],
+   "cfg": 1.0
+  },
+  "_meta": {
+   "title": "CFGGuider"
+  }
+ },
+ "21": {
+  "class_type": "KSamplerSelect",
+  "inputs": {
+   "sampler_name": "euler"
+  },
+  "_meta": {
+   "title": "KSamplerSelect"
+  }
+ },
+ "22": {
+  "class_type": "Flux2Scheduler",
+  "inputs": {
+   "steps": 4,
+   "width": [
+    "2",
+    4
+   ],
+   "height": [
+    "2",
+    5
+   ]
+  },
+  "_meta": {
+   "title": "Flux2Scheduler"
+  }
+ },
+ "23": {
+  "class_type": "EmptyFlux2LatentImage",
+  "inputs": {
+   "width": [
+    "2",
+    4
+   ],
+   "height": [
+    "2",
+    5
+   ],
+   "batch_size": 1
+  },
+  "_meta": {
+   "title": "EmptyFlux2LatentImage"
+  }
+ },
+ "24": {
+  "class_type": "SamplerCustomAdvanced",
+  "inputs": {
+   "noise": [
+    "19",
+    0
+   ],
+   "guider": [
+    "20",
+    0
+   ],
+   "sampler": [
+    "21",
+    0
+   ],
+   "sigmas": [
+    "22",
+    0
+   ],
+   "latent_image": [
+    "23",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "SamplerCustomAdvanced"
+  }
+ },
+ "25": {
+  "class_type": "VAEDecode",
+  "inputs": {
+   "samples": [
+    "24",
+    0
+   ],
+   "vae": [
+    "6",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "VAEDecode"
+  }
+ },
+ "26": {
+  "class_type": "PreviewImage",
+  "inputs": {
+   "images": [
+    "25",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Raw model output"
+  }
+ },
+ "27": {
+  "class_type": "LoadBackgroundRemovalModel",
+  "inputs": {
+   "bg_removal_name": "birefnet.safetensors"
+  },
+  "_meta": {
+   "title": "LoadBackgroundRemovalModel"
+  }
+ },
+ "28": {
+  "class_type": "RemoveBackground",
+  "inputs": {
+   "bg_removal_model": [
+    "27",
+    0
+   ],
+   "image": [
+    "25",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "RemoveBackground"
+  }
+ },
+ "29": {
+  "class_type": "SK_BackgroundRemove",
+  "inputs": {
+   "image": [
+    "25",
+    0
+   ],
+   "mode": "mask_and_key",
+   "remove_shadow": true,
+   "tolerance": 0.08,
+   "mask_threshold": 0.5,
+   "enabled": [
+    "2",
+    7
+   ],
+   "foreground_mask": [
+    "28",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "SK_BackgroundRemove"
+  }
+ },
+ "30": {
+  "class_type": "SK_PixelPerfect",
+  "inputs": {
+   "image": [
+    "29",
+    0
+   ],
+   "mode": "fixed_size",
+   "width": [
+    "2",
+    2
+   ],
+   "height": [
+    "2",
+    3
+   ],
+   "scale": 16,
+   "method": "dominant",
+   "pre_colors": 48
+  },
+  "_meta": {
+   "title": "SK_PixelPerfect"
+  }
+ },
+ "31": {
+  "class_type": "SK_Palette",
+  "inputs": {
+   "image": [
+    "30",
+    0
+   ],
+   "source": "auto",
+   "colors": [
+    "2",
+    6
+   ],
+   "preset": "PICO-8",
+   "dither": "none",
+   "dither_strength": 0.5,
+   "shared_palette": true
+  },
+  "_meta": {
+   "title": "SK_Palette"
+  }
+ },
+ "32": {
+  "class_type": "SK_Cleanup",
+  "inputs": {
+   "image": [
+    "31",
+    0
+   ],
+   "speck_size": 2,
+   "max_contrast": 0.12,
+   "outline": "none",
+   "outline_color": "#140c1c",
+   "outline_diagonal": false,
+   "darken": 0.45
+  },
+  "_meta": {
+   "title": "SK_Cleanup"
+  }
+ },
+ "33": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "32",
+    0
+   ],
+   "filename_prefix": "spritekiln/ref2pixel",
+   "upscale": 8,
+   "as_animation": false,
+   "fps": 8.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ }
+}

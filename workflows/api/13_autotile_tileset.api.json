@@ -1,0 +1,446 @@
+{
+ "2": {
+  "class_type": "PrimitiveInt",
+  "inputs": {
+   "value": 16
+  },
+  "_meta": {
+   "title": "Tile size (px)"
+  }
+ },
+ "3": {
+  "class_type": "PrimitiveStringMultiline",
+  "inputs": {
+   "value": "Pixel art style. seamless tileable pixel art texture of green grass, large chunky pixels, simple 16-bit RPG game tile, top-down, flat even lighting"
+  },
+  "_meta": {
+   "title": "Terrain A"
+  }
+ },
+ "4": {
+  "class_type": "PrimitiveStringMultiline",
+  "inputs": {
+   "value": "Pixel art style. seamless tileable pixel art texture of brown dirt with a few small stones, large chunky pixels, simple 16-bit RPG game tile, top-down, flat even lighting"
+  },
+  "_meta": {
+   "title": "Terrain B"
+  }
+ },
+ "5": {
+  "class_type": "UNETLoader",
+  "inputs": {
+   "unet_name": "z_image_turbo_bf16.safetensors",
+   "weight_dtype": "default"
+  },
+  "_meta": {
+   "title": "UNETLoader"
+  }
+ },
+ "6": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "5",
+    0
+   ],
+   "lora_name": "spritekiln_zimage_pixel_art.safetensors",
+   "strength_model": 0.8
+  },
+  "_meta": {
+   "title": "Pixel-art LoRA (Z-Image)"
+  }
+ },
+ "7": {
+  "class_type": "ModelSamplingAuraFlow",
+  "inputs": {
+   "model": [
+    "6",
+    0
+   ],
+   "shift": 3.0
+  },
+  "_meta": {
+   "title": "ModelSamplingAuraFlow"
+  }
+ },
+ "8": {
+  "class_type": "CLIPLoader",
+  "inputs": {
+   "clip_name": "qwen_3_4b.safetensors",
+   "type": "lumina2",
+   "device": "default"
+  },
+  "_meta": {
+   "title": "CLIPLoader"
+  }
+ },
+ "9": {
+  "class_type": "VAELoader",
+  "inputs": {
+   "vae_name": "ae.safetensors"
+  },
+  "_meta": {
+   "title": "VAELoader"
+  }
+ },
+ "10": {
+  "class_type": "SK_SeamlessTiling",
+  "inputs": {
+   "model": [
+    "7",
+    0
+   ],
+   "axes": "both",
+   "align": 2
+  },
+  "_meta": {
+   "title": "SK_SeamlessTiling"
+  }
+ },
+ "11": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": [
+    "3",
+    0
+   ],
+   "clip": [
+    "8",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Prompt"
+  }
+ },
+ "12": {
+  "class_type": "ConditioningZeroOut",
+  "inputs": {
+   "conditioning": [
+    "11",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ConditioningZeroOut"
+  }
+ },
+ "13": {
+  "class_type": "EmptySD3LatentImage",
+  "inputs": {
+   "width": 512,
+   "height": 512,
+   "batch_size": 1
+  },
+  "_meta": {
+   "title": "EmptySD3LatentImage"
+  }
+ },
+ "14": {
+  "class_type": "KSampler",
+  "inputs": {
+   "model": [
+    "10",
+    0
+   ],
+   "seed": 1234,
+   "steps": 8,
+   "cfg": 1.0,
+   "sampler_name": "res_multistep",
+   "scheduler": "simple",
+   "positive": [
+    "11",
+    0
+   ],
+   "negative": [
+    "12",
+    0
+   ],
+   "latent_image": [
+    "13",
+    0
+   ],
+   "denoise": 1.0
+  },
+  "_meta": {
+   "title": "KSampler"
+  }
+ },
+ "15": {
+  "class_type": "SK_SeamlessVAEDecode",
+  "inputs": {
+   "samples": [
+    "14",
+    0
+   ],
+   "vae": [
+    "9",
+    0
+   ],
+   "axes": "both",
+   "pad_latent": 8
+  },
+  "_meta": {
+   "title": "SK_SeamlessVAEDecode"
+  }
+ },
+ "16": {
+  "class_type": "SK_PixelPerfect",
+  "inputs": {
+   "image": [
+    "15",
+    0
+   ],
+   "mode": "fixed_size",
+   "width": [
+    "2",
+    0
+   ],
+   "height": [
+    "2",
+    0
+   ],
+   "scale": 16,
+   "method": "dominant",
+   "pre_colors": 48
+  },
+  "_meta": {
+   "title": "Terrain A → tile"
+  }
+ },
+ "17": {
+  "class_type": "SK_Palette",
+  "inputs": {
+   "image": [
+    "16",
+    0
+   ],
+   "source": "auto",
+   "colors": 8,
+   "preset": "PICO-8",
+   "dither": "none",
+   "dither_strength": 0.5,
+   "shared_palette": true
+  },
+  "_meta": {
+   "title": "SK_Palette"
+  }
+ },
+ "18": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": [
+    "4",
+    0
+   ],
+   "clip": [
+    "8",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Prompt"
+  }
+ },
+ "19": {
+  "class_type": "ConditioningZeroOut",
+  "inputs": {
+   "conditioning": [
+    "18",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ConditioningZeroOut"
+  }
+ },
+ "20": {
+  "class_type": "EmptySD3LatentImage",
+  "inputs": {
+   "width": 512,
+   "height": 512,
+   "batch_size": 1
+  },
+  "_meta": {
+   "title": "EmptySD3LatentImage"
+  }
+ },
+ "21": {
+  "class_type": "KSampler",
+  "inputs": {
+   "model": [
+    "10",
+    0
+   ],
+   "seed": 1234,
+   "steps": 8,
+   "cfg": 1.0,
+   "sampler_name": "res_multistep",
+   "scheduler": "simple",
+   "positive": [
+    "18",
+    0
+   ],
+   "negative": [
+    "19",
+    0
+   ],
+   "latent_image": [
+    "20",
+    0
+   ],
+   "denoise": 1.0
+  },
+  "_meta": {
+   "title": "KSampler"
+  }
+ },
+ "22": {
+  "class_type": "SK_SeamlessVAEDecode",
+  "inputs": {
+   "samples": [
+    "21",
+    0
+   ],
+   "vae": [
+    "9",
+    0
+   ],
+   "axes": "both",
+   "pad_latent": 8
+  },
+  "_meta": {
+   "title": "SK_SeamlessVAEDecode"
+  }
+ },
+ "23": {
+  "class_type": "SK_PixelPerfect",
+  "inputs": {
+   "image": [
+    "22",
+    0
+   ],
+   "mode": "fixed_size",
+   "width": [
+    "2",
+    0
+   ],
+   "height": [
+    "2",
+    0
+   ],
+   "scale": 16,
+   "method": "dominant",
+   "pre_colors": 48
+  },
+  "_meta": {
+   "title": "Terrain B → tile"
+  }
+ },
+ "24": {
+  "class_type": "SK_Palette",
+  "inputs": {
+   "image": [
+    "23",
+    0
+   ],
+   "source": "auto",
+   "colors": 8,
+   "preset": "PICO-8",
+   "dither": "none",
+   "dither_strength": 0.5,
+   "shared_palette": true
+  },
+  "_meta": {
+   "title": "SK_Palette"
+  }
+ },
+ "25": {
+  "class_type": "SK_Tileset",
+  "inputs": {
+   "texture_a": [
+    "17",
+    0
+   ],
+   "texture_b": [
+    "24",
+    0
+   ],
+   "layout": "wang16",
+   "edge_noise": 0.35,
+   "noise_cells": 3,
+   "edge_shade": 0.65,
+   "seed": 7
+  },
+  "_meta": {
+   "title": "SK_Tileset"
+  }
+ },
+ "26": {
+  "class_type": "SK_Tileset",
+  "inputs": {
+   "texture_a": [
+    "17",
+    0
+   ],
+   "texture_b": [
+    "24",
+    0
+   ],
+   "layout": "blob47",
+   "edge_noise": 0.35,
+   "noise_cells": 3,
+   "edge_shade": 0.65,
+   "seed": 7
+  },
+  "_meta": {
+   "title": "SK_Tileset"
+  }
+ },
+ "27": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "25",
+    0
+   ],
+   "filename_prefix": "spritekiln/tileset_wang16",
+   "upscale": 8,
+   "as_animation": false,
+   "fps": 8.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ },
+ "28": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "26",
+    0
+   ],
+   "filename_prefix": "spritekiln/tileset_blob47",
+   "upscale": 8,
+   "as_animation": false,
+   "fps": 8.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ },
+ "29": {
+  "class_type": "PreviewAny",
+  "inputs": {
+   "source": [
+    "26",
+    1
+   ]
+  },
+  "_meta": {
+   "title": "blob47 mapping (bitmask → tile)"
+  }
+ }
+}

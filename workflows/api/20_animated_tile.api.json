@@ -1,0 +1,695 @@
+{
+ "2": {
+  "class_type": "PrimitiveInt",
+  "inputs": {
+   "value": 32
+  },
+  "_meta": {
+   "title": "Tile size (px)"
+  }
+ },
+ "3": {
+  "class_type": "PrimitiveStringMultiline",
+  "inputs": {
+   "value": "Pixel art style. seamless tileable pixel art texture of deep blue ocean water with small white wave crests, large chunky pixels, simple 16-bit RPG game tile, top-down, flat even lighting"
+  },
+  "_meta": {
+   "title": "Tile"
+  }
+ },
+ "4": {
+  "class_type": "PrimitiveStringMultiline",
+  "inputs": {
+   "value": "2D pixel art game tile animation, top-down view of water, the waves ripple and flow gently, shimmering highlights move across the surface, static locked camera, seamless looping texture animation, crisp pixel art."
+  },
+  "_meta": {
+   "title": "Motion"
+  }
+ },
+ "5": {
+  "class_type": "PrimitiveInt",
+  "inputs": {
+   "value": 33
+  },
+  "_meta": {
+   "title": "Video frames (4n+1)"
+  }
+ },
+ "6": {
+  "class_type": "PrimitiveInt",
+  "inputs": {
+   "value": 8
+  },
+  "_meta": {
+   "title": "Tile frames"
+  }
+ },
+ "7": {
+  "class_type": "UNETLoader",
+  "inputs": {
+   "unet_name": "z_image_turbo_bf16.safetensors",
+   "weight_dtype": "default"
+  },
+  "_meta": {
+   "title": "UNETLoader"
+  }
+ },
+ "8": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "7",
+    0
+   ],
+   "lora_name": "spritekiln_zimage_pixel_art.safetensors",
+   "strength_model": 0.8
+  },
+  "_meta": {
+   "title": "Pixel-art LoRA (Z-Image)"
+  }
+ },
+ "9": {
+  "class_type": "ModelSamplingAuraFlow",
+  "inputs": {
+   "model": [
+    "8",
+    0
+   ],
+   "shift": 3.0
+  },
+  "_meta": {
+   "title": "ModelSamplingAuraFlow"
+  }
+ },
+ "10": {
+  "class_type": "CLIPLoader",
+  "inputs": {
+   "clip_name": "qwen_3_4b.safetensors",
+   "type": "lumina2",
+   "device": "default"
+  },
+  "_meta": {
+   "title": "CLIPLoader"
+  }
+ },
+ "11": {
+  "class_type": "VAELoader",
+  "inputs": {
+   "vae_name": "ae.safetensors"
+  },
+  "_meta": {
+   "title": "VAELoader"
+  }
+ },
+ "12": {
+  "class_type": "SK_SeamlessTiling",
+  "inputs": {
+   "model": [
+    "9",
+    0
+   ],
+   "axes": "both",
+   "align": 2
+  },
+  "_meta": {
+   "title": "SK_SeamlessTiling"
+  }
+ },
+ "13": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": [
+    "3",
+    0
+   ],
+   "clip": [
+    "10",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Prompt"
+  }
+ },
+ "14": {
+  "class_type": "ConditioningZeroOut",
+  "inputs": {
+   "conditioning": [
+    "13",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ConditioningZeroOut"
+  }
+ },
+ "15": {
+  "class_type": "EmptySD3LatentImage",
+  "inputs": {
+   "width": 512,
+   "height": 512,
+   "batch_size": 1
+  },
+  "_meta": {
+   "title": "EmptySD3LatentImage"
+  }
+ },
+ "16": {
+  "class_type": "KSampler",
+  "inputs": {
+   "model": [
+    "12",
+    0
+   ],
+   "seed": 1234,
+   "steps": 8,
+   "cfg": 1.0,
+   "sampler_name": "res_multistep",
+   "scheduler": "simple",
+   "positive": [
+    "13",
+    0
+   ],
+   "negative": [
+    "14",
+    0
+   ],
+   "latent_image": [
+    "15",
+    0
+   ],
+   "denoise": 1.0
+  },
+  "_meta": {
+   "title": "KSampler"
+  }
+ },
+ "17": {
+  "class_type": "SK_SeamlessVAEDecode",
+  "inputs": {
+   "samples": [
+    "16",
+    0
+   ],
+   "vae": [
+    "11",
+    0
+   ],
+   "axes": "both",
+   "pad_latent": 8
+  },
+  "_meta": {
+   "title": "SK_SeamlessVAEDecode"
+  }
+ },
+ "18": {
+  "class_type": "SK_PixelPerfect",
+  "inputs": {
+   "image": [
+    "17",
+    0
+   ],
+   "mode": "fixed_size",
+   "width": [
+    "2",
+    0
+   ],
+   "height": [
+    "2",
+    0
+   ],
+   "scale": 16,
+   "method": "dominant",
+   "pre_colors": 48
+  },
+  "_meta": {
+   "title": "Tile → pixel grid"
+  }
+ },
+ "19": {
+  "class_type": "SK_Palette",
+  "inputs": {
+   "image": [
+    "18",
+    0
+   ],
+   "source": "auto",
+   "colors": 12,
+   "preset": "PICO-8",
+   "dither": "none",
+   "dither_strength": 0.5,
+   "shared_palette": true
+  },
+  "_meta": {
+   "title": "SK_Palette"
+  }
+ },
+ "20": {
+  "class_type": "SK_ToCanvas",
+  "inputs": {
+   "image": [
+    "19",
+    0
+   ],
+   "long_side": 640,
+   "multiple": 16,
+   "background": "gray",
+   "custom_color": "#808080",
+   "padding": 0,
+   "target_width": 640,
+   "target_height": 640
+  },
+  "_meta": {
+   "title": "Tile → video canvas"
+  }
+ },
+ "21": {
+  "class_type": "CLIPLoader",
+  "inputs": {
+   "clip_name": "umt5_xxl_fp16.safetensors",
+   "type": "wan",
+   "device": "default"
+  },
+  "_meta": {
+   "title": "CLIPLoader"
+  }
+ },
+ "22": {
+  "class_type": "VAELoader",
+  "inputs": {
+   "vae_name": "wan_2.1_vae.safetensors"
+  },
+  "_meta": {
+   "title": "VAELoader"
+  }
+ },
+ "23": {
+  "class_type": "UnetLoaderGGUF",
+  "inputs": {
+   "unet_name": "wan2.2_i2v_high_noise_14B_Q4_K_M.gguf"
+  },
+  "_meta": {
+   "title": "Wan 2.2 I2V 14B high noise"
+  }
+ },
+ "24": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "23",
+    0
+   ],
+   "lora_name": "wan2.2_i2v_lightning_4step_high.safetensors",
+   "strength_model": 1.0
+  },
+  "_meta": {
+   "title": "Lightning 4-step (high)"
+  }
+ },
+ "25": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "24",
+    0
+   ],
+   "lora_name": "spritekiln_wan22_pixel_animate.safetensors",
+   "strength_model": 1.0
+  },
+  "_meta": {
+   "title": "Pixel-animate LoRA (high)"
+  }
+ },
+ "26": {
+  "class_type": "ModelSamplingSD3",
+  "inputs": {
+   "model": [
+    "25",
+    0
+   ],
+   "shift": 5.0
+  },
+  "_meta": {
+   "title": "ModelSamplingSD3"
+  }
+ },
+ "27": {
+  "class_type": "SK_SeamlessTiling",
+  "inputs": {
+   "model": [
+    "26",
+    0
+   ],
+   "axes": "both",
+   "align": 2
+  },
+  "_meta": {
+   "title": "Seamless (high)"
+  }
+ },
+ "28": {
+  "class_type": "UnetLoaderGGUF",
+  "inputs": {
+   "unet_name": "wan2.2_i2v_low_noise_14B_Q4_K_M.gguf"
+  },
+  "_meta": {
+   "title": "Wan 2.2 I2V 14B low noise"
+  }
+ },
+ "29": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "28",
+    0
+   ],
+   "lora_name": "wan2.2_i2v_lightning_4step_low.safetensors",
+   "strength_model": 1.0
+  },
+  "_meta": {
+   "title": "Lightning 4-step (low)"
+  }
+ },
+ "30": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "29",
+    0
+   ],
+   "lora_name": "spritekiln_wan22_pixel_animate.safetensors",
+   "strength_model": 1.0
+  },
+  "_meta": {
+   "title": "Pixel-animate LoRA (low)"
+  }
+ },
+ "31": {
+  "class_type": "ModelSamplingSD3",
+  "inputs": {
+   "model": [
+    "30",
+    0
+   ],
+   "shift": 5.0
+  },
+  "_meta": {
+   "title": "ModelSamplingSD3"
+  }
+ },
+ "32": {
+  "class_type": "SK_SeamlessTiling",
+  "inputs": {
+   "model": [
+    "31",
+    0
+   ],
+   "axes": "both",
+   "align": 2
+  },
+  "_meta": {
+   "title": "Seamless (low)"
+  }
+ },
+ "33": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": [
+    "4",
+    0
+   ],
+   "clip": [
+    "21",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Motion prompt"
+  }
+ },
+ "34": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": "色调艳丽，过曝，静态，细节模糊不清，字幕，风格，作品，画作，画面，静止，整体发灰，最差质量，低质量，JPEG压缩残留，丑陋的，残缺的，camera movement, zoom, background change, blurry, morphing, extra limbs, text, watermark",
+   "clip": [
+    "21",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Negative"
+  }
+ },
+ "35": {
+  "class_type": "WanFirstLastFrameToVideo",
+  "inputs": {
+   "positive": [
+    "33",
+    0
+   ],
+   "negative": [
+    "34",
+    0
+   ],
+   "vae": [
+    "22",
+    0
+   ],
+   "width": [
+    "20",
+    2
+   ],
+   "height": [
+    "20",
+    3
+   ],
+   "length": [
+    "5",
+    0
+   ],
+   "batch_size": 1,
+   "start_image": [
+    "20",
+    0
+   ],
+   "end_image": [
+    "20",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "WanFirstLastFrameToVideo"
+  }
+ },
+ "36": {
+  "class_type": "KSamplerAdvanced",
+  "inputs": {
+   "model": [
+    "27",
+    0
+   ],
+   "add_noise": "enable",
+   "noise_seed": 1234,
+   "steps": 4,
+   "cfg": 1.0,
+   "sampler_name": "euler",
+   "scheduler": "simple",
+   "positive": [
+    "35",
+    0
+   ],
+   "negative": [
+    "35",
+    1
+   ],
+   "latent_image": [
+    "35",
+    2
+   ],
+   "start_at_step": 0,
+   "end_at_step": 2,
+   "return_with_leftover_noise": "enable"
+  },
+  "_meta": {
+   "title": "High noise (steps 0-2)"
+  }
+ },
+ "37": {
+  "class_type": "KSamplerAdvanced",
+  "inputs": {
+   "model": [
+    "32",
+    0
+   ],
+   "add_noise": "disable",
+   "noise_seed": 1234,
+   "steps": 4,
+   "cfg": 1.0,
+   "sampler_name": "euler",
+   "scheduler": "simple",
+   "positive": [
+    "35",
+    0
+   ],
+   "negative": [
+    "35",
+    1
+   ],
+   "latent_image": [
+    "36",
+    0
+   ],
+   "start_at_step": 2,
+   "end_at_step": 10000,
+   "return_with_leftover_noise": "disable"
+  },
+  "_meta": {
+   "title": "Low noise (steps 2-4)"
+  }
+ },
+ "38": {
+  "class_type": "SK_SeamlessVAEDecode",
+  "inputs": {
+   "samples": [
+    "37",
+    0
+   ],
+   "vae": [
+    "22",
+    0
+   ],
+   "axes": "both",
+   "pad_latent": 4
+  },
+  "_meta": {
+   "title": "SK_SeamlessVAEDecode"
+  }
+ },
+ "39": {
+  "class_type": "SK_FrameSelect",
+  "inputs": {
+   "frames": [
+    "38",
+    0
+   ],
+   "count": [
+    "6",
+    0
+   ],
+   "mode": "even",
+   "skip_start": 0,
+   "min_loop_fraction": 0.4
+  },
+  "_meta": {
+   "title": "SK_FrameSelect"
+  }
+ },
+ "40": {
+  "class_type": "SK_PixelPerfect",
+  "inputs": {
+   "image": [
+    "39",
+    0
+   ],
+   "mode": "match_reference",
+   "width": 32,
+   "height": 32,
+   "scale": [
+    "20",
+    1
+   ],
+   "method": "dominant",
+   "pre_colors": 48,
+   "reference": [
+    "20",
+    4
+   ]
+  },
+  "_meta": {
+   "title": "SK_PixelPerfect"
+  }
+ },
+ "41": {
+  "class_type": "SK_Palette",
+  "inputs": {
+   "image": [
+    "40",
+    0
+   ],
+   "source": "palette_image",
+   "colors": 256,
+   "preset": "PICO-8",
+   "dither": "none",
+   "dither_strength": 0.5,
+   "shared_palette": true,
+   "palette_image": [
+    "19",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Lock to the tile's palette"
+  }
+ },
+ "42": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "41",
+    0
+   ],
+   "filename_prefix": "spritekiln/anim_tile",
+   "upscale": 8,
+   "as_animation": true,
+   "fps": 8.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ },
+ "43": {
+  "class_type": "SK_TilePreview",
+  "inputs": {
+   "image": [
+    "41",
+    0
+   ],
+   "repeat_x": 3,
+   "repeat_y": 3
+  },
+  "_meta": {
+   "title": "SK_TilePreview"
+  }
+ },
+ "44": {
+  "class_type": "SK_ScaleNearest",
+  "inputs": {
+   "image": [
+    "43",
+    0
+   ],
+   "scale": 4
+  },
+  "_meta": {
+   "title": "SK_ScaleNearest"
+  }
+ },
+ "45": {
+  "class_type": "SaveAnimatedWEBP",
+  "inputs": {
+   "images": [
+    "44",
+    0
+   ],
+   "filename_prefix": "spritekiln/anim_tile_3x3",
+   "fps": 8.0,
+   "lossless": true,
+   "quality": 100,
+   "method": "default"
+  },
+  "_meta": {
+   "title": "3×3 tiling check (animated)"
+  }
+ }
+}

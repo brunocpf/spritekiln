@@ -1,0 +1,451 @@
+{
+ "2": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "spritekiln_example_hd_character.png"
+  },
+  "_meta": {
+   "title": "Character (neutral pose)"
+  }
+ },
+ "3": {
+  "class_type": "JoinImageWithAlpha",
+  "inputs": {
+   "image": [
+    "2",
+    0
+   ],
+   "alpha": [
+    "2",
+    1
+   ]
+  },
+  "_meta": {
+   "title": "Character (neutral pose) (RGBA)"
+  }
+ },
+ "4": {
+  "class_type": "SK_HDCanvas",
+  "inputs": {
+   "image": [
+    "3",
+    0
+   ],
+   "width": 1024,
+   "height": 1024,
+   "padding_percent": 5.0,
+   "background": "white",
+   "trim_first": true
+  },
+  "_meta": {
+   "title": "SK_HDCanvas"
+  }
+ },
+ "5": {
+  "class_type": "SK_PartPrompts",
+  "inputs": {
+   "parts": "cape, left arm, left leg, right leg, torso, head, right arm, sword",
+   "character": "the character",
+   "completion_template": "Extend the {part} of {character} into the empty area: the {part} continues underneath the parts that covered it, so draw its hidden section (same colours, shading and art style) to make it whole."
+  },
+  "_meta": {
+   "title": "SK_PartPrompts"
+  }
+ },
+ "6": {
+  "class_type": "CheckpointLoaderSimple",
+  "inputs": {
+   "ckpt_name": "sam3.1_multiplex_fp16.safetensors"
+  },
+  "_meta": {
+   "title": "SAM3.1"
+  }
+ },
+ "7": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": [
+    "5",
+    0
+   ],
+   "clip": [
+    "6",
+    1
+   ]
+  },
+  "_meta": {
+   "title": "Part prompt"
+  }
+ },
+ "8": {
+  "class_type": "SAM3_Detect",
+  "inputs": {
+   "model": [
+    "6",
+    0
+   ],
+   "image": [
+    "4",
+    0
+   ],
+   "threshold": 0.35,
+   "refine_iterations": 2,
+   "individual_masks": false,
+   "conditioning": [
+    "7",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "SAM3_Detect"
+  }
+ },
+ "9": {
+  "class_type": "LoadBackgroundRemovalModel",
+  "inputs": {
+   "bg_removal_name": "birefnet.safetensors"
+  },
+  "_meta": {
+   "title": "LoadBackgroundRemovalModel"
+  }
+ },
+ "10": {
+  "class_type": "RemoveBackground",
+  "inputs": {
+   "bg_removal_model": [
+    "9",
+    0
+   ],
+   "image": [
+    "4",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "RemoveBackground"
+  }
+ },
+ "11": {
+  "class_type": "SK_PartLayout",
+  "inputs": {
+   "image": [
+    "4",
+    0
+   ],
+   "part_masks": [
+    "8",
+    0
+   ],
+   "names": [
+    "5",
+    2
+   ],
+   "prompts": [
+    "5",
+    1
+   ],
+   "hidden_reach_percent": 25.0,
+   "min_part_px": 64,
+   "rest_layer": true,
+   "character_mask": [
+    "10",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "SK_PartLayout"
+  }
+ },
+ "12": {
+  "class_type": "UNETLoader",
+  "inputs": {
+   "unet_name": "flux-2-klein-4b.safetensors",
+   "weight_dtype": "default"
+  },
+  "_meta": {
+   "title": "FLUX.2 klein 4B distilled"
+  }
+ },
+ "13": {
+  "class_type": "CLIPLoader",
+  "inputs": {
+   "clip_name": "qwen_3_4b.safetensors",
+   "type": "flux2",
+   "device": "default"
+  },
+  "_meta": {
+   "title": "CLIPLoader"
+  }
+ },
+ "14": {
+  "class_type": "VAELoader",
+  "inputs": {
+   "vae_name": "flux2-vae.safetensors"
+  },
+  "_meta": {
+   "title": "VAELoader"
+  }
+ },
+ "15": {
+  "class_type": "VAEEncode",
+  "inputs": {
+   "pixels": [
+    "11",
+    0
+   ],
+   "vae": [
+    "14",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "VAEEncode"
+  }
+ },
+ "16": {
+  "class_type": "SetLatentNoiseMask",
+  "inputs": {
+   "samples": [
+    "15",
+    0
+   ],
+   "mask": [
+    "11",
+    1
+   ]
+  },
+  "_meta": {
+   "title": "SetLatentNoiseMask"
+  }
+ },
+ "17": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": [
+    "11",
+    4
+   ],
+   "clip": [
+    "13",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Prompt"
+  }
+ },
+ "18": {
+  "class_type": "ConditioningZeroOut",
+  "inputs": {
+   "conditioning": [
+    "17",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ConditioningZeroOut"
+  }
+ },
+ "19": {
+  "class_type": "ReferenceLatent",
+  "inputs": {
+   "conditioning": [
+    "17",
+    0
+   ],
+   "latent": [
+    "15",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ReferenceLatent"
+  }
+ },
+ "20": {
+  "class_type": "ReferenceLatent",
+  "inputs": {
+   "conditioning": [
+    "18",
+    0
+   ],
+   "latent": [
+    "15",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ReferenceLatent"
+  }
+ },
+ "21": {
+  "class_type": "RandomNoise",
+  "inputs": {
+   "noise_seed": 1234
+  },
+  "_meta": {
+   "title": "RandomNoise"
+  }
+ },
+ "22": {
+  "class_type": "CFGGuider",
+  "inputs": {
+   "model": [
+    "12",
+    0
+   ],
+   "positive": [
+    "19",
+    0
+   ],
+   "negative": [
+    "20",
+    0
+   ],
+   "cfg": 1.0
+  },
+  "_meta": {
+   "title": "CFGGuider"
+  }
+ },
+ "23": {
+  "class_type": "KSamplerSelect",
+  "inputs": {
+   "sampler_name": "euler"
+  },
+  "_meta": {
+   "title": "KSamplerSelect"
+  }
+ },
+ "24": {
+  "class_type": "Flux2Scheduler",
+  "inputs": {
+   "steps": 4,
+   "width": [
+    "4",
+    1
+   ],
+   "height": [
+    "4",
+    2
+   ]
+  },
+  "_meta": {
+   "title": "Flux2Scheduler"
+  }
+ },
+ "25": {
+  "class_type": "SamplerCustomAdvanced",
+  "inputs": {
+   "noise": [
+    "21",
+    0
+   ],
+   "guider": [
+    "22",
+    0
+   ],
+   "sampler": [
+    "23",
+    0
+   ],
+   "sigmas": [
+    "24",
+    0
+   ],
+   "latent_image": [
+    "16",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "SamplerCustomAdvanced"
+  }
+ },
+ "26": {
+  "class_type": "VAEDecode",
+  "inputs": {
+   "samples": [
+    "25",
+    0
+   ],
+   "vae": [
+    "14",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "VAEDecode"
+  }
+ },
+ "27": {
+  "class_type": "LoadBackgroundRemovalModel",
+  "inputs": {
+   "bg_removal_name": "birefnet.safetensors"
+  },
+  "_meta": {
+   "title": "LoadBackgroundRemovalModel"
+  }
+ },
+ "28": {
+  "class_type": "RemoveBackground",
+  "inputs": {
+   "bg_removal_model": [
+    "27",
+    0
+   ],
+   "image": [
+    "26",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "RemoveBackground"
+  }
+ },
+ "29": {
+  "class_type": "SK_PartCutout",
+  "inputs": {
+   "image": [
+    "4",
+    0
+   ],
+   "visible_mask": [
+    "11",
+    2
+   ],
+   "completed": [
+    "26",
+    0
+   ],
+   "inpaint_mask": [
+    "11",
+    1
+   ],
+   "completed_mask": [
+    "28",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "SK_PartCutout"
+  }
+ },
+ "30": {
+  "class_type": "SK_SaveParts",
+  "inputs": {
+   "layers": [
+    "29",
+    0
+   ],
+   "names": [
+    "11",
+    3
+   ],
+   "folder": "spritekiln/parts/character"
+  },
+  "_meta": {
+   "title": "SK_SaveParts"
+  }
+ }
+}

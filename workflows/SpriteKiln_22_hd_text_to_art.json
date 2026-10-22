@@ -1,0 +1,1202 @@
+{
+ "id": "spritekiln-22_hd_text_to_art",
+ "revision": 0,
+ "last_node_id": 16,
+ "last_link_id": 20,
+ "nodes": [
+  {
+   "id": 1,
+   "type": "MarkdownNote",
+   "pos": [
+    20,
+    70
+   ],
+   "size": [
+    420,
+    180
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "MarkdownNote"
+   },
+   "title": "Note",
+   "inputs": [],
+   "outputs": [],
+   "widgets_values": [
+    "## HD 2D art\nNo pixel grid, no palette: full-resolution painted / cartoon art. The style sets the prompt, the model resolution (portrait for characters) and the output size. Sprites get a plain background that is removed with soft anti-aliased edges and edge-colour cleanup."
+   ],
+   "color": "#432",
+   "bgcolor": "#653"
+  },
+  {
+   "id": 2,
+   "type": "SK_HDStylePreset",
+   "pos": [
+    20,
+    290
+   ],
+   "size": [
+    360,
+    392
+   ],
+   "flags": {},
+   "order": 1,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_HDStylePreset"
+   },
+   "inputs": [
+    {
+     "name": "subject",
+     "type": "STRING",
+     "link": null,
+     "widget": {
+      "name": "subject"
+     }
+    },
+    {
+     "name": "style",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "style"
+     }
+    },
+    {
+     "name": "background",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "background"
+     }
+    },
+    {
+     "name": "out_long_side",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "out_long_side"
+     }
+    },
+    {
+     "name": "extra",
+     "type": "STRING",
+     "link": null,
+     "widget": {
+      "name": "extra"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "prompt",
+     "type": "STRING",
+     "links": [
+      2
+     ],
+     "slot_index": 0
+    },
+    {
+     "name": "negative",
+     "type": "STRING",
+     "links": [],
+     "slot_index": 1
+    },
+    {
+     "name": "gen_width",
+     "type": "INT",
+     "links": [
+      5
+     ],
+     "slot_index": 2
+    },
+    {
+     "name": "gen_height",
+     "type": "INT",
+     "links": [
+      6
+     ],
+     "slot_index": 3
+    },
+    {
+     "name": "out_long_side",
+     "type": "INT",
+     "links": [
+      17
+     ],
+     "slot_index": 4
+    },
+    {
+     "name": "transparent",
+     "type": "BOOLEAN",
+     "links": [
+      18
+     ],
+     "slot_index": 5
+    }
+   ],
+   "widgets_values": [
+    "a cheerful lanky hero with a big red scarf, a blue tunic and a wooden sword",
+    "painted cartoon platformer (Rayman-like)",
+    "auto",
+    0,
+    ""
+   ]
+  },
+  {
+   "id": 3,
+   "type": "UNETLoader",
+   "pos": [
+    560,
+    70
+   ],
+   "size": [
+    320,
+    114
+   ],
+   "flags": {},
+   "order": 2,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "UNETLoader"
+   },
+   "inputs": [
+    {
+     "name": "unet_name",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "unet_name"
+     }
+    },
+    {
+     "name": "weight_dtype",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "weight_dtype"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      1
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    "z_image_turbo_bf16.safetensors",
+    "default"
+   ]
+  },
+  {
+   "id": 4,
+   "type": "ModelSamplingAuraFlow",
+   "pos": [
+    930,
+    70
+   ],
+   "size": [
+    320,
+    114
+   ],
+   "flags": {},
+   "order": 3,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "ModelSamplingAuraFlow"
+   },
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 1
+    },
+    {
+     "name": "shift",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "shift"
+     }
+    },
+    {
+     "name": "sampling",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "sampling"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      7
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    3.0,
+    "flow"
+   ]
+  },
+  {
+   "id": 5,
+   "type": "CLIPLoader",
+   "pos": [
+    560,
+    224
+   ],
+   "size": [
+    320,
+    140
+   ],
+   "flags": {},
+   "order": 4,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "CLIPLoader"
+   },
+   "inputs": [
+    {
+     "name": "clip_name",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "clip_name"
+     }
+    },
+    {
+     "name": "type",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "type"
+     }
+    },
+    {
+     "name": "device",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "device"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "CLIP",
+     "type": "CLIP",
+     "links": [
+      3
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    "qwen_3_4b.safetensors",
+    "lumina2",
+    "default"
+   ]
+  },
+  {
+   "id": 6,
+   "type": "VAELoader",
+   "pos": [
+    560,
+    404
+   ],
+   "size": [
+    320,
+    88
+   ],
+   "flags": {},
+   "order": 5,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "VAELoader"
+   },
+   "inputs": [
+    {
+     "name": "vae_name",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "vae_name"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "VAE",
+     "type": "VAE",
+     "links": [
+      12
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    "ae.safetensors"
+   ]
+  },
+  {
+   "id": 7,
+   "type": "CLIPTextEncode",
+   "pos": [
+    930,
+    224
+   ],
+   "size": [
+    360,
+    178
+   ],
+   "flags": {},
+   "order": 6,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "CLIPTextEncode"
+   },
+   "title": "Prompt",
+   "inputs": [
+    {
+     "name": "text",
+     "type": "STRING",
+     "link": 2,
+     "widget": {
+      "name": "text"
+     }
+    },
+    {
+     "name": "clip",
+     "type": "CLIP",
+     "link": 3
+    }
+   ],
+   "outputs": [
+    {
+     "name": "CONDITIONING",
+     "type": "CONDITIONING",
+     "links": [
+      4,
+      8
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    ""
+   ]
+  },
+  {
+   "id": 8,
+   "type": "ConditioningZeroOut",
+   "pos": [
+    1340,
+    70
+   ],
+   "size": [
+    320,
+    62
+   ],
+   "flags": {},
+   "order": 7,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "ConditioningZeroOut"
+   },
+   "inputs": [
+    {
+     "name": "conditioning",
+     "type": "CONDITIONING",
+     "link": 4
+    }
+   ],
+   "outputs": [
+    {
+     "name": "CONDITIONING",
+     "type": "CONDITIONING",
+     "links": [
+      9
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": []
+  },
+  {
+   "id": 9,
+   "type": "EmptySD3LatentImage",
+   "pos": [
+    560,
+    532
+   ],
+   "size": [
+    320,
+    140
+   ],
+   "flags": {},
+   "order": 8,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "EmptySD3LatentImage"
+   },
+   "inputs": [
+    {
+     "name": "width",
+     "type": "INT",
+     "link": 5,
+     "widget": {
+      "name": "width"
+     }
+    },
+    {
+     "name": "height",
+     "type": "INT",
+     "link": 6,
+     "widget": {
+      "name": "height"
+     }
+    },
+    {
+     "name": "batch_size",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "batch_size"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "LATENT",
+     "type": "LATENT",
+     "links": [
+      10
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    1024,
+    1024,
+    1
+   ]
+  },
+  {
+   "id": 10,
+   "type": "KSampler",
+   "pos": [
+    1710,
+    70
+   ],
+   "size": [
+    320,
+    284
+   ],
+   "flags": {},
+   "order": 9,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "KSampler"
+   },
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 7
+    },
+    {
+     "name": "seed",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "seed"
+     }
+    },
+    {
+     "name": "steps",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "steps"
+     }
+    },
+    {
+     "name": "cfg",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "cfg"
+     }
+    },
+    {
+     "name": "sampler_name",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "sampler_name"
+     }
+    },
+    {
+     "name": "scheduler",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "scheduler"
+     }
+    },
+    {
+     "name": "positive",
+     "type": "CONDITIONING",
+     "link": 8
+    },
+    {
+     "name": "negative",
+     "type": "CONDITIONING",
+     "link": 9
+    },
+    {
+     "name": "latent_image",
+     "type": "LATENT",
+     "link": 10
+    },
+    {
+     "name": "denoise",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "denoise"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "LATENT",
+     "type": "LATENT",
+     "links": [
+      11
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    1234,
+    "randomize",
+    8,
+    1.0,
+    "res_multistep",
+    "simple",
+    1.0
+   ]
+  },
+  {
+   "id": 11,
+   "type": "VAEDecode",
+   "pos": [
+    2080,
+    70
+   ],
+   "size": [
+    320,
+    84
+   ],
+   "flags": {},
+   "order": 10,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "VAEDecode"
+   },
+   "inputs": [
+    {
+     "name": "samples",
+     "type": "LATENT",
+     "link": 11
+    },
+    {
+     "name": "vae",
+     "type": "VAE",
+     "link": 12
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      13,
+      15,
+      16
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": []
+  },
+  {
+   "id": 12,
+   "type": "PreviewImage",
+   "pos": [
+    2450,
+    70
+   ],
+   "size": [
+    320,
+    362
+   ],
+   "flags": {},
+   "order": 11,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "PreviewImage"
+   },
+   "title": "Raw model output",
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 13
+    }
+   ],
+   "outputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "links": [],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": []
+  },
+  {
+   "id": 13,
+   "type": "LoadBackgroundRemovalModel",
+   "pos": [
+    20,
+    902
+   ],
+   "size": [
+    320,
+    88
+   ],
+   "flags": {},
+   "order": 12,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "LoadBackgroundRemovalModel"
+   },
+   "inputs": [
+    {
+     "name": "bg_removal_name",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "bg_removal_name"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "bg_model",
+     "type": "BACKGROUND_REMOVAL",
+     "links": [
+      14
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    "birefnet.safetensors"
+   ]
+  },
+  {
+   "id": 14,
+   "type": "RemoveBackground",
+   "pos": [
+    390,
+    902
+   ],
+   "size": [
+    320,
+    84
+   ],
+   "flags": {},
+   "order": 13,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "RemoveBackground"
+   },
+   "inputs": [
+    {
+     "name": "bg_removal_model",
+     "type": "BACKGROUND_REMOVAL",
+     "link": 14
+    },
+    {
+     "name": "image",
+     "type": "IMAGE",
+     "link": 15
+    }
+   ],
+   "outputs": [
+    {
+     "name": "mask",
+     "type": "MASK",
+     "links": [
+      19
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": []
+  },
+  {
+   "id": 15,
+   "type": "SK_HDCutout",
+   "pos": [
+    760,
+    902
+   ],
+   "size": [
+    320,
+    318
+   ],
+   "flags": {},
+   "order": 14,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_HDCutout"
+   },
+   "inputs": [
+    {
+     "name": "image",
+     "type": "IMAGE",
+     "link": 16
+    },
+    {
+     "name": "mode",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "mode"
+     }
+    },
+    {
+     "name": "tolerance",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "tolerance"
+     }
+    },
+    {
+     "name": "remove_shadow",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "remove_shadow"
+     }
+    },
+    {
+     "name": "soft_edges",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "soft_edges"
+     }
+    },
+    {
+     "name": "decontaminate",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "decontaminate"
+     }
+    },
+    {
+     "name": "trim",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "trim"
+     }
+    },
+    {
+     "name": "margin",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "margin"
+     }
+    },
+    {
+     "name": "out_long_side",
+     "type": "INT",
+     "link": 17,
+     "widget": {
+      "name": "out_long_side"
+     }
+    },
+    {
+     "name": "enabled",
+     "type": "BOOLEAN",
+     "link": 18,
+     "widget": {
+      "name": "enabled"
+     }
+    },
+    {
+     "name": "foreground_mask",
+     "type": "MASK",
+     "link": 19
+    }
+   ],
+   "outputs": [
+    {
+     "name": "image",
+     "type": "IMAGE",
+     "links": [
+      20
+     ],
+     "slot_index": 0
+    },
+    {
+     "name": "alpha",
+     "type": "MASK",
+     "links": [],
+     "slot_index": 1
+    }
+   ],
+   "widgets_values": [
+    "mask_and_key",
+    0.08,
+    true,
+    true,
+    true,
+    true,
+    8,
+    0,
+    true
+   ]
+  },
+  {
+   "id": 16,
+   "type": "SK_SavePixelArt",
+   "pos": [
+    1200,
+    902
+   ],
+   "size": [
+    320,
+    514
+   ],
+   "flags": {},
+   "order": 15,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_SavePixelArt"
+   },
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 20
+    },
+    {
+     "name": "filename_prefix",
+     "type": "STRING",
+     "link": null,
+     "widget": {
+      "name": "filename_prefix"
+     }
+    },
+    {
+     "name": "upscale",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "upscale"
+     }
+    },
+    {
+     "name": "as_animation",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "as_animation"
+     }
+    },
+    {
+     "name": "fps",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "fps"
+     }
+    },
+    {
+     "name": "sheet_columns",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "sheet_columns"
+     }
+    },
+    {
+     "name": "row_names",
+     "type": "STRING",
+     "link": null
+    }
+   ],
+   "outputs": [],
+   "widgets_values": [
+    "spritekiln/hd_art",
+    1,
+    false,
+    8.0,
+    0
+   ]
+  }
+ ],
+ "links": [
+  [
+   1,
+   3,
+   0,
+   4,
+   0,
+   "MODEL"
+  ],
+  [
+   2,
+   2,
+   0,
+   7,
+   0,
+   "STRING"
+  ],
+  [
+   3,
+   5,
+   0,
+   7,
+   1,
+   "CLIP"
+  ],
+  [
+   4,
+   7,
+   0,
+   8,
+   0,
+   "CONDITIONING"
+  ],
+  [
+   5,
+   2,
+   2,
+   9,
+   0,
+   "INT"
+  ],
+  [
+   6,
+   2,
+   3,
+   9,
+   1,
+   "INT"
+  ],
+  [
+   7,
+   4,
+   0,
+   10,
+   0,
+   "MODEL"
+  ],
+  [
+   8,
+   7,
+   0,
+   10,
+   6,
+   "CONDITIONING"
+  ],
+  [
+   9,
+   8,
+   0,
+   10,
+   7,
+   "CONDITIONING"
+  ],
+  [
+   10,
+   9,
+   0,
+   10,
+   8,
+   "LATENT"
+  ],
+  [
+   11,
+   10,
+   0,
+   11,
+   0,
+   "LATENT"
+  ],
+  [
+   12,
+   6,
+   0,
+   11,
+   1,
+   "VAE"
+  ],
+  [
+   13,
+   11,
+   0,
+   12,
+   0,
+   "IMAGE"
+  ],
+  [
+   14,
+   13,
+   0,
+   14,
+   0,
+   "BACKGROUND_REMOVAL"
+  ],
+  [
+   15,
+   11,
+   0,
+   14,
+   1,
+   "IMAGE"
+  ],
+  [
+   16,
+   11,
+   0,
+   15,
+   0,
+   "IMAGE"
+  ],
+  [
+   17,
+   2,
+   4,
+   15,
+   8,
+   "INT"
+  ],
+  [
+   18,
+   2,
+   5,
+   15,
+   9,
+   "BOOLEAN"
+  ],
+  [
+   19,
+   14,
+   0,
+   15,
+   10,
+   "MASK"
+  ],
+  [
+   20,
+   15,
+   0,
+   16,
+   0,
+   "IMAGE"
+  ]
+ ],
+ "groups": [
+  {
+   "id": 1,
+   "title": "1 · Prompt & style",
+   "bounding": [
+    0,
+    0,
+    460,
+    712
+   ],
+   "color": "#3f789e",
+   "font_size": 24,
+   "flags": {}
+  },
+  {
+   "id": 2,
+   "title": "2 · Generate (Z-Image Turbo, no pixel LoRA)",
+   "bounding": [
+    540,
+    0,
+    2250,
+    702
+   ],
+   "color": "#8A8",
+   "font_size": 24,
+   "flags": {}
+  },
+  {
+   "id": 3,
+   "title": "3 · Soft-edged cutout",
+   "bounding": [
+    0,
+    832,
+    1100,
+    418
+   ],
+   "color": "#b06634",
+   "font_size": 24,
+   "flags": {}
+  },
+  {
+   "id": 4,
+   "title": "4 · Save",
+   "bounding": [
+    1180,
+    832,
+    360,
+    614
+   ],
+   "color": "#a1309b",
+   "font_size": 24,
+   "flags": {}
+  }
+ ],
+ "config": {},
+ "extra": {
+  "ds": {
+   "scale": 0.55,
+   "offset": [
+    40,
+    40
+   ]
+  },
+  "spritekiln": {
+   "title": "HD 2D Art from Text (painted / cartoon, no pixels)",
+   "description": "Rayman-style painted cartoon characters, creatures, props, icons and VFX as clean transparent PNGs."
+  }
+ },
+ "version": 0.4
+}

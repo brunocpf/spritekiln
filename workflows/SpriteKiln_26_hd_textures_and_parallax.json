@@ -1,0 +1,1920 @@
+{
+ "id": "spritekiln-26_hd_textures_and_parallax",
+ "revision": 0,
+ "last_node_id": 26,
+ "last_link_id": 32,
+ "nodes": [
+  {
+   "id": 1,
+   "type": "MarkdownNote",
+   "pos": [
+    20,
+    70
+   ],
+   "size": [
+    420,
+    140
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "MarkdownNote"
+   },
+   "title": "Note",
+   "inputs": [],
+   "outputs": [],
+   "widgets_values": [
+    "## Painted textures & parallax\nThe texture wraps in x and y. The parallax layer wraps only horizontally, so it scrolls forever in a side-scroller."
+   ],
+   "color": "#432",
+   "bgcolor": "#653"
+  },
+  {
+   "id": 2,
+   "type": "UNETLoader",
+   "pos": [
+    20,
+    250
+   ],
+   "size": [
+    320,
+    114
+   ],
+   "flags": {},
+   "order": 1,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "UNETLoader"
+   },
+   "inputs": [
+    {
+     "name": "unet_name",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "unet_name"
+     }
+    },
+    {
+     "name": "weight_dtype",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "weight_dtype"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      1
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    "z_image_turbo_bf16.safetensors",
+    "default"
+   ]
+  },
+  {
+   "id": 3,
+   "type": "ModelSamplingAuraFlow",
+   "pos": [
+    490,
+    70
+   ],
+   "size": [
+    320,
+    114
+   ],
+   "flags": {},
+   "order": 2,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "ModelSamplingAuraFlow"
+   },
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 1
+    },
+    {
+     "name": "shift",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "shift"
+     }
+    },
+    {
+     "name": "sampling",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "sampling"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      2,
+      18
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    3.0,
+    "flow"
+   ]
+  },
+  {
+   "id": 4,
+   "type": "CLIPLoader",
+   "pos": [
+    20,
+    404
+   ],
+   "size": [
+    320,
+    140
+   ],
+   "flags": {},
+   "order": 3,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "CLIPLoader"
+   },
+   "inputs": [
+    {
+     "name": "clip_name",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "clip_name"
+     }
+    },
+    {
+     "name": "type",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "type"
+     }
+    },
+    {
+     "name": "device",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "device"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "CLIP",
+     "type": "CLIP",
+     "links": [
+      4,
+      20
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    "qwen_3_4b.safetensors",
+    "lumina2",
+    "default"
+   ]
+  },
+  {
+   "id": 5,
+   "type": "VAELoader",
+   "pos": [
+    20,
+    584
+   ],
+   "size": [
+    320,
+    88
+   ],
+   "flags": {},
+   "order": 4,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "VAELoader"
+   },
+   "inputs": [
+    {
+     "name": "vae_name",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "vae_name"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "VAE",
+     "type": "VAE",
+     "links": [
+      13,
+      29
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    "ae.safetensors"
+   ]
+  },
+  {
+   "id": 6,
+   "type": "SK_HDStylePreset",
+   "pos": [
+    20,
+    712
+   ],
+   "size": [
+    360,
+    392
+   ],
+   "flags": {},
+   "order": 5,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_HDStylePreset"
+   },
+   "inputs": [
+    {
+     "name": "subject",
+     "type": "STRING",
+     "link": null,
+     "widget": {
+      "name": "subject"
+     }
+    },
+    {
+     "name": "style",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "style"
+     }
+    },
+    {
+     "name": "background",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "background"
+     }
+    },
+    {
+     "name": "out_long_side",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "out_long_side"
+     }
+    },
+    {
+     "name": "extra",
+     "type": "STRING",
+     "link": null,
+     "widget": {
+      "name": "extra"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "prompt",
+     "type": "STRING",
+     "links": [
+      3
+     ],
+     "slot_index": 0
+    },
+    {
+     "name": "negative",
+     "type": "STRING",
+     "links": [],
+     "slot_index": 1
+    },
+    {
+     "name": "gen_width",
+     "type": "INT",
+     "links": [
+      6
+     ],
+     "slot_index": 2
+    },
+    {
+     "name": "gen_height",
+     "type": "INT",
+     "links": [
+      7
+     ],
+     "slot_index": 3
+    },
+    {
+     "name": "out_long_side",
+     "type": "INT",
+     "links": [],
+     "slot_index": 4
+    },
+    {
+     "name": "transparent",
+     "type": "BOOLEAN",
+     "links": [],
+     "slot_index": 5
+    }
+   ],
+   "widgets_values": [
+    "mossy cobblestone path with small flowers",
+    "texture (painted, tileable)",
+    "scene",
+    0,
+    ""
+   ]
+  },
+  {
+   "id": 7,
+   "type": "SK_SeamlessTiling",
+   "pos": [
+    900,
+    70
+   ],
+   "size": [
+    320,
+    114
+   ],
+   "flags": {},
+   "order": 6,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_SeamlessTiling"
+   },
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 2
+    },
+    {
+     "name": "axes",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "axes"
+     }
+    },
+    {
+     "name": "align",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "align"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      8
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    "both",
+    2
+   ]
+  },
+  {
+   "id": 8,
+   "type": "CLIPTextEncode",
+   "pos": [
+    490,
+    224
+   ],
+   "size": [
+    360,
+    178
+   ],
+   "flags": {},
+   "order": 7,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "CLIPTextEncode"
+   },
+   "title": "Prompt",
+   "inputs": [
+    {
+     "name": "text",
+     "type": "STRING",
+     "link": 3,
+     "widget": {
+      "name": "text"
+     }
+    },
+    {
+     "name": "clip",
+     "type": "CLIP",
+     "link": 4
+    }
+   ],
+   "outputs": [
+    {
+     "name": "CONDITIONING",
+     "type": "CONDITIONING",
+     "links": [
+      5,
+      9
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    ""
+   ]
+  },
+  {
+   "id": 9,
+   "type": "ConditioningZeroOut",
+   "pos": [
+    900,
+    224
+   ],
+   "size": [
+    320,
+    62
+   ],
+   "flags": {},
+   "order": 8,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "ConditioningZeroOut"
+   },
+   "inputs": [
+    {
+     "name": "conditioning",
+     "type": "CONDITIONING",
+     "link": 5
+    }
+   ],
+   "outputs": [
+    {
+     "name": "CONDITIONING",
+     "type": "CONDITIONING",
+     "links": [
+      10
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": []
+  },
+  {
+   "id": 10,
+   "type": "EmptySD3LatentImage",
+   "pos": [
+    490,
+    442
+   ],
+   "size": [
+    320,
+    140
+   ],
+   "flags": {},
+   "order": 9,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "EmptySD3LatentImage"
+   },
+   "inputs": [
+    {
+     "name": "width",
+     "type": "INT",
+     "link": 6,
+     "widget": {
+      "name": "width"
+     }
+    },
+    {
+     "name": "height",
+     "type": "INT",
+     "link": 7,
+     "widget": {
+      "name": "height"
+     }
+    },
+    {
+     "name": "batch_size",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "batch_size"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "LATENT",
+     "type": "LATENT",
+     "links": [
+      11
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    1024,
+    1024,
+    1
+   ]
+  },
+  {
+   "id": 11,
+   "type": "KSampler",
+   "pos": [
+    1270,
+    70
+   ],
+   "size": [
+    320,
+    284
+   ],
+   "flags": {},
+   "order": 10,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "KSampler"
+   },
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 8
+    },
+    {
+     "name": "seed",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "seed"
+     }
+    },
+    {
+     "name": "steps",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "steps"
+     }
+    },
+    {
+     "name": "cfg",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "cfg"
+     }
+    },
+    {
+     "name": "sampler_name",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "sampler_name"
+     }
+    },
+    {
+     "name": "scheduler",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "scheduler"
+     }
+    },
+    {
+     "name": "positive",
+     "type": "CONDITIONING",
+     "link": 9
+    },
+    {
+     "name": "negative",
+     "type": "CONDITIONING",
+     "link": 10
+    },
+    {
+     "name": "latent_image",
+     "type": "LATENT",
+     "link": 11
+    },
+    {
+     "name": "denoise",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "denoise"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "LATENT",
+     "type": "LATENT",
+     "links": [
+      12
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    1234,
+    "randomize",
+    8,
+    1.0,
+    "res_multistep",
+    "simple",
+    1.0
+   ]
+  },
+  {
+   "id": 12,
+   "type": "SK_SeamlessVAEDecode",
+   "pos": [
+    1640,
+    70
+   ],
+   "size": [
+    320,
+    136
+   ],
+   "flags": {},
+   "order": 11,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_SeamlessVAEDecode"
+   },
+   "inputs": [
+    {
+     "name": "samples",
+     "type": "LATENT",
+     "link": 12
+    },
+    {
+     "name": "vae",
+     "type": "VAE",
+     "link": 13
+    },
+    {
+     "name": "axes",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "axes"
+     }
+    },
+    {
+     "name": "pad_latent",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "pad_latent"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      14
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    "both",
+    8
+   ]
+  },
+  {
+   "id": 13,
+   "type": "ImageScale",
+   "pos": [
+    2010,
+    70
+   ],
+   "size": [
+    320,
+    166
+   ],
+   "flags": {},
+   "order": 12,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "ImageScale"
+   },
+   "title": "Texture size",
+   "inputs": [
+    {
+     "name": "image",
+     "type": "IMAGE",
+     "link": 14
+    },
+    {
+     "name": "upscale_method",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "upscale_method"
+     }
+    },
+    {
+     "name": "width",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "width"
+     }
+    },
+    {
+     "name": "height",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "height"
+     }
+    },
+    {
+     "name": "crop",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "crop"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      15,
+      16
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    "lanczos",
+    512,
+    512,
+    "disabled"
+   ]
+  },
+  {
+   "id": 14,
+   "type": "SK_SavePixelArt",
+   "pos": [
+    2450,
+    70
+   ],
+   "size": [
+    320,
+    514
+   ],
+   "flags": {},
+   "order": 13,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_SavePixelArt"
+   },
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 15
+    },
+    {
+     "name": "filename_prefix",
+     "type": "STRING",
+     "link": null,
+     "widget": {
+      "name": "filename_prefix"
+     }
+    },
+    {
+     "name": "upscale",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "upscale"
+     }
+    },
+    {
+     "name": "as_animation",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "as_animation"
+     }
+    },
+    {
+     "name": "fps",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "fps"
+     }
+    },
+    {
+     "name": "sheet_columns",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "sheet_columns"
+     }
+    },
+    {
+     "name": "row_names",
+     "type": "STRING",
+     "link": null
+    }
+   ],
+   "outputs": [],
+   "widgets_values": [
+    "spritekiln/hd_texture",
+    1,
+    false,
+    8.0,
+    0
+   ]
+  },
+  {
+   "id": 15,
+   "type": "SK_TilePreview",
+   "pos": [
+    2450,
+    624
+   ],
+   "size": [
+    320,
+    114
+   ],
+   "flags": {},
+   "order": 14,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_TilePreview"
+   },
+   "inputs": [
+    {
+     "name": "image",
+     "type": "IMAGE",
+     "link": 16
+    },
+    {
+     "name": "repeat_x",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "repeat_x"
+     }
+    },
+    {
+     "name": "repeat_y",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "repeat_y"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      17
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    3,
+    2
+   ]
+  },
+  {
+   "id": 16,
+   "type": "PreviewImage",
+   "pos": [
+    2820,
+    70
+   ],
+   "size": [
+    320,
+    362
+   ],
+   "flags": {},
+   "order": 15,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "PreviewImage"
+   },
+   "title": "Tiling check",
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 17
+    }
+   ],
+   "outputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "links": [],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": []
+  },
+  {
+   "id": 17,
+   "type": "SK_HDStylePreset",
+   "pos": [
+    20,
+    1666
+   ],
+   "size": [
+    360,
+    392
+   ],
+   "flags": {},
+   "order": 16,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_HDStylePreset"
+   },
+   "inputs": [
+    {
+     "name": "subject",
+     "type": "STRING",
+     "link": null,
+     "widget": {
+      "name": "subject"
+     }
+    },
+    {
+     "name": "style",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "style"
+     }
+    },
+    {
+     "name": "background",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "background"
+     }
+    },
+    {
+     "name": "out_long_side",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "out_long_side"
+     }
+    },
+    {
+     "name": "extra",
+     "type": "STRING",
+     "link": null,
+     "widget": {
+      "name": "extra"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "prompt",
+     "type": "STRING",
+     "links": [
+      19
+     ],
+     "slot_index": 0
+    },
+    {
+     "name": "negative",
+     "type": "STRING",
+     "links": [],
+     "slot_index": 1
+    },
+    {
+     "name": "gen_width",
+     "type": "INT",
+     "links": [
+      22
+     ],
+     "slot_index": 2
+    },
+    {
+     "name": "gen_height",
+     "type": "INT",
+     "links": [
+      23
+     ],
+     "slot_index": 3
+    },
+    {
+     "name": "out_long_side",
+     "type": "INT",
+     "links": [],
+     "slot_index": 4
+    },
+    {
+     "name": "transparent",
+     "type": "BOOLEAN",
+     "links": [],
+     "slot_index": 5
+    }
+   ],
+   "widgets_values": [
+    "enchanted forest with giant mushrooms and distant hills",
+    "painted background / parallax layer",
+    "scene",
+    0,
+    ""
+   ]
+  },
+  {
+   "id": 18,
+   "type": "SK_SeamlessTiling",
+   "pos": [
+    20,
+    2098
+   ],
+   "size": [
+    320,
+    114
+   ],
+   "flags": {},
+   "order": 17,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_SeamlessTiling"
+   },
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 18
+    },
+    {
+     "name": "axes",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "axes"
+     }
+    },
+    {
+     "name": "align",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "align"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      24
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    "x",
+    2
+   ]
+  },
+  {
+   "id": 19,
+   "type": "CLIPTextEncode",
+   "pos": [
+    430,
+    1666
+   ],
+   "size": [
+    360,
+    178
+   ],
+   "flags": {},
+   "order": 18,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "CLIPTextEncode"
+   },
+   "title": "Prompt",
+   "inputs": [
+    {
+     "name": "text",
+     "type": "STRING",
+     "link": 19,
+     "widget": {
+      "name": "text"
+     }
+    },
+    {
+     "name": "clip",
+     "type": "CLIP",
+     "link": 20
+    }
+   ],
+   "outputs": [
+    {
+     "name": "CONDITIONING",
+     "type": "CONDITIONING",
+     "links": [
+      21,
+      25
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    ""
+   ]
+  },
+  {
+   "id": 20,
+   "type": "ConditioningZeroOut",
+   "pos": [
+    840,
+    1666
+   ],
+   "size": [
+    320,
+    62
+   ],
+   "flags": {},
+   "order": 19,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "ConditioningZeroOut"
+   },
+   "inputs": [
+    {
+     "name": "conditioning",
+     "type": "CONDITIONING",
+     "link": 21
+    }
+   ],
+   "outputs": [
+    {
+     "name": "CONDITIONING",
+     "type": "CONDITIONING",
+     "links": [
+      26
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": []
+  },
+  {
+   "id": 21,
+   "type": "EmptySD3LatentImage",
+   "pos": [
+    430,
+    1884
+   ],
+   "size": [
+    320,
+    140
+   ],
+   "flags": {},
+   "order": 20,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "EmptySD3LatentImage"
+   },
+   "inputs": [
+    {
+     "name": "width",
+     "type": "INT",
+     "link": 22,
+     "widget": {
+      "name": "width"
+     }
+    },
+    {
+     "name": "height",
+     "type": "INT",
+     "link": 23,
+     "widget": {
+      "name": "height"
+     }
+    },
+    {
+     "name": "batch_size",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "batch_size"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "LATENT",
+     "type": "LATENT",
+     "links": [
+      27
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    1024,
+    1024,
+    1
+   ]
+  },
+  {
+   "id": 22,
+   "type": "KSampler",
+   "pos": [
+    1210,
+    1666
+   ],
+   "size": [
+    320,
+    284
+   ],
+   "flags": {},
+   "order": 21,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "KSampler"
+   },
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 24
+    },
+    {
+     "name": "seed",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "seed"
+     }
+    },
+    {
+     "name": "steps",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "steps"
+     }
+    },
+    {
+     "name": "cfg",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "cfg"
+     }
+    },
+    {
+     "name": "sampler_name",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "sampler_name"
+     }
+    },
+    {
+     "name": "scheduler",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "scheduler"
+     }
+    },
+    {
+     "name": "positive",
+     "type": "CONDITIONING",
+     "link": 25
+    },
+    {
+     "name": "negative",
+     "type": "CONDITIONING",
+     "link": 26
+    },
+    {
+     "name": "latent_image",
+     "type": "LATENT",
+     "link": 27
+    },
+    {
+     "name": "denoise",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "denoise"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "LATENT",
+     "type": "LATENT",
+     "links": [
+      28
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    1234,
+    "randomize",
+    8,
+    1.0,
+    "res_multistep",
+    "simple",
+    1.0
+   ]
+  },
+  {
+   "id": 23,
+   "type": "SK_SeamlessVAEDecode",
+   "pos": [
+    1580,
+    1666
+   ],
+   "size": [
+    320,
+    136
+   ],
+   "flags": {},
+   "order": 22,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_SeamlessVAEDecode"
+   },
+   "inputs": [
+    {
+     "name": "samples",
+     "type": "LATENT",
+     "link": 28
+    },
+    {
+     "name": "vae",
+     "type": "VAE",
+     "link": 29
+    },
+    {
+     "name": "axes",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "axes"
+     }
+    },
+    {
+     "name": "pad_latent",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "pad_latent"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      30,
+      31
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    "x",
+    8
+   ]
+  },
+  {
+   "id": 24,
+   "type": "SK_SavePixelArt",
+   "pos": [
+    2450,
+    778
+   ],
+   "size": [
+    320,
+    514
+   ],
+   "flags": {},
+   "order": 23,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_SavePixelArt"
+   },
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 30
+    },
+    {
+     "name": "filename_prefix",
+     "type": "STRING",
+     "link": null,
+     "widget": {
+      "name": "filename_prefix"
+     }
+    },
+    {
+     "name": "upscale",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "upscale"
+     }
+    },
+    {
+     "name": "as_animation",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "as_animation"
+     }
+    },
+    {
+     "name": "fps",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "fps"
+     }
+    },
+    {
+     "name": "sheet_columns",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "sheet_columns"
+     }
+    },
+    {
+     "name": "row_names",
+     "type": "STRING",
+     "link": null
+    }
+   ],
+   "outputs": [],
+   "widgets_values": [
+    "spritekiln/hd_parallax",
+    1,
+    false,
+    8.0,
+    0
+   ]
+  },
+  {
+   "id": 25,
+   "type": "SK_TilePreview",
+   "pos": [
+    2450,
+    1332
+   ],
+   "size": [
+    320,
+    114
+   ],
+   "flags": {},
+   "order": 24,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_TilePreview"
+   },
+   "inputs": [
+    {
+     "name": "image",
+     "type": "IMAGE",
+     "link": 31
+    },
+    {
+     "name": "repeat_x",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "repeat_x"
+     }
+    },
+    {
+     "name": "repeat_y",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "repeat_y"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      32
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    2,
+    1
+   ]
+  },
+  {
+   "id": 26,
+   "type": "PreviewImage",
+   "pos": [
+    2820,
+    472
+   ],
+   "size": [
+    320,
+    362
+   ],
+   "flags": {},
+   "order": 25,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "PreviewImage"
+   },
+   "title": "Horizontal loop check",
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 32
+    }
+   ],
+   "outputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "links": [],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": []
+  }
+ ],
+ "links": [
+  [
+   1,
+   2,
+   0,
+   3,
+   0,
+   "MODEL"
+  ],
+  [
+   2,
+   3,
+   0,
+   7,
+   0,
+   "MODEL"
+  ],
+  [
+   3,
+   6,
+   0,
+   8,
+   0,
+   "STRING"
+  ],
+  [
+   4,
+   4,
+   0,
+   8,
+   1,
+   "CLIP"
+  ],
+  [
+   5,
+   8,
+   0,
+   9,
+   0,
+   "CONDITIONING"
+  ],
+  [
+   6,
+   6,
+   2,
+   10,
+   0,
+   "INT"
+  ],
+  [
+   7,
+   6,
+   3,
+   10,
+   1,
+   "INT"
+  ],
+  [
+   8,
+   7,
+   0,
+   11,
+   0,
+   "MODEL"
+  ],
+  [
+   9,
+   8,
+   0,
+   11,
+   6,
+   "CONDITIONING"
+  ],
+  [
+   10,
+   9,
+   0,
+   11,
+   7,
+   "CONDITIONING"
+  ],
+  [
+   11,
+   10,
+   0,
+   11,
+   8,
+   "LATENT"
+  ],
+  [
+   12,
+   11,
+   0,
+   12,
+   0,
+   "LATENT"
+  ],
+  [
+   13,
+   5,
+   0,
+   12,
+   1,
+   "VAE"
+  ],
+  [
+   14,
+   12,
+   0,
+   13,
+   0,
+   "IMAGE"
+  ],
+  [
+   15,
+   13,
+   0,
+   14,
+   0,
+   "IMAGE"
+  ],
+  [
+   16,
+   13,
+   0,
+   15,
+   0,
+   "IMAGE"
+  ],
+  [
+   17,
+   15,
+   0,
+   16,
+   0,
+   "IMAGE"
+  ],
+  [
+   18,
+   3,
+   0,
+   18,
+   0,
+   "MODEL"
+  ],
+  [
+   19,
+   17,
+   0,
+   19,
+   0,
+   "STRING"
+  ],
+  [
+   20,
+   4,
+   0,
+   19,
+   1,
+   "CLIP"
+  ],
+  [
+   21,
+   19,
+   0,
+   20,
+   0,
+   "CONDITIONING"
+  ],
+  [
+   22,
+   17,
+   2,
+   21,
+   0,
+   "INT"
+  ],
+  [
+   23,
+   17,
+   3,
+   21,
+   1,
+   "INT"
+  ],
+  [
+   24,
+   18,
+   0,
+   22,
+   0,
+   "MODEL"
+  ],
+  [
+   25,
+   19,
+   0,
+   22,
+   6,
+   "CONDITIONING"
+  ],
+  [
+   26,
+   20,
+   0,
+   22,
+   7,
+   "CONDITIONING"
+  ],
+  [
+   27,
+   21,
+   0,
+   22,
+   8,
+   "LATENT"
+  ],
+  [
+   28,
+   22,
+   0,
+   23,
+   0,
+   "LATENT"
+  ],
+  [
+   29,
+   5,
+   0,
+   23,
+   1,
+   "VAE"
+  ],
+  [
+   30,
+   23,
+   0,
+   24,
+   0,
+   "IMAGE"
+  ],
+  [
+   31,
+   23,
+   0,
+   25,
+   0,
+   "IMAGE"
+  ],
+  [
+   32,
+   25,
+   0,
+   26,
+   0,
+   "IMAGE"
+  ]
+ ],
+ "groups": [
+  {
+   "id": 1,
+   "title": "1 · Seamless texture (tiles both ways)",
+   "bounding": [
+    0,
+    0,
+    2350,
+    1134
+   ],
+   "color": "#3f789e",
+   "font_size": 24,
+   "flags": {}
+  },
+  {
+   "id": 2,
+   "title": "3 · Save",
+   "bounding": [
+    2430,
+    0,
+    730,
+    1476
+   ],
+   "color": "#8A8",
+   "font_size": 24,
+   "flags": {}
+  },
+  {
+   "id": 3,
+   "title": "2 · Parallax layer (loops horizontally)",
+   "bounding": [
+    0,
+    1596,
+    1920,
+    646
+   ],
+   "color": "#b06634",
+   "font_size": 24,
+   "flags": {}
+  }
+ ],
+ "config": {},
+ "extra": {
+  "ds": {
+   "scale": 0.55,
+   "offset": [
+    40,
+    40
+   ]
+  },
+  "spritekiln": {
+   "title": "HD Seamless Texture + Parallax Background Layer",
+   "description": "Painted tileable textures (both axes) and horizontally looping parallax backgrounds."
+  }
+ },
+ "version": 0.4
+}

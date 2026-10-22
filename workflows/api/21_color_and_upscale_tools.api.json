@@ -1,0 +1,245 @@
+{
+ "2": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "spritekiln_example_sprite.png"
+  },
+  "_meta": {
+   "title": "Sprite"
+  }
+ },
+ "3": {
+  "class_type": "JoinImageWithAlpha",
+  "inputs": {
+   "image": [
+    "2",
+    0
+   ],
+   "alpha": [
+    "2",
+    1
+   ]
+  },
+  "_meta": {
+   "title": "Sprite (RGBA)"
+  }
+ },
+ "4": {
+  "class_type": "SK_ColorRamp",
+  "inputs": {
+   "base_colors": "#b13e53 #3b5dc9 #38b764 #ef7d57",
+   "steps": 6,
+   "hue_shift": 25.0,
+   "light_range": 0.6,
+   "saturation_curve": 0.3
+  },
+  "_meta": {
+   "title": "SK_ColorRamp"
+  }
+ },
+ "5": {
+  "class_type": "PreviewImage",
+  "inputs": {
+   "images": [
+    "4",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Ramps"
+  }
+ },
+ "6": {
+  "class_type": "SK_Palette",
+  "inputs": {
+   "image": [
+    "3",
+    0
+   ],
+   "source": "hex",
+   "colors": 64,
+   "preset": "PICO-8",
+   "dither": "none",
+   "dither_strength": 0.5,
+   "shared_palette": true,
+   "hex_palette": [
+    "4",
+    1
+   ]
+  },
+  "_meta": {
+   "title": "Recolour with the ramps"
+  }
+ },
+ "7": {
+  "class_type": "SK_Palette",
+  "inputs": {
+   "image": [
+    "3",
+    0
+   ],
+   "source": "auto",
+   "colors": 32,
+   "preset": "PICO-8",
+   "dither": "none",
+   "dither_strength": 0.5,
+   "shared_palette": true
+  },
+  "_meta": {
+   "title": "Sprite palette (copy colours from here)"
+  }
+ },
+ "8": {
+  "class_type": "PreviewAny",
+  "inputs": {
+   "source": [
+    "7",
+    2
+   ]
+  },
+  "_meta": {
+   "title": "Sprite colours"
+  }
+ },
+ "9": {
+  "class_type": "SK_PaletteSwap",
+  "inputs": {
+   "image": [
+    "3",
+    0
+   ],
+   "from_colors": "#a22633 #e43b44",
+   "to_colors": "#124e89 #0099db",
+   "tolerance": 0.12
+  },
+  "_meta": {
+   "title": "SK_PaletteSwap"
+  }
+ },
+ "10": {
+  "class_type": "SK_HueShift",
+  "inputs": {
+   "image": [
+    "3",
+    0
+   ],
+   "hue_degrees": 140.0,
+   "saturation": 1.1,
+   "lightness": 0.0
+  },
+  "_meta": {
+   "title": "Hue shift (enemy variant)"
+  }
+ },
+ "11": {
+  "class_type": "SK_PixelUpscale",
+  "inputs": {
+   "image": [
+    "3",
+    0
+   ],
+   "method": "scale2x"
+  },
+  "_meta": {
+   "title": "SK_PixelUpscale"
+  }
+ },
+ "12": {
+  "class_type": "SK_PixelUpscale",
+  "inputs": {
+   "image": [
+    "3",
+    0
+   ],
+   "method": "scale3x"
+  },
+  "_meta": {
+   "title": "SK_PixelUpscale"
+  }
+ },
+ "13": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "6",
+    0
+   ],
+   "filename_prefix": "spritekiln/ramp_recolor",
+   "upscale": 8,
+   "as_animation": false,
+   "fps": 8.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ },
+ "14": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "9",
+    0
+   ],
+   "filename_prefix": "spritekiln/palette_swap",
+   "upscale": 8,
+   "as_animation": false,
+   "fps": 8.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ },
+ "15": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "10",
+    0
+   ],
+   "filename_prefix": "spritekiln/hue_variant",
+   "upscale": 8,
+   "as_animation": false,
+   "fps": 8.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ },
+ "16": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "11",
+    0
+   ],
+   "filename_prefix": "spritekiln/scale2x",
+   "upscale": 4,
+   "as_animation": false,
+   "fps": 8.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ },
+ "17": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "12",
+    0
+   ],
+   "filename_prefix": "spritekiln/scale3x",
+   "upscale": 3,
+   "as_animation": false,
+   "fps": 8.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ }
+}

@@ -1,0 +1,333 @@
+{
+ "2": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "spritekiln_example_reference.png"
+  },
+  "_meta": {
+   "title": "LoadImage"
+  }
+ },
+ "3": {
+  "class_type": "PrimitiveInt",
+  "inputs": {
+   "value": 96
+  },
+  "_meta": {
+   "title": "Art width"
+  }
+ },
+ "4": {
+  "class_type": "PrimitiveInt",
+  "inputs": {
+   "value": 96
+  },
+  "_meta": {
+   "title": "Art height"
+  }
+ },
+ "5": {
+  "class_type": "PrimitiveInt",
+  "inputs": {
+   "value": 24
+  },
+  "_meta": {
+   "title": "Colours"
+  }
+ },
+ "6": {
+  "class_type": "SK_PixelPerfect",
+  "inputs": {
+   "image": [
+    "2",
+    0
+   ],
+   "mode": "fixed_size",
+   "width": [
+    "3",
+    0
+   ],
+   "height": [
+    "4",
+    0
+   ],
+   "scale": 16,
+   "method": "mean",
+   "pre_colors": 48
+  },
+  "_meta": {
+   "title": "SK_PixelPerfect"
+  }
+ },
+ "7": {
+  "class_type": "SK_Palette",
+  "inputs": {
+   "image": [
+    "6",
+    0
+   ],
+   "source": "auto",
+   "colors": [
+    "5",
+    0
+   ],
+   "preset": "PICO-8",
+   "dither": "none",
+   "dither_strength": 0.3,
+   "shared_palette": true
+  },
+  "_meta": {
+   "title": "SK_Palette"
+  }
+ },
+ "8": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "7",
+    0
+   ],
+   "filename_prefix": "spritekiln/img2pixel_direct",
+   "upscale": 8,
+   "as_animation": false,
+   "fps": 8.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ },
+ "9": {
+  "class_type": "UNETLoader",
+  "inputs": {
+   "unet_name": "z_image_turbo_bf16.safetensors",
+   "weight_dtype": "default"
+  },
+  "_meta": {
+   "title": "UNETLoader"
+  }
+ },
+ "10": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "9",
+    0
+   ],
+   "lora_name": "spritekiln_zimage_pixel_art.safetensors",
+   "strength_model": 0.8
+  },
+  "_meta": {
+   "title": "Pixel-art LoRA (Z-Image)"
+  }
+ },
+ "11": {
+  "class_type": "ModelSamplingAuraFlow",
+  "inputs": {
+   "model": [
+    "10",
+    0
+   ],
+   "shift": 3.0
+  },
+  "_meta": {
+   "title": "ModelSamplingAuraFlow"
+  }
+ },
+ "12": {
+  "class_type": "CLIPLoader",
+  "inputs": {
+   "clip_name": "qwen_3_4b.safetensors",
+   "type": "lumina2",
+   "device": "default"
+  },
+  "_meta": {
+   "title": "CLIPLoader"
+  }
+ },
+ "13": {
+  "class_type": "VAELoader",
+  "inputs": {
+   "vae_name": "ae.safetensors"
+  },
+  "_meta": {
+   "title": "VAELoader"
+  }
+ },
+ "14": {
+  "class_type": "ImageScaleToTotalPixels",
+  "inputs": {
+   "image": [
+    "2",
+    0
+   ],
+   "upscale_method": "lanczos",
+   "megapixels": 1.0,
+   "resolution_steps": 16
+  },
+  "_meta": {
+   "title": "ImageScaleToTotalPixels"
+  }
+ },
+ "15": {
+  "class_type": "VAEEncode",
+  "inputs": {
+   "pixels": [
+    "14",
+    0
+   ],
+   "vae": [
+    "13",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "VAEEncode"
+  }
+ },
+ "16": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": "Pixel art style. pixel art of the scene, crisp pixels, limited palette, retro game graphics",
+   "clip": [
+    "12",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Prompt"
+  }
+ },
+ "17": {
+  "class_type": "ConditioningZeroOut",
+  "inputs": {
+   "conditioning": [
+    "16",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ConditioningZeroOut"
+  }
+ },
+ "18": {
+  "class_type": "KSampler",
+  "inputs": {
+   "model": [
+    "11",
+    0
+   ],
+   "seed": 1234,
+   "steps": 8,
+   "cfg": 1.0,
+   "sampler_name": "res_multistep",
+   "scheduler": "simple",
+   "positive": [
+    "16",
+    0
+   ],
+   "negative": [
+    "17",
+    0
+   ],
+   "latent_image": [
+    "15",
+    0
+   ],
+   "denoise": 0.6
+  },
+  "_meta": {
+   "title": "KSampler"
+  }
+ },
+ "19": {
+  "class_type": "VAEDecode",
+  "inputs": {
+   "samples": [
+    "18",
+    0
+   ],
+   "vae": [
+    "13",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "VAEDecode"
+  }
+ },
+ "20": {
+  "class_type": "PreviewImage",
+  "inputs": {
+   "images": [
+    "19",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Redraw (model res)"
+  }
+ },
+ "21": {
+  "class_type": "SK_PixelPerfect",
+  "inputs": {
+   "image": [
+    "19",
+    0
+   ],
+   "mode": "fixed_size",
+   "width": [
+    "3",
+    0
+   ],
+   "height": [
+    "4",
+    0
+   ],
+   "scale": 16,
+   "method": "dominant",
+   "pre_colors": 48
+  },
+  "_meta": {
+   "title": "SK_PixelPerfect"
+  }
+ },
+ "22": {
+  "class_type": "SK_Palette",
+  "inputs": {
+   "image": [
+    "21",
+    0
+   ],
+   "source": "auto",
+   "colors": [
+    "5",
+    0
+   ],
+   "preset": "PICO-8",
+   "dither": "none",
+   "dither_strength": 0.5,
+   "shared_palette": true
+  },
+  "_meta": {
+   "title": "SK_Palette"
+  }
+ },
+ "23": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "22",
+    0
+   ],
+   "filename_prefix": "spritekiln/img2pixel_redraw",
+   "upscale": 8,
+   "as_animation": false,
+   "fps": 8.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ }
+}

@@ -1,0 +1,2729 @@
+{
+ "id": "spritekiln-09_walk_spritesheet_from_text",
+ "revision": 0,
+ "last_node_id": 37,
+ "last_link_id": 37,
+ "nodes": [
+  {
+   "id": 1,
+   "type": "MarkdownNote",
+   "pos": [
+    20,
+    70
+   ],
+   "size": [
+    420,
+    140
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "MarkdownNote"
+   },
+   "title": "Note",
+   "inputs": [],
+   "outputs": [],
+   "widgets_values": [
+    "## Walk spritesheet\nDescribe the character only; the layout text is appended automatically. Generates at 512×512 (training size) and snaps to a true 128×128 sheet of 32×32 frames."
+   ],
+   "color": "#432",
+   "bgcolor": "#653"
+  },
+  {
+   "id": 2,
+   "type": "PrimitiveStringMultiline",
+   "pos": [
+    20,
+    250
+   ],
+   "size": [
+    360,
+    178
+   ],
+   "flags": {},
+   "order": 1,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "PrimitiveStringMultiline"
+   },
+   "title": "Character",
+   "inputs": [
+    {
+     "name": "value",
+     "type": "STRING",
+     "link": null,
+     "widget": {
+      "name": "value"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "STRING",
+     "type": "STRING",
+     "links": [
+      1
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    "A pixel art spritesheet of a medieval knight wearing metal armor and a helmet with a red plume."
+   ]
+  },
+  {
+   "id": 3,
+   "type": "StringConcatenate",
+   "pos": [
+    490,
+    70
+   ],
+   "size": [
+    360,
+    320
+   ],
+   "flags": {},
+   "order": 2,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "StringConcatenate"
+   },
+   "inputs": [
+    {
+     "name": "string_a",
+     "type": "STRING",
+     "link": 1,
+     "widget": {
+      "name": "string_a"
+     }
+    },
+    {
+     "name": "string_b",
+     "type": "STRING",
+     "link": null,
+     "widget": {
+      "name": "string_b"
+     }
+    },
+    {
+     "name": "delimiter",
+     "type": "STRING",
+     "link": null,
+     "widget": {
+      "name": "delimiter"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "STRING",
+     "type": "STRING",
+     "links": [
+      3
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    "",
+    "The spritesheet is a 4 by 4 grid of four rows of frames - first row is 3 walking frames facing down and 1 frame both arms raised, second row is 3 walking frames facing left and 1 frame jumping left, third row is 3 walking frames facing right and 1 frame jumping right, fourth row is 3 walking frames back view facing up and 1 frame lying on floor.",
+    " "
+   ]
+  },
+  {
+   "id": 4,
+   "type": "UNETLoader",
+   "pos": [
+    970,
+    70
+   ],
+   "size": [
+    320,
+    114
+   ],
+   "flags": {},
+   "order": 3,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "UNETLoader"
+   },
+   "title": "FLUX.2 klein 4B base",
+   "inputs": [
+    {
+     "name": "unet_name",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "unet_name"
+     }
+    },
+    {
+     "name": "weight_dtype",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "weight_dtype"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      2
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    "flux-2-klein-base-4b.safetensors",
+    "default"
+   ]
+  },
+  {
+   "id": 5,
+   "type": "LoraLoaderModelOnly",
+   "pos": [
+    1340,
+    70
+   ],
+   "size": [
+    320,
+    114
+   ],
+   "flags": {},
+   "order": 4,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "LoraLoaderModelOnly"
+   },
+   "title": "4-walk spritesheet LoRA",
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 2
+    },
+    {
+     "name": "lora_name",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "lora_name"
+     }
+    },
+    {
+     "name": "strength_model",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "strength_model"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      6
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    "spritekiln_klein_base_4walk_sheet.safetensors",
+    1.0
+   ]
+  },
+  {
+   "id": 6,
+   "type": "CLIPLoader",
+   "pos": [
+    970,
+    224
+   ],
+   "size": [
+    320,
+    140
+   ],
+   "flags": {},
+   "order": 5,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "CLIPLoader"
+   },
+   "inputs": [
+    {
+     "name": "clip_name",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "clip_name"
+     }
+    },
+    {
+     "name": "type",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "type"
+     }
+    },
+    {
+     "name": "device",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "device"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "CLIP",
+     "type": "CLIP",
+     "links": [
+      4,
+      5
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    "qwen_3_4b.safetensors",
+    "flux2",
+    "default"
+   ]
+  },
+  {
+   "id": 7,
+   "type": "VAELoader",
+   "pos": [
+    970,
+    404
+   ],
+   "size": [
+    320,
+    88
+   ],
+   "flags": {},
+   "order": 6,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "VAELoader"
+   },
+   "inputs": [
+    {
+     "name": "vae_name",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "vae_name"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "VAE",
+     "type": "VAE",
+     "links": [
+      15
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    "flux2-vae.safetensors"
+   ]
+  },
+  {
+   "id": 8,
+   "type": "CLIPTextEncode",
+   "pos": [
+    1340,
+    224
+   ],
+   "size": [
+    360,
+    178
+   ],
+   "flags": {},
+   "order": 7,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "CLIPTextEncode"
+   },
+   "title": "Prompt",
+   "inputs": [
+    {
+     "name": "text",
+     "type": "STRING",
+     "link": 3,
+     "widget": {
+      "name": "text"
+     }
+    },
+    {
+     "name": "clip",
+     "type": "CLIP",
+     "link": 4
+    }
+   ],
+   "outputs": [
+    {
+     "name": "CONDITIONING",
+     "type": "CONDITIONING",
+     "links": [
+      7
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    ""
+   ]
+  },
+  {
+   "id": 9,
+   "type": "CLIPTextEncode",
+   "pos": [
+    1340,
+    442
+   ],
+   "size": [
+    360,
+    178
+   ],
+   "flags": {},
+   "order": 8,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "CLIPTextEncode"
+   },
+   "title": "Negative",
+   "inputs": [
+    {
+     "name": "text",
+     "type": "STRING",
+     "link": null,
+     "widget": {
+      "name": "text"
+     }
+    },
+    {
+     "name": "clip",
+     "type": "CLIP",
+     "link": 5
+    }
+   ],
+   "outputs": [
+    {
+     "name": "CONDITIONING",
+     "type": "CONDITIONING",
+     "links": [
+      8
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    "blurry, smooth, photo, text, watermark"
+   ]
+  },
+  {
+   "id": 10,
+   "type": "RandomNoise",
+   "pos": [
+    970,
+    532
+   ],
+   "size": [
+    320,
+    88
+   ],
+   "flags": {},
+   "order": 9,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "RandomNoise"
+   },
+   "inputs": [
+    {
+     "name": "noise_seed",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "noise_seed"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "NOISE",
+     "type": "NOISE",
+     "links": [
+      9
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    1234,
+    "randomize"
+   ]
+  },
+  {
+   "id": 11,
+   "type": "CFGGuider",
+   "pos": [
+    1750,
+    70
+   ],
+   "size": [
+    320,
+    132
+   ],
+   "flags": {},
+   "order": 10,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "CFGGuider"
+   },
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 6
+    },
+    {
+     "name": "positive",
+     "type": "CONDITIONING",
+     "link": 7
+    },
+    {
+     "name": "negative",
+     "type": "CONDITIONING",
+     "link": 8
+    },
+    {
+     "name": "cfg",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "cfg"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "GUIDER",
+     "type": "GUIDER",
+     "links": [
+      10
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    5.0
+   ]
+  },
+  {
+   "id": 12,
+   "type": "KSamplerSelect",
+   "pos": [
+    970,
+    660
+   ],
+   "size": [
+    320,
+    88
+   ],
+   "flags": {},
+   "order": 11,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "KSamplerSelect"
+   },
+   "inputs": [
+    {
+     "name": "sampler_name",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "sampler_name"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "SAMPLER",
+     "type": "SAMPLER",
+     "links": [
+      11
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    "euler"
+   ]
+  },
+  {
+   "id": 13,
+   "type": "Flux2Scheduler",
+   "pos": [
+    970,
+    788
+   ],
+   "size": [
+    320,
+    140
+   ],
+   "flags": {},
+   "order": 12,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "Flux2Scheduler"
+   },
+   "inputs": [
+    {
+     "name": "steps",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "steps"
+     }
+    },
+    {
+     "name": "width",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "width"
+     }
+    },
+    {
+     "name": "height",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "height"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "SIGMAS",
+     "type": "SIGMAS",
+     "links": [
+      12
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    24,
+    512,
+    512
+   ]
+  },
+  {
+   "id": 14,
+   "type": "EmptyFlux2LatentImage",
+   "pos": [
+    970,
+    968
+   ],
+   "size": [
+    320,
+    140
+   ],
+   "flags": {},
+   "order": 13,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "EmptyFlux2LatentImage"
+   },
+   "inputs": [
+    {
+     "name": "width",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "width"
+     }
+    },
+    {
+     "name": "height",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "height"
+     }
+    },
+    {
+     "name": "batch_size",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "batch_size"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "LATENT",
+     "type": "LATENT",
+     "links": [
+      13
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    512,
+    512,
+    1
+   ]
+  },
+  {
+   "id": 15,
+   "type": "SamplerCustomAdvanced",
+   "pos": [
+    2120,
+    70
+   ],
+   "size": [
+    320,
+    150
+   ],
+   "flags": {},
+   "order": 14,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SamplerCustomAdvanced"
+   },
+   "inputs": [
+    {
+     "name": "noise",
+     "type": "NOISE",
+     "link": 9
+    },
+    {
+     "name": "guider",
+     "type": "GUIDER",
+     "link": 10
+    },
+    {
+     "name": "sampler",
+     "type": "SAMPLER",
+     "link": 11
+    },
+    {
+     "name": "sigmas",
+     "type": "SIGMAS",
+     "link": 12
+    },
+    {
+     "name": "latent_image",
+     "type": "LATENT",
+     "link": 13
+    }
+   ],
+   "outputs": [
+    {
+     "name": "output",
+     "type": "LATENT",
+     "links": [
+      14
+     ],
+     "slot_index": 0
+    },
+    {
+     "name": "denoised_output",
+     "type": "LATENT",
+     "links": [],
+     "slot_index": 1
+    }
+   ],
+   "widgets_values": []
+  },
+  {
+   "id": 16,
+   "type": "VAEDecode",
+   "pos": [
+    2490,
+    70
+   ],
+   "size": [
+    320,
+    84
+   ],
+   "flags": {},
+   "order": 15,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "VAEDecode"
+   },
+   "inputs": [
+    {
+     "name": "samples",
+     "type": "LATENT",
+     "link": 14
+    },
+    {
+     "name": "vae",
+     "type": "VAE",
+     "link": 15
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      16,
+      18,
+      19
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": []
+  },
+  {
+   "id": 17,
+   "type": "PreviewImage",
+   "pos": [
+    2860,
+    70
+   ],
+   "size": [
+    320,
+    362
+   ],
+   "flags": {},
+   "order": 16,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "PreviewImage"
+   },
+   "title": "Raw sheet",
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 16
+    }
+   ],
+   "outputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "links": [],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": []
+  },
+  {
+   "id": 18,
+   "type": "LoadBackgroundRemovalModel",
+   "pos": [
+    20,
+    1328
+   ],
+   "size": [
+    320,
+    88
+   ],
+   "flags": {},
+   "order": 17,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "LoadBackgroundRemovalModel"
+   },
+   "inputs": [
+    {
+     "name": "bg_removal_name",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "bg_removal_name"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "bg_model",
+     "type": "BACKGROUND_REMOVAL",
+     "links": [
+      17
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    "birefnet.safetensors"
+   ]
+  },
+  {
+   "id": 19,
+   "type": "RemoveBackground",
+   "pos": [
+    390,
+    1328
+   ],
+   "size": [
+    320,
+    84
+   ],
+   "flags": {},
+   "order": 18,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "RemoveBackground"
+   },
+   "inputs": [
+    {
+     "name": "bg_removal_model",
+     "type": "BACKGROUND_REMOVAL",
+     "link": 17
+    },
+    {
+     "name": "image",
+     "type": "IMAGE",
+     "link": 18
+    }
+   ],
+   "outputs": [
+    {
+     "name": "mask",
+     "type": "MASK",
+     "links": [
+      20
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": []
+  },
+  {
+   "id": 20,
+   "type": "SK_BackgroundRemove",
+   "pos": [
+    760,
+    1328
+   ],
+   "size": [
+    320,
+    214
+   ],
+   "flags": {},
+   "order": 19,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_BackgroundRemove"
+   },
+   "inputs": [
+    {
+     "name": "image",
+     "type": "IMAGE",
+     "link": 19
+    },
+    {
+     "name": "mode",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "mode"
+     }
+    },
+    {
+     "name": "remove_shadow",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "remove_shadow"
+     }
+    },
+    {
+     "name": "tolerance",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "tolerance"
+     }
+    },
+    {
+     "name": "mask_threshold",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "mask_threshold"
+     }
+    },
+    {
+     "name": "enabled",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "enabled"
+     }
+    },
+    {
+     "name": "foreground_mask",
+     "type": "MASK",
+     "link": 20
+    }
+   ],
+   "outputs": [
+    {
+     "name": "image",
+     "type": "IMAGE",
+     "links": [
+      21
+     ],
+     "slot_index": 0
+    },
+    {
+     "name": "foreground_mask",
+     "type": "MASK",
+     "links": [],
+     "slot_index": 1
+    }
+   ],
+   "widgets_values": [
+    "mask_and_key",
+    true,
+    0.08,
+    0.5,
+    true
+   ]
+  },
+  {
+   "id": 21,
+   "type": "SK_PixelPerfect",
+   "pos": [
+    1130,
+    1328
+   ],
+   "size": [
+    320,
+    262
+   ],
+   "flags": {},
+   "order": 20,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_PixelPerfect"
+   },
+   "title": "512 → 128 (x4, as trained)",
+   "inputs": [
+    {
+     "name": "image",
+     "type": "IMAGE",
+     "link": 21
+    },
+    {
+     "name": "mode",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "mode"
+     }
+    },
+    {
+     "name": "width",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "width"
+     }
+    },
+    {
+     "name": "height",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "height"
+     }
+    },
+    {
+     "name": "scale",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "scale"
+     }
+    },
+    {
+     "name": "method",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "method"
+     }
+    },
+    {
+     "name": "pre_colors",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "pre_colors"
+     }
+    },
+    {
+     "name": "foreground_mask",
+     "type": "MASK",
+     "link": null
+    },
+    {
+     "name": "reference",
+     "type": "IMAGE",
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "name": "pixel_art",
+     "type": "IMAGE",
+     "links": [
+      22
+     ],
+     "slot_index": 0
+    },
+    {
+     "name": "preview",
+     "type": "IMAGE",
+     "links": [],
+     "slot_index": 1
+    },
+    {
+     "name": "info",
+     "type": "STRING",
+     "links": [],
+     "slot_index": 2
+    }
+   ],
+   "widgets_values": [
+    "fixed_size",
+    128,
+    128,
+    4,
+    "dominant",
+    48
+   ]
+  },
+  {
+   "id": 22,
+   "type": "SK_Palette",
+   "pos": [
+    1500,
+    1328
+   ],
+   "size": [
+    320,
+    288
+   ],
+   "flags": {},
+   "order": 21,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_Palette"
+   },
+   "inputs": [
+    {
+     "name": "image",
+     "type": "IMAGE",
+     "link": 22
+    },
+    {
+     "name": "source",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "source"
+     }
+    },
+    {
+     "name": "colors",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "colors"
+     }
+    },
+    {
+     "name": "preset",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "preset"
+     }
+    },
+    {
+     "name": "dither",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "dither"
+     }
+    },
+    {
+     "name": "dither_strength",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "dither_strength"
+     }
+    },
+    {
+     "name": "shared_palette",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "shared_palette"
+     }
+    },
+    {
+     "name": "palette_image",
+     "type": "IMAGE",
+     "link": null
+    },
+    {
+     "name": "hex_palette",
+     "type": "STRING",
+     "link": null,
+     "widget": {
+      "name": "hex_palette"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "image",
+     "type": "IMAGE",
+     "links": [
+      23
+     ],
+     "slot_index": 0
+    },
+    {
+     "name": "palette",
+     "type": "IMAGE",
+     "links": [],
+     "slot_index": 1
+    },
+    {
+     "name": "hex",
+     "type": "STRING",
+     "links": [],
+     "slot_index": 2
+    }
+   ],
+   "widgets_values": [
+    "auto",
+    24,
+    "PICO-8",
+    "none",
+    0.5,
+    true,
+    ""
+   ]
+  },
+  {
+   "id": 23,
+   "type": "SK_Cleanup",
+   "pos": [
+    1870,
+    1328
+   ],
+   "size": [
+    320,
+    218
+   ],
+   "flags": {},
+   "order": 22,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_Cleanup"
+   },
+   "inputs": [
+    {
+     "name": "image",
+     "type": "IMAGE",
+     "link": 23
+    },
+    {
+     "name": "speck_size",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "speck_size"
+     }
+    },
+    {
+     "name": "max_contrast",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "max_contrast"
+     }
+    },
+    {
+     "name": "outline",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "outline"
+     }
+    },
+    {
+     "name": "outline_color",
+     "type": "STRING",
+     "link": null,
+     "widget": {
+      "name": "outline_color"
+     }
+    },
+    {
+     "name": "outline_diagonal",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "outline_diagonal"
+     }
+    },
+    {
+     "name": "darken",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "darken"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      24,
+      25
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    2,
+    0.12,
+    "none",
+    "#140c1c",
+    false,
+    0.45
+   ]
+  },
+  {
+   "id": 24,
+   "type": "SK_SavePixelArt",
+   "pos": [
+    20,
+    1836
+   ],
+   "size": [
+    320,
+    514
+   ],
+   "flags": {},
+   "order": 23,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_SavePixelArt"
+   },
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 24
+    },
+    {
+     "name": "filename_prefix",
+     "type": "STRING",
+     "link": null,
+     "widget": {
+      "name": "filename_prefix"
+     }
+    },
+    {
+     "name": "upscale",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "upscale"
+     }
+    },
+    {
+     "name": "as_animation",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "as_animation"
+     }
+    },
+    {
+     "name": "fps",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "fps"
+     }
+    },
+    {
+     "name": "sheet_columns",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "sheet_columns"
+     }
+    },
+    {
+     "name": "row_names",
+     "type": "STRING",
+     "link": null
+    }
+   ],
+   "outputs": [],
+   "widgets_values": [
+    "spritekiln/walksheet",
+    8,
+    false,
+    8.0,
+    0
+   ]
+  },
+  {
+   "id": 25,
+   "type": "SK_SliceSheet",
+   "pos": [
+    20,
+    2390
+   ],
+   "size": [
+    320,
+    166
+   ],
+   "flags": {},
+   "order": 24,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_SliceSheet"
+   },
+   "inputs": [
+    {
+     "name": "sheet",
+     "type": "IMAGE",
+     "link": 25
+    },
+    {
+     "name": "rows",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "rows"
+     }
+    },
+    {
+     "name": "columns",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "columns"
+     }
+    },
+    {
+     "name": "inset",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "inset"
+     }
+    },
+    {
+     "name": "order",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "order"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "frames",
+     "type": "IMAGE",
+     "links": [
+      26,
+      29,
+      32,
+      35
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    4,
+    4,
+    0,
+    "row_major"
+   ]
+  },
+  {
+   "id": 26,
+   "type": "ImageFromBatch",
+   "pos": [
+    390,
+    1836
+   ],
+   "size": [
+    320,
+    114
+   ],
+   "flags": {},
+   "order": 25,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "ImageFromBatch"
+   },
+   "title": "Walk down",
+   "inputs": [
+    {
+     "name": "image",
+     "type": "IMAGE",
+     "link": 26
+    },
+    {
+     "name": "batch_index",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "batch_index"
+     }
+    },
+    {
+     "name": "length",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "length"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      27
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    0,
+    3
+   ]
+  },
+  {
+   "id": 27,
+   "type": "SK_FrameSelect",
+   "pos": [
+    760,
+    1836
+   ],
+   "size": [
+    320,
+    188
+   ],
+   "flags": {},
+   "order": 26,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_FrameSelect"
+   },
+   "title": "Ping-pong 0-1-2-1",
+   "inputs": [
+    {
+     "name": "frames",
+     "type": "IMAGE",
+     "link": 27
+    },
+    {
+     "name": "count",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "count"
+     }
+    },
+    {
+     "name": "mode",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "mode"
+     }
+    },
+    {
+     "name": "skip_start",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "skip_start"
+     }
+    },
+    {
+     "name": "min_loop_fraction",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "min_loop_fraction"
+     }
+    },
+    {
+     "name": "loop",
+     "type": "BOOLEAN",
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "name": "frames",
+     "type": "IMAGE",
+     "links": [
+      28
+     ],
+     "slot_index": 0
+    },
+    {
+     "name": "info",
+     "type": "STRING",
+     "links": [],
+     "slot_index": 1
+    }
+   ],
+   "widgets_values": [
+    4,
+    "ping_pong",
+    0,
+    0.4
+   ]
+  },
+  {
+   "id": 28,
+   "type": "SK_SavePixelArt",
+   "pos": [
+    1130,
+    1836
+   ],
+   "size": [
+    320,
+    514
+   ],
+   "flags": {},
+   "order": 27,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_SavePixelArt"
+   },
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 28
+    },
+    {
+     "name": "filename_prefix",
+     "type": "STRING",
+     "link": null,
+     "widget": {
+      "name": "filename_prefix"
+     }
+    },
+    {
+     "name": "upscale",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "upscale"
+     }
+    },
+    {
+     "name": "as_animation",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "as_animation"
+     }
+    },
+    {
+     "name": "fps",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "fps"
+     }
+    },
+    {
+     "name": "sheet_columns",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "sheet_columns"
+     }
+    },
+    {
+     "name": "row_names",
+     "type": "STRING",
+     "link": null
+    }
+   ],
+   "outputs": [],
+   "widgets_values": [
+    "spritekiln/walk_down",
+    8,
+    true,
+    6.0,
+    0
+   ]
+  },
+  {
+   "id": 29,
+   "type": "ImageFromBatch",
+   "pos": [
+    390,
+    1990
+   ],
+   "size": [
+    320,
+    114
+   ],
+   "flags": {},
+   "order": 28,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "ImageFromBatch"
+   },
+   "title": "Walk left",
+   "inputs": [
+    {
+     "name": "image",
+     "type": "IMAGE",
+     "link": 29
+    },
+    {
+     "name": "batch_index",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "batch_index"
+     }
+    },
+    {
+     "name": "length",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "length"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      30
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    4,
+    3
+   ]
+  },
+  {
+   "id": 30,
+   "type": "SK_FrameSelect",
+   "pos": [
+    760,
+    2064
+   ],
+   "size": [
+    320,
+    188
+   ],
+   "flags": {},
+   "order": 29,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_FrameSelect"
+   },
+   "title": "Ping-pong 0-1-2-1",
+   "inputs": [
+    {
+     "name": "frames",
+     "type": "IMAGE",
+     "link": 30
+    },
+    {
+     "name": "count",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "count"
+     }
+    },
+    {
+     "name": "mode",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "mode"
+     }
+    },
+    {
+     "name": "skip_start",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "skip_start"
+     }
+    },
+    {
+     "name": "min_loop_fraction",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "min_loop_fraction"
+     }
+    },
+    {
+     "name": "loop",
+     "type": "BOOLEAN",
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "name": "frames",
+     "type": "IMAGE",
+     "links": [
+      31
+     ],
+     "slot_index": 0
+    },
+    {
+     "name": "info",
+     "type": "STRING",
+     "links": [],
+     "slot_index": 1
+    }
+   ],
+   "widgets_values": [
+    4,
+    "ping_pong",
+    0,
+    0.4
+   ]
+  },
+  {
+   "id": 31,
+   "type": "SK_SavePixelArt",
+   "pos": [
+    1130,
+    2390
+   ],
+   "size": [
+    320,
+    514
+   ],
+   "flags": {},
+   "order": 30,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_SavePixelArt"
+   },
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 31
+    },
+    {
+     "name": "filename_prefix",
+     "type": "STRING",
+     "link": null,
+     "widget": {
+      "name": "filename_prefix"
+     }
+    },
+    {
+     "name": "upscale",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "upscale"
+     }
+    },
+    {
+     "name": "as_animation",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "as_animation"
+     }
+    },
+    {
+     "name": "fps",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "fps"
+     }
+    },
+    {
+     "name": "sheet_columns",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "sheet_columns"
+     }
+    },
+    {
+     "name": "row_names",
+     "type": "STRING",
+     "link": null
+    }
+   ],
+   "outputs": [],
+   "widgets_values": [
+    "spritekiln/walk_left",
+    8,
+    true,
+    6.0,
+    0
+   ]
+  },
+  {
+   "id": 32,
+   "type": "ImageFromBatch",
+   "pos": [
+    390,
+    2144
+   ],
+   "size": [
+    320,
+    114
+   ],
+   "flags": {},
+   "order": 31,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "ImageFromBatch"
+   },
+   "title": "Walk right",
+   "inputs": [
+    {
+     "name": "image",
+     "type": "IMAGE",
+     "link": 32
+    },
+    {
+     "name": "batch_index",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "batch_index"
+     }
+    },
+    {
+     "name": "length",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "length"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      33
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    8,
+    3
+   ]
+  },
+  {
+   "id": 33,
+   "type": "SK_FrameSelect",
+   "pos": [
+    760,
+    2292
+   ],
+   "size": [
+    320,
+    188
+   ],
+   "flags": {},
+   "order": 32,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_FrameSelect"
+   },
+   "title": "Ping-pong 0-1-2-1",
+   "inputs": [
+    {
+     "name": "frames",
+     "type": "IMAGE",
+     "link": 33
+    },
+    {
+     "name": "count",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "count"
+     }
+    },
+    {
+     "name": "mode",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "mode"
+     }
+    },
+    {
+     "name": "skip_start",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "skip_start"
+     }
+    },
+    {
+     "name": "min_loop_fraction",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "min_loop_fraction"
+     }
+    },
+    {
+     "name": "loop",
+     "type": "BOOLEAN",
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "name": "frames",
+     "type": "IMAGE",
+     "links": [
+      34
+     ],
+     "slot_index": 0
+    },
+    {
+     "name": "info",
+     "type": "STRING",
+     "links": [],
+     "slot_index": 1
+    }
+   ],
+   "widgets_values": [
+    4,
+    "ping_pong",
+    0,
+    0.4
+   ]
+  },
+  {
+   "id": 34,
+   "type": "SK_SavePixelArt",
+   "pos": [
+    1130,
+    2944
+   ],
+   "size": [
+    320,
+    514
+   ],
+   "flags": {},
+   "order": 33,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_SavePixelArt"
+   },
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 34
+    },
+    {
+     "name": "filename_prefix",
+     "type": "STRING",
+     "link": null,
+     "widget": {
+      "name": "filename_prefix"
+     }
+    },
+    {
+     "name": "upscale",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "upscale"
+     }
+    },
+    {
+     "name": "as_animation",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "as_animation"
+     }
+    },
+    {
+     "name": "fps",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "fps"
+     }
+    },
+    {
+     "name": "sheet_columns",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "sheet_columns"
+     }
+    },
+    {
+     "name": "row_names",
+     "type": "STRING",
+     "link": null
+    }
+   ],
+   "outputs": [],
+   "widgets_values": [
+    "spritekiln/walk_right",
+    8,
+    true,
+    6.0,
+    0
+   ]
+  },
+  {
+   "id": 35,
+   "type": "ImageFromBatch",
+   "pos": [
+    390,
+    2298
+   ],
+   "size": [
+    320,
+    114
+   ],
+   "flags": {},
+   "order": 34,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "ImageFromBatch"
+   },
+   "title": "Walk up",
+   "inputs": [
+    {
+     "name": "image",
+     "type": "IMAGE",
+     "link": 35
+    },
+    {
+     "name": "batch_index",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "batch_index"
+     }
+    },
+    {
+     "name": "length",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "length"
+     }
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      36
+     ],
+     "slot_index": 0
+    }
+   ],
+   "widgets_values": [
+    12,
+    3
+   ]
+  },
+  {
+   "id": 36,
+   "type": "SK_FrameSelect",
+   "pos": [
+    760,
+    2520
+   ],
+   "size": [
+    320,
+    188
+   ],
+   "flags": {},
+   "order": 35,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_FrameSelect"
+   },
+   "title": "Ping-pong 0-1-2-1",
+   "inputs": [
+    {
+     "name": "frames",
+     "type": "IMAGE",
+     "link": 36
+    },
+    {
+     "name": "count",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "count"
+     }
+    },
+    {
+     "name": "mode",
+     "type": "COMBO",
+     "link": null,
+     "widget": {
+      "name": "mode"
+     }
+    },
+    {
+     "name": "skip_start",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "skip_start"
+     }
+    },
+    {
+     "name": "min_loop_fraction",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "min_loop_fraction"
+     }
+    },
+    {
+     "name": "loop",
+     "type": "BOOLEAN",
+     "link": null
+    }
+   ],
+   "outputs": [
+    {
+     "name": "frames",
+     "type": "IMAGE",
+     "links": [
+      37
+     ],
+     "slot_index": 0
+    },
+    {
+     "name": "info",
+     "type": "STRING",
+     "links": [],
+     "slot_index": 1
+    }
+   ],
+   "widgets_values": [
+    4,
+    "ping_pong",
+    0,
+    0.4
+   ]
+  },
+  {
+   "id": 37,
+   "type": "SK_SavePixelArt",
+   "pos": [
+    1130,
+    3498
+   ],
+   "size": [
+    320,
+    514
+   ],
+   "flags": {},
+   "order": 36,
+   "mode": 0,
+   "properties": {
+    "Node name for S&R": "SK_SavePixelArt"
+   },
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 37
+    },
+    {
+     "name": "filename_prefix",
+     "type": "STRING",
+     "link": null,
+     "widget": {
+      "name": "filename_prefix"
+     }
+    },
+    {
+     "name": "upscale",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "upscale"
+     }
+    },
+    {
+     "name": "as_animation",
+     "type": "BOOLEAN",
+     "link": null,
+     "widget": {
+      "name": "as_animation"
+     }
+    },
+    {
+     "name": "fps",
+     "type": "FLOAT",
+     "link": null,
+     "widget": {
+      "name": "fps"
+     }
+    },
+    {
+     "name": "sheet_columns",
+     "type": "INT",
+     "link": null,
+     "widget": {
+      "name": "sheet_columns"
+     }
+    },
+    {
+     "name": "row_names",
+     "type": "STRING",
+     "link": null
+    }
+   ],
+   "outputs": [],
+   "widgets_values": [
+    "spritekiln/walk_up",
+    8,
+    true,
+    6.0,
+    0
+   ]
+  }
+ ],
+ "links": [
+  [
+   1,
+   2,
+   0,
+   3,
+   0,
+   "STRING"
+  ],
+  [
+   2,
+   4,
+   0,
+   5,
+   0,
+   "MODEL"
+  ],
+  [
+   3,
+   3,
+   0,
+   8,
+   0,
+   "STRING"
+  ],
+  [
+   4,
+   6,
+   0,
+   8,
+   1,
+   "CLIP"
+  ],
+  [
+   5,
+   6,
+   0,
+   9,
+   1,
+   "CLIP"
+  ],
+  [
+   6,
+   5,
+   0,
+   11,
+   0,
+   "MODEL"
+  ],
+  [
+   7,
+   8,
+   0,
+   11,
+   1,
+   "CONDITIONING"
+  ],
+  [
+   8,
+   9,
+   0,
+   11,
+   2,
+   "CONDITIONING"
+  ],
+  [
+   9,
+   10,
+   0,
+   15,
+   0,
+   "NOISE"
+  ],
+  [
+   10,
+   11,
+   0,
+   15,
+   1,
+   "GUIDER"
+  ],
+  [
+   11,
+   12,
+   0,
+   15,
+   2,
+   "SAMPLER"
+  ],
+  [
+   12,
+   13,
+   0,
+   15,
+   3,
+   "SIGMAS"
+  ],
+  [
+   13,
+   14,
+   0,
+   15,
+   4,
+   "LATENT"
+  ],
+  [
+   14,
+   15,
+   0,
+   16,
+   0,
+   "LATENT"
+  ],
+  [
+   15,
+   7,
+   0,
+   16,
+   1,
+   "VAE"
+  ],
+  [
+   16,
+   16,
+   0,
+   17,
+   0,
+   "IMAGE"
+  ],
+  [
+   17,
+   18,
+   0,
+   19,
+   0,
+   "BACKGROUND_REMOVAL"
+  ],
+  [
+   18,
+   16,
+   0,
+   19,
+   1,
+   "IMAGE"
+  ],
+  [
+   19,
+   16,
+   0,
+   20,
+   0,
+   "IMAGE"
+  ],
+  [
+   20,
+   19,
+   0,
+   20,
+   6,
+   "MASK"
+  ],
+  [
+   21,
+   20,
+   0,
+   21,
+   0,
+   "IMAGE"
+  ],
+  [
+   22,
+   21,
+   0,
+   22,
+   0,
+   "IMAGE"
+  ],
+  [
+   23,
+   22,
+   0,
+   23,
+   0,
+   "IMAGE"
+  ],
+  [
+   24,
+   23,
+   0,
+   24,
+   0,
+   "IMAGE"
+  ],
+  [
+   25,
+   23,
+   0,
+   25,
+   0,
+   "IMAGE"
+  ],
+  [
+   26,
+   25,
+   0,
+   26,
+   0,
+   "IMAGE"
+  ],
+  [
+   27,
+   26,
+   0,
+   27,
+   0,
+   "IMAGE"
+  ],
+  [
+   28,
+   27,
+   0,
+   28,
+   0,
+   "IMAGE"
+  ],
+  [
+   29,
+   25,
+   0,
+   29,
+   0,
+   "IMAGE"
+  ],
+  [
+   30,
+   29,
+   0,
+   30,
+   0,
+   "IMAGE"
+  ],
+  [
+   31,
+   30,
+   0,
+   31,
+   0,
+   "IMAGE"
+  ],
+  [
+   32,
+   25,
+   0,
+   32,
+   0,
+   "IMAGE"
+  ],
+  [
+   33,
+   32,
+   0,
+   33,
+   0,
+   "IMAGE"
+  ],
+  [
+   34,
+   33,
+   0,
+   34,
+   0,
+   "IMAGE"
+  ],
+  [
+   35,
+   25,
+   0,
+   35,
+   0,
+   "IMAGE"
+  ],
+  [
+   36,
+   35,
+   0,
+   36,
+   0,
+   "IMAGE"
+  ],
+  [
+   37,
+   36,
+   0,
+   37,
+   0,
+   "IMAGE"
+  ]
+ ],
+ "groups": [
+  {
+   "id": 1,
+   "title": "1 · Character",
+   "bounding": [
+    0,
+    0,
+    870,
+    458
+   ],
+   "color": "#3f789e",
+   "font_size": 24,
+   "flags": {}
+  },
+  {
+   "id": 2,
+   "title": "2 · Generate 512² sheet (klein base, 4-walk LoRA)",
+   "bounding": [
+    950,
+    0,
+    2250,
+    1138
+   ],
+   "color": "#8A8",
+   "font_size": 24,
+   "flags": {}
+  },
+  {
+   "id": 3,
+   "title": "3 · Pixel-perfect 128²",
+   "bounding": [
+    0,
+    1258,
+    2210,
+    388
+   ],
+   "color": "#b06634",
+   "font_size": 24,
+   "flags": {}
+  },
+  {
+   "id": 4,
+   "title": "4 · Sheet + GIFs",
+   "bounding": [
+    0,
+    1766,
+    1470,
+    2276
+   ],
+   "color": "#a1309b",
+   "font_size": 24,
+   "flags": {}
+  }
+ ],
+ "config": {},
+ "extra": {
+  "ds": {
+   "scale": 0.55,
+   "offset": [
+    40,
+    40
+   ]
+  },
+  "spritekiln": {
+   "title": "4-Direction Walk Spritesheet from Text (klein base + LoRA)",
+   "description": "32×32 character sheet: walk down/left/right/up, arms raised, jumps, lying down — plus a GIF per direction."
+  }
+ },
+ "version": 0.4
+}

@@ -1,0 +1,569 @@
+{
+ "2": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "spritekiln_example_sheet.png"
+  },
+  "_meta": {
+   "title": "Base animation sheet"
+  }
+ },
+ "3": {
+  "class_type": "JoinImageWithAlpha",
+  "inputs": {
+   "image": [
+    "2",
+    0
+   ],
+   "alpha": [
+    "2",
+    1
+   ]
+  },
+  "_meta": {
+   "title": "Base animation sheet (RGBA)"
+  }
+ },
+ "4": {
+  "class_type": "SK_SliceSheet",
+  "inputs": {
+   "sheet": [
+    "3",
+    0
+   ],
+   "rows": 4,
+   "columns": 4,
+   "inset": 0,
+   "order": "row_major"
+  },
+  "_meta": {
+   "title": "SK_SliceSheet"
+  }
+ },
+ "5": {
+  "class_type": "ImageFromBatch",
+  "inputs": {
+   "image": [
+    "4",
+    0
+   ],
+   "batch_index": 0,
+   "length": 4
+  },
+  "_meta": {
+   "title": "Frames to dress (start, count)"
+  }
+ },
+ "6": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "spritekiln_example_reference.png"
+  },
+  "_meta": {
+   "title": "Gear reference (image 2)"
+  }
+ },
+ "7": {
+  "class_type": "PrimitiveStringMultiline",
+  "inputs": {
+   "value": "a golden crown and a blue cape"
+  },
+  "_meta": {
+   "title": "Gear description"
+  }
+ },
+ "8": {
+  "class_type": "StringConcatenate",
+  "inputs": {
+   "string_a": "Dress the pixel art character in image 1 with",
+   "string_b": [
+    "7",
+    0
+   ],
+   "delimiter": " "
+  },
+  "_meta": {
+   "title": "StringConcatenate"
+  }
+ },
+ "9": {
+  "class_type": "StringConcatenate",
+  "inputs": {
+   "string_a": [
+    "8",
+    0
+   ],
+   "string_b": "as shown in image 2. Keep exactly the same pose, body, proportions, position, size and pixel art style; only add the equipment. Plain solid flat gray background.",
+   "delimiter": " "
+  },
+  "_meta": {
+   "title": "StringConcatenate"
+  }
+ },
+ "10": {
+  "class_type": "SK_BatchToList",
+  "inputs": {
+   "images": [
+    "5",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "SK_BatchToList"
+  }
+ },
+ "11": {
+  "class_type": "SK_ToCanvas",
+  "inputs": {
+   "image": [
+    "10",
+    0
+   ],
+   "long_side": 1024,
+   "multiple": 16,
+   "background": "gray",
+   "custom_color": "#808080",
+   "padding": 0
+  },
+  "_meta": {
+   "title": "SK_ToCanvas"
+  }
+ },
+ "12": {
+  "class_type": "UNETLoader",
+  "inputs": {
+   "unet_name": "flux-2-klein-4b.safetensors",
+   "weight_dtype": "default"
+  },
+  "_meta": {
+   "title": "FLUX.2 klein 4B distilled"
+  }
+ },
+ "13": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "12",
+    0
+   ],
+   "lora_name": "spritekiln_klein_pixel_art.safetensors",
+   "strength_model": 0.5
+  },
+  "_meta": {
+   "title": "Pixel-art LoRA (klein)"
+  }
+ },
+ "14": {
+  "class_type": "CLIPLoader",
+  "inputs": {
+   "clip_name": "qwen_3_4b.safetensors",
+   "type": "flux2",
+   "device": "default"
+  },
+  "_meta": {
+   "title": "CLIPLoader"
+  }
+ },
+ "15": {
+  "class_type": "VAELoader",
+  "inputs": {
+   "vae_name": "flux2-vae.safetensors"
+  },
+  "_meta": {
+   "title": "VAELoader"
+  }
+ },
+ "16": {
+  "class_type": "VAEEncode",
+  "inputs": {
+   "pixels": [
+    "11",
+    0
+   ],
+   "vae": [
+    "15",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "VAEEncode"
+  }
+ },
+ "17": {
+  "class_type": "ImageScaleToTotalPixels",
+  "inputs": {
+   "image": [
+    "6",
+    0
+   ],
+   "upscale_method": "lanczos",
+   "megapixels": 1.0,
+   "resolution_steps": 16
+  },
+  "_meta": {
+   "title": "ImageScaleToTotalPixels"
+  }
+ },
+ "18": {
+  "class_type": "VAEEncode",
+  "inputs": {
+   "pixels": [
+    "17",
+    0
+   ],
+   "vae": [
+    "15",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "VAEEncode"
+  }
+ },
+ "19": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": [
+    "9",
+    0
+   ],
+   "clip": [
+    "14",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Prompt"
+  }
+ },
+ "20": {
+  "class_type": "ConditioningZeroOut",
+  "inputs": {
+   "conditioning": [
+    "19",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ConditioningZeroOut"
+  }
+ },
+ "21": {
+  "class_type": "ReferenceLatent",
+  "inputs": {
+   "conditioning": [
+    "19",
+    0
+   ],
+   "latent": [
+    "16",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ReferenceLatent"
+  }
+ },
+ "22": {
+  "class_type": "ReferenceLatent",
+  "inputs": {
+   "conditioning": [
+    "20",
+    0
+   ],
+   "latent": [
+    "16",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ReferenceLatent"
+  }
+ },
+ "23": {
+  "class_type": "ReferenceLatent",
+  "inputs": {
+   "conditioning": [
+    "21",
+    0
+   ],
+   "latent": [
+    "18",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ReferenceLatent"
+  }
+ },
+ "24": {
+  "class_type": "ReferenceLatent",
+  "inputs": {
+   "conditioning": [
+    "22",
+    0
+   ],
+   "latent": [
+    "18",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ReferenceLatent"
+  }
+ },
+ "25": {
+  "class_type": "RandomNoise",
+  "inputs": {
+   "noise_seed": 1234
+  },
+  "_meta": {
+   "title": "RandomNoise"
+  }
+ },
+ "26": {
+  "class_type": "CFGGuider",
+  "inputs": {
+   "model": [
+    "13",
+    0
+   ],
+   "positive": [
+    "23",
+    0
+   ],
+   "negative": [
+    "24",
+    0
+   ],
+   "cfg": 1.0
+  },
+  "_meta": {
+   "title": "CFGGuider"
+  }
+ },
+ "27": {
+  "class_type": "KSamplerSelect",
+  "inputs": {
+   "sampler_name": "euler"
+  },
+  "_meta": {
+   "title": "KSamplerSelect"
+  }
+ },
+ "28": {
+  "class_type": "Flux2Scheduler",
+  "inputs": {
+   "steps": 4,
+   "width": [
+    "11",
+    2
+   ],
+   "height": [
+    "11",
+    3
+   ]
+  },
+  "_meta": {
+   "title": "Flux2Scheduler"
+  }
+ },
+ "29": {
+  "class_type": "EmptyFlux2LatentImage",
+  "inputs": {
+   "width": [
+    "11",
+    2
+   ],
+   "height": [
+    "11",
+    3
+   ],
+   "batch_size": 1
+  },
+  "_meta": {
+   "title": "EmptyFlux2LatentImage"
+  }
+ },
+ "30": {
+  "class_type": "SamplerCustomAdvanced",
+  "inputs": {
+   "noise": [
+    "25",
+    0
+   ],
+   "guider": [
+    "26",
+    0
+   ],
+   "sampler": [
+    "27",
+    0
+   ],
+   "sigmas": [
+    "28",
+    0
+   ],
+   "latent_image": [
+    "29",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "SamplerCustomAdvanced"
+  }
+ },
+ "31": {
+  "class_type": "VAEDecode",
+  "inputs": {
+   "samples": [
+    "30",
+    0
+   ],
+   "vae": [
+    "15",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "VAEDecode"
+  }
+ },
+ "32": {
+  "class_type": "SK_PixelPerfect",
+  "inputs": {
+   "image": [
+    "31",
+    0
+   ],
+   "mode": "match_reference",
+   "width": 64,
+   "height": 64,
+   "scale": [
+    "11",
+    1
+   ],
+   "method": "dominant",
+   "pre_colors": 48,
+   "reference": [
+    "11",
+    4
+   ]
+  },
+  "_meta": {
+   "title": "SK_PixelPerfect"
+  }
+ },
+ "33": {
+  "class_type": "SK_BackgroundRemove",
+  "inputs": {
+   "image": [
+    "32",
+    0
+   ],
+   "mode": "border_flood",
+   "remove_shadow": true,
+   "tolerance": 0.06,
+   "mask_threshold": 0.5,
+   "enabled": true
+  },
+  "_meta": {
+   "title": "SK_BackgroundRemove"
+  }
+ },
+ "34": {
+  "class_type": "SK_LayerExtract",
+  "inputs": {
+   "base": [
+    "10",
+    0
+   ],
+   "equipped": [
+    "33",
+    0
+   ],
+   "tolerance": 0.07,
+   "min_area": 3,
+   "grow": 0
+  },
+  "_meta": {
+   "title": "SK_LayerExtract"
+  }
+ },
+ "35": {
+  "class_type": "SK_ListToBatch",
+  "inputs": {
+   "images": [
+    "34",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Layer frames"
+  }
+ },
+ "36": {
+  "class_type": "SK_ListToBatch",
+  "inputs": {
+   "images": [
+    "34",
+    1
+   ]
+  },
+  "_meta": {
+   "title": "Composite frames"
+  }
+ },
+ "37": {
+  "class_type": "SK_Palette",
+  "inputs": {
+   "image": [
+    "35",
+    0
+   ],
+   "source": "auto",
+   "colors": 16,
+   "preset": "PICO-8",
+   "dither": "none",
+   "dither_strength": 0.5,
+   "shared_palette": true
+  },
+  "_meta": {
+   "title": "One palette for the layer"
+  }
+ },
+ "38": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "37",
+    0
+   ],
+   "filename_prefix": "spritekiln/gear_layer",
+   "upscale": 8,
+   "as_animation": true,
+   "fps": 8.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ },
+ "39": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "36",
+    0
+   ],
+   "filename_prefix": "spritekiln/gear_preview",
+   "upscale": 8,
+   "as_animation": true,
+   "fps": 8.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ }
+}

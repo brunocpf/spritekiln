@@ -1,0 +1,186 @@
+{
+ "2": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "spritekiln_example_hd_character.png"
+  },
+  "_meta": {
+   "title": "HD art (transparent PNG)"
+  }
+ },
+ "3": {
+  "class_type": "JoinImageWithAlpha",
+  "inputs": {
+   "image": [
+    "2",
+    0
+   ],
+   "alpha": [
+    "2",
+    1
+   ]
+  },
+  "_meta": {
+   "title": "HD art (transparent PNG) (RGBA)"
+  }
+ },
+ "4": {
+  "class_type": "SK_Flatten",
+  "inputs": {
+   "image": [
+    "3",
+    0
+   ],
+   "background": "#808080"
+  },
+  "_meta": {
+   "title": "SK_Flatten"
+  }
+ },
+ "5": {
+  "class_type": "LoadMoGeModel",
+  "inputs": {
+   "model_name": "moge_2_vitl_normal_fp16.safetensors"
+  },
+  "_meta": {
+   "title": "LoadMoGeModel"
+  }
+ },
+ "6": {
+  "class_type": "MoGeInference",
+  "inputs": {
+   "moge_model": [
+    "5",
+    0
+   ],
+   "image": [
+    "4",
+    0
+   ],
+   "resolution_level": 9,
+   "fov_x_degrees": 0.0,
+   "batch_size": 1,
+   "force_projection": true,
+   "apply_mask": false,
+   "refine_steps": 0
+  },
+  "_meta": {
+   "title": "MoGeInference"
+  }
+ },
+ "7": {
+  "class_type": "MoGeRender",
+  "inputs": {
+   "moge_geometry": [
+    "6",
+    0
+   ],
+   "output": "normal_opengl"
+  },
+  "_meta": {
+   "title": "MoGeRender"
+  }
+ },
+ "8": {
+  "class_type": "PreviewImage",
+  "inputs": {
+   "images": [
+    "7",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "MoGe normals"
+  }
+ },
+ "9": {
+  "class_type": "SK_SpriteNormalMap",
+  "inputs": {
+   "image": [
+    "3",
+    0
+   ],
+   "inflate": 1.0,
+   "radius": 0,
+   "detail": 0.2,
+   "detail_blur": 1.5,
+   "strength": 1.0,
+   "convention": "opengl",
+   "invert_detail": false,
+   "ai_normals": [
+    "7",
+    0
+   ],
+   "ai_weight": 0.6
+  },
+  "_meta": {
+   "title": "SK_SpriteNormalMap"
+  }
+ },
+ "10": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "9",
+    0
+   ],
+   "filename_prefix": "spritekiln/hd_normal",
+   "upscale": 1,
+   "as_animation": false,
+   "fps": 8.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "Normal map"
+  }
+ },
+ "11": {
+  "class_type": "PreviewImage",
+  "inputs": {
+   "images": [
+    "9",
+    1
+   ]
+  },
+  "_meta": {
+   "title": "Height"
+  }
+ },
+ "12": {
+  "class_type": "SK_NormalLightPreview",
+  "inputs": {
+   "image": [
+    "3",
+    0
+   ],
+   "normal_map": [
+    "9",
+    0
+   ],
+   "frames": 12,
+   "elevation_deg": 35.0,
+   "ambient": 0.3,
+   "convention": "opengl"
+  },
+  "_meta": {
+   "title": "SK_NormalLightPreview"
+  }
+ },
+ "13": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "12",
+    0
+   ],
+   "filename_prefix": "spritekiln/hd_lit",
+   "upscale": 1,
+   "as_animation": true,
+   "fps": 10.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "Lit preview (light circling)"
+  }
+ }
+}

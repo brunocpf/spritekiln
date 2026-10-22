@@ -1,0 +1,408 @@
+{
+ "2": {
+  "class_type": "LoadImage",
+  "inputs": {
+   "image": "spritekiln_example_sprite.png"
+  },
+  "_meta": {
+   "title": "Sprite"
+  }
+ },
+ "3": {
+  "class_type": "JoinImageWithAlpha",
+  "inputs": {
+   "image": [
+    "2",
+    0
+   ],
+   "alpha": [
+    "2",
+    1
+   ]
+  },
+  "_meta": {
+   "title": "Sprite (RGBA)"
+  }
+ },
+ "4": {
+  "class_type": "SK_RegionMask",
+  "inputs": {
+   "image": [
+    "3",
+    0
+   ],
+   "x": 16,
+   "y": 0,
+   "width": 32,
+   "height": 20,
+   "grow": 1,
+   "invert": false
+  },
+  "_meta": {
+   "title": "SK_RegionMask"
+  }
+ },
+ "5": {
+  "class_type": "SK_ToCanvas",
+  "inputs": {
+   "image": [
+    "3",
+    0
+   ],
+   "long_side": 1024,
+   "multiple": 16,
+   "background": "gray",
+   "custom_color": "#808080",
+   "padding": 0,
+   "mask": [
+    "4",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "SK_ToCanvas"
+  }
+ },
+ "6": {
+  "class_type": "UNETLoader",
+  "inputs": {
+   "unet_name": "flux-2-klein-4b.safetensors",
+   "weight_dtype": "default"
+  },
+  "_meta": {
+   "title": "FLUX.2 klein 4B distilled"
+  }
+ },
+ "7": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "model": [
+    "6",
+    0
+   ],
+   "lora_name": "spritekiln_klein_pixel_art.safetensors",
+   "strength_model": 0.5
+  },
+  "_meta": {
+   "title": "Pixel-art LoRA (klein)"
+  }
+ },
+ "8": {
+  "class_type": "CLIPLoader",
+  "inputs": {
+   "clip_name": "qwen_3_4b.safetensors",
+   "type": "flux2",
+   "device": "default"
+  },
+  "_meta": {
+   "title": "CLIPLoader"
+  }
+ },
+ "9": {
+  "class_type": "VAELoader",
+  "inputs": {
+   "vae_name": "flux2-vae.safetensors"
+  },
+  "_meta": {
+   "title": "VAELoader"
+  }
+ },
+ "10": {
+  "class_type": "VAEEncode",
+  "inputs": {
+   "pixels": [
+    "5",
+    0
+   ],
+   "vae": [
+    "9",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "VAEEncode"
+  }
+ },
+ "11": {
+  "class_type": "SetLatentNoiseMask",
+  "inputs": {
+   "samples": [
+    "10",
+    0
+   ],
+   "mask": [
+    "5",
+    5
+   ]
+  },
+  "_meta": {
+   "title": "SetLatentNoiseMask"
+  }
+ },
+ "12": {
+  "class_type": "CLIPTextEncode",
+  "inputs": {
+   "text": "Pixel art sprite: the knight now wears a horned viking helmet. Same pixel art style, same palette, same outline, gray background.",
+   "clip": [
+    "8",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Prompt"
+  }
+ },
+ "13": {
+  "class_type": "ConditioningZeroOut",
+  "inputs": {
+   "conditioning": [
+    "12",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ConditioningZeroOut"
+  }
+ },
+ "14": {
+  "class_type": "ReferenceLatent",
+  "inputs": {
+   "conditioning": [
+    "12",
+    0
+   ],
+   "latent": [
+    "10",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ReferenceLatent"
+  }
+ },
+ "15": {
+  "class_type": "ReferenceLatent",
+  "inputs": {
+   "conditioning": [
+    "13",
+    0
+   ],
+   "latent": [
+    "10",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "ReferenceLatent"
+  }
+ },
+ "16": {
+  "class_type": "RandomNoise",
+  "inputs": {
+   "noise_seed": 1234
+  },
+  "_meta": {
+   "title": "RandomNoise"
+  }
+ },
+ "17": {
+  "class_type": "CFGGuider",
+  "inputs": {
+   "model": [
+    "7",
+    0
+   ],
+   "positive": [
+    "14",
+    0
+   ],
+   "negative": [
+    "15",
+    0
+   ],
+   "cfg": 1.0
+  },
+  "_meta": {
+   "title": "CFGGuider"
+  }
+ },
+ "18": {
+  "class_type": "KSamplerSelect",
+  "inputs": {
+   "sampler_name": "euler"
+  },
+  "_meta": {
+   "title": "KSamplerSelect"
+  }
+ },
+ "19": {
+  "class_type": "Flux2Scheduler",
+  "inputs": {
+   "steps": 4,
+   "width": [
+    "5",
+    2
+   ],
+   "height": [
+    "5",
+    3
+   ]
+  },
+  "_meta": {
+   "title": "Flux2Scheduler"
+  }
+ },
+ "20": {
+  "class_type": "SamplerCustomAdvanced",
+  "inputs": {
+   "noise": [
+    "16",
+    0
+   ],
+   "guider": [
+    "17",
+    0
+   ],
+   "sampler": [
+    "18",
+    0
+   ],
+   "sigmas": [
+    "19",
+    0
+   ],
+   "latent_image": [
+    "11",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "SamplerCustomAdvanced"
+  }
+ },
+ "21": {
+  "class_type": "VAEDecode",
+  "inputs": {
+   "samples": [
+    "20",
+    0
+   ],
+   "vae": [
+    "9",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "VAEDecode"
+  }
+ },
+ "22": {
+  "class_type": "PreviewImage",
+  "inputs": {
+   "images": [
+    "21",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "Raw inpaint"
+  }
+ },
+ "23": {
+  "class_type": "SK_PixelPerfect",
+  "inputs": {
+   "image": [
+    "21",
+    0
+   ],
+   "mode": "match_reference",
+   "width": 64,
+   "height": 64,
+   "scale": [
+    "5",
+    1
+   ],
+   "method": "dominant",
+   "pre_colors": 48,
+   "reference": [
+    "5",
+    4
+   ]
+  },
+  "_meta": {
+   "title": "SK_PixelPerfect"
+  }
+ },
+ "24": {
+  "class_type": "SK_BackgroundRemove",
+  "inputs": {
+   "image": [
+    "23",
+    0
+   ],
+   "mode": "border_flood",
+   "remove_shadow": true,
+   "tolerance": 0.06,
+   "mask_threshold": 0.5,
+   "enabled": true
+  },
+  "_meta": {
+   "title": "SK_BackgroundRemove"
+  }
+ },
+ "25": {
+  "class_type": "SK_Palette",
+  "inputs": {
+   "image": [
+    "24",
+    0
+   ],
+   "source": "auto",
+   "colors": 32,
+   "preset": "PICO-8",
+   "dither": "none",
+   "dither_strength": 0.5,
+   "shared_palette": true
+  },
+  "_meta": {
+   "title": "SK_Palette"
+  }
+ },
+ "26": {
+  "class_type": "SK_MaskedMerge",
+  "inputs": {
+   "original": [
+    "3",
+    0
+   ],
+   "edited": [
+    "25",
+    0
+   ],
+   "mask": [
+    "4",
+    0
+   ]
+  },
+  "_meta": {
+   "title": "SK_MaskedMerge"
+  }
+ },
+ "27": {
+  "class_type": "SK_SavePixelArt",
+  "inputs": {
+   "images": [
+    "26",
+    0
+   ],
+   "filename_prefix": "spritekiln/inpaint",
+   "upscale": 8,
+   "as_animation": false,
+   "fps": 8.0,
+   "sheet_columns": 0
+  },
+  "_meta": {
+   "title": "SK_SavePixelArt"
+  }
+ }
+}
